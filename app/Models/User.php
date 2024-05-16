@@ -44,4 +44,14 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+
+    public static function headers(): array
+    {
+        return [
+            ['title' => "Nombre", 'key' => 'name', 'align' => 'center'],
+            ['title' => "Usuario", 'key' => 'username', 'align' => 'center'],
+            ['title' => "Correo", 'key' => 'email', 'align' => 'center'],
+            ['title' => "Acciones", 'key' => 'actions', 'align' => 'center', 'sortable' => false]
+        ];
+    }
 }

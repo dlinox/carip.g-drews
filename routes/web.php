@@ -11,10 +11,11 @@ Route::get('/', function () {
 //grupo de rutas para el auth 
 Route::group(['prefix'=>'auth'],function(){
     Route::get('/',[\App\Http\Controllers\Auth\AuthController::class,'index']);
+    Route::post('/sign-in',[\App\Http\Controllers\Auth\AuthController::class,'signIn']);
 });
 
 //ruta para el dashboard
-Route::get('/dashboard',[\App\Http\Controllers\Dashboard\DashboardController::class,'index']);
+Route::get('/dashboard',[\App\Http\Controllers\Dashboard\DashboardController::class,'index'])->name('dashboard');
 
 //rutas para recepcion
 Route::group(['prefix'=>'recepcion'],function(){
@@ -37,6 +38,8 @@ Route::group(['prefix'=>'configuracion'],function(){
 //rutas para security
 Route::group(['prefix'=>'seguridad'],function(){
     Route::get('/usuarios',[\App\Http\Controllers\Security\UserController::class,'index']);
+    Route::post('/usuarios/lista',[\App\Http\Controllers\Security\UserController::class,'list']);
+    
     Route::get('/roles',[\App\Http\Controllers\Security\RoleController::class,'index']);
     Route::get('/permisos',[\App\Http\Controllers\Security\PermissionController::class,'index']);
     Route::get('/modulos',[\App\Http\Controllers\Security\ModuleController::class,'index']);

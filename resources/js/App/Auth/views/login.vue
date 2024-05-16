@@ -53,29 +53,39 @@
 
                             <v-card-text>
                                 <v-form @submit.prevent="submitSignIn">
-                                    <v-text-field
-                                        v-model="email"
-                                        label="Usuario"
-                                        prepend-inner-icon="mdi-account"
-                                        type="text"
-                                    ></v-text-field>
-                                    <v-text-field
-                                        autocomplete="off"
-                                        v-model="password"
-                                        prepend-inner-icon="mdi-lock"
-                                        :append-inner-icon="
-                                            showPassword
-                                                ? 'mdi-eye'
-                                                : 'mdi-eye-off'
-                                        "
-                                        @click:append-inner="
-                                            () => (showPassword = !showPassword)
-                                        "
-                                        label="Contraseña"
-                                        :type="
-                                            showPassword ? 'text' : 'password'
-                                        "
-                                    ></v-text-field>
+                                    <v-row>
+                                        <v-col cols="12">
+                                            <v-text-field
+                                                v-model="form.email"
+                                                label="Usuario"
+                                                prepend-inner-icon="mdi-account"
+                                                type="text"
+                                            ></v-text-field>
+                                        </v-col>
+                                        <v-col cols="12">
+                                            <v-text-field
+                                                autocomplete="off"
+                                                v-model="form.password"
+                                                prepend-inner-icon="mdi-lock"
+                                                :append-inner-icon="
+                                                    showPassword
+                                                        ? 'mdi-eye'
+                                                        : 'mdi-eye-off'
+                                                "
+                                                @click:append-inner="
+                                                    () =>
+                                                        (showPassword =
+                                                            !showPassword)
+                                                "
+                                                label="Contraseña"
+                                                :type="
+                                                    showPassword
+                                                        ? 'text'
+                                                        : 'password'
+                                                "
+                                            ></v-text-field>
+                                        </v-col>
+                                    </v-row>
 
                                     <div
                                         class="text-center d-flex justify-space-between align-center"
@@ -114,13 +124,26 @@
 </template>
 <script setup>
 import { ref } from "vue";
-import { router } from "@inertiajs/vue3";
+import { router, useForm } from "@inertiajs/vue3";
 const showPassword = ref(false);
-const email = ref("");
-const password = ref("");
+
+
+const form = useForm({
+    email: "test@example.com",
+    password: "password",
+});
 
 const submitSignIn = () => {
     console.log("submitSignIn");
-    router.get("/dashboard");
+
+    form.post("/auth/sign-in", {
+        preserveState: true,
+        onSuccess: () => {
+            console.log("onSuccess");
+          //  router.get("dashboard");
+        },
+    });
+    
+
 };
 </script>

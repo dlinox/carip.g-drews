@@ -12,4 +12,18 @@ class AuthController extends Controller
         return inertia('Auth/views/login');
     }
 
+    public function signIn(Request $request)
+    {
+        $request->validate([
+            'email' => 'required|email',
+            'password' => 'required',
+        ]);
+
+        if (!auth()->attempt($request->only('email', 'password'))) {
+            return back()->with('error', 'Invalid credentials');
+        }
+
+        return redirect()->route('dashboard');
+    }
+
 }
