@@ -48,15 +48,6 @@
 
                 <template v-slot:item.actions="{ item }">
                     <v-btn
-                        icon="mdi-plus"
-                        size="small"
-                        color="primary"
-                        variant="tonal"
-                        link
-                    >
-                    </v-btn>
-
-                    <v-btn
                         icon="mdi-pencil"
                         size="small"
                         color="primary"
