@@ -20,6 +20,7 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'status',
     ];
 
     /**
@@ -51,7 +52,8 @@ class User extends Authenticatable
             ['title' => "Nombre", 'key' => 'name', 'align' => 'center'],
             ['title' => "Usuario", 'key' => 'username', 'align' => 'center'],
             ['title' => "Correo", 'key' => 'email', 'align' => 'center'],
-            ['title' => "Acciones", 'key' => 'actions', 'align' => 'center', 'sortable' => false]
+            ['title' => "Estado", 'key' => 'status', 'align' => 'center'],
+            ['title' => "Acciones", 'key' => 'actions', 'align' => 'end', 'sortable' => false]
         ];
     }
 }

@@ -12,9 +12,7 @@ class UserController extends Controller
 
     public function index()
     {
-        $users = User::all();
-
-        return Inertia::render('Security/views/user/index', ['users' => $users,]);
+        return Inertia::render('Security/views/user/index');
     }
 
     public function list(Request $request)
@@ -25,7 +23,7 @@ class UserController extends Controller
         $query = User::query();
         $sortBy = [];
 
-        if ( $request->has('sortBy') && count($request->sortBy) > 0) {
+        if ($request->has('sortBy') && count($request->sortBy) > 0) {
             $sortBy = $request->sortBy;
             foreach ($sortBy as $sort) {
                 $query->orderBy($sort['key'], $sort['order']);
@@ -34,7 +32,8 @@ class UserController extends Controller
 
         if ($request->has('search')) {
             $query->where('username', 'like', '%' . $request->search . '%')
-                ->orWhere('email', 'like', '%' . $request->search . '%');
+                ->orWhere('email', 'like', '%' . $request->search . '%')
+                ->orWhere('name', 'like', '%' . $request->search . '%');
         }
 
         $items = $query->paginate($perPage);
@@ -51,7 +50,7 @@ class UserController extends Controller
         ]);
     }
 
-    public function store() {
-        
+    public function store()
+    {
     }
 }

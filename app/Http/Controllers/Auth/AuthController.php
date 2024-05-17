@@ -20,10 +20,12 @@ class AuthController extends Controller
         ]);
 
         if (!auth()->attempt($request->only('email', 'password'))) {
-            return back()->with('error', 'Invalid credentials');
+            return back()->withErrors([
+                'message' => 'Invalid credentials',
+            ]);
         }
 
-        return redirect()->route('dashboard');
+        //return back()->with('success', 'You have successfully logged in');
     }
 
 }

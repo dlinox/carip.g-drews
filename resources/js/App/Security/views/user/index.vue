@@ -27,10 +27,34 @@
                 :loading="loading"
                 :search="search_"
                 multi-sort
-    :items-per-page-options="[1,5, 10, 25, 50]"
+                :items-per-page-options="[1, 5, 10, 25, 50]"
                 item-value="name"
                 @update:options="loadItems"
-            ></v-data-table-server>
+                no-data-text="No se encontraron registros"
+                items-per-page-text="Registros por página"
+                loading-text="Cargando registros"
+            >
+                <template v-slot:item.status="{ item }">
+                    <v-chip
+                        :color="item.status === 1 ? 'success' : 'error'"
+                        dark
+                        label
+                    >
+                        {{ item.status ? "Activo" : "Inactivo" }}
+                    </v-chip>
+                </template>
+
+                <template v-slot:item.actions="{ item }">
+                    <v-btn
+                        icon="mdi-pencil"
+                        size="small"
+                        color="primary"
+                        variant="tonal"
+                        link
+                    >
+                    </v-btn>
+                </template>
+            </v-data-table-server>
         </v-card>
     </AdminLayout>
 </template>
@@ -58,10 +82,8 @@ const dataTable = ref({
     },
 });
 
-
 const search_ = ref("");
 const loading = ref(true);
-
 
 const loadItems = async ({ page, itemsPerPage, sortBy }) => {
     loading.value = true;
@@ -76,6 +98,4 @@ const loadItems = async ({ page, itemsPerPage, sortBy }) => {
 
     loading.value = false;
 };
-
-
 </script>

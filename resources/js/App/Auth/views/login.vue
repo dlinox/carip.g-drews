@@ -140,7 +140,10 @@ const submitSignIn = () => {
         preserveState: true,
         onSuccess: () => {
             console.log("onSuccess");
-          //  router.get("dashboard");
+            router.get("dashboard");
+        },
+        onError: () => {
+            alert("Error");
         },
     });
     

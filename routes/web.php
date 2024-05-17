@@ -27,7 +27,14 @@ Route::group(['prefix'=>'recepcion'],function(){
 //rutas para configuracion
 Route::group(['prefix'=>'configuracion'],function(){
     Route::get('/empresa',[\App\Http\Controllers\Configuration\CompanyController::class,'index']);
+
     Route::get('/categorias',[\App\Http\Controllers\Configuration\CategoryController::class,'index']);
+    // loadItems
+    Route::post('/categorias/lista',[\App\Http\Controllers\Configuration\CategoryController::class,'loadItems']);
+    // store
+    Route::post('/categorias',[\App\Http\Controllers\Configuration\CategoryController::class,'store']);
+
+    
     Route::get('/cajas',[\App\Http\Controllers\Configuration\CashRegisterController::class,'index']);
     Route::get('/habitaciones',[\App\Http\Controllers\Configuration\RoomController::class,'index']);
     Route::get('/pisos',[\App\Http\Controllers\Configuration\FloorController::class,'index']);
