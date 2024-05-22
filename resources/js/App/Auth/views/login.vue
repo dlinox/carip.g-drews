@@ -34,7 +34,7 @@
                                                 variant="outlined"
                                                 prepend-icon="mdi-google"
                                                 link
-                                                @click="router.get('/auth/google')"
+                                                href="/auth/google"
                                             >
                                                 Google
                                             </v-btn>
