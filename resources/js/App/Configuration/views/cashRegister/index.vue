@@ -1,7 +1,7 @@
 <template>
     <AdminLayout>
         <v-container fluid>
-            caja registradora
+            no implementado
         </v-container>
     </AdminLayout>
 </template>

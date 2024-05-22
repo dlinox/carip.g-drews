@@ -2,7 +2,7 @@
     <AdminLayout>
         <v-container fluid>
             
-            company 
+            no implementado
         </v-container>
     </AdminLayout>
 </template>

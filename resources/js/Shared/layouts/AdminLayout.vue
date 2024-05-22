@@ -101,96 +101,96 @@ const menuApp = [
         link: "/dashboard",
         childrens: [],
     },
-    {
-        title: "Rececion",
-        icon: "mdi-room-service-outline",
-        link: "/reception",
-        childrens: [
-            {
-                title: "Registro",
-                icon: "mdi-account-plus-outline",
-                link: "/recepcion/registro",
-            },
-            {
-                title: "Salida",
-                icon: "mdi-account-minus-outline",
-                link: "/recepcion/salida",
-            },
-            {
-                title: "Listado",
-                icon: "mdi-account-multiple-outline",
-                link: "/recepcion",
-            },
-        ],
-    },
+    // {
+    //     title: "Rececion",
+    //     icon: "mdi-room-service-outline",
+    //     link: "/reception",
+    //     childrens: [
+    //         {
+    //             title: "Registro",
+    //             icon: "mdi-account-plus-outline",
+    //             link: "/recepcion/registro",
+    //         },
+    //         {
+    //             title: "Salida",
+    //             icon: "mdi-account-minus-outline",
+    //             link: "/recepcion/salida",
+    //         },
+    //         {
+    //             title: "Listado",
+    //             icon: "mdi-account-multiple-outline",
+    //             link: "/recepcion",
+    //         },
+    //     ],
+    // },
 
-    {
-        title: "Inentario",
-        icon: "mdi-store-outline",
-        link: "/stores",
-        childrens: [
-            {
-                title: "Products",
-                icon: "mdi-cart-plus",
-                link: "/products",
-            },
-            {
-                title: "Sales",
-                icon: "mdi-point-of-sale",
-                link: "/sales",
-            },
-            {
-                title: "POS",
-                icon: "mdi-network-pos",
-                link: "/pos",
-            },
-        ],
-    },
-    {
-        title: "Contactos",
-        icon: "mdi-account-group-outline",
-        link: "/customers",
-        childrens: [
-            {
-                title: "Clientes",
-                icon: "mdi-account-multiple",
-                link: "/customers/clients",
-            },
-            {
-                title: "Proveedores",
-                icon: "mdi-account-group",
-                link: "/customers/providers",
-            },
-        ],
-    },
+    // {
+    //     title: "Inentario",
+    //     icon: "mdi-store-outline",
+    //     link: "/stores",
+    //     childrens: [
+    //         {
+    //             title: "Products",
+    //             icon: "mdi-cart-plus",
+    //             link: "/products",
+    //         },
+    //         {
+    //             title: "Sales",
+    //             icon: "mdi-point-of-sale",
+    //             link: "/sales",
+    //         },
+    //         {
+    //             title: "POS",
+    //             icon: "mdi-network-pos",
+    //             link: "/pos",
+    //         },
+    //     ],
+    // },
+    // {
+    //     title: "Contactos",
+    //     icon: "mdi-account-group-outline",
+    //     link: "/customers",
+    //     childrens: [
+    //         {
+    //             title: "Clientes",
+    //             icon: "mdi-account-multiple",
+    //             link: "/customers/clients",
+    //         },
+    //         {
+    //             title: "Proveedores",
+    //             icon: "mdi-account-group",
+    //             link: "/customers/providers",
+    //         },
+    //     ],
+    // },
 
-    {
-        title: "Reportes",
-        icon: "mdi-finance",
-        link: "/finance",
-        childrens: [
-            {
-                title: "Ventas",
-                icon: "mdi-cash-register",
-                link: "/finance/sales",
-            },
-            {
-                title: "Compras",
-                icon: "mdi-cash-refund",
-                link: "/finance/purchases",
-            },
-            {
-                title: "Gastos",
-                icon: "mdi-cash",
-                link: "/finance/expenses",
-            },
-            {
-                title: "Ingresos",
-                icon: "mdi-cash-multiple",
-                link: "/finance/incomes",
-            },
-        ],
-    },
+    // {
+    //     title: "Reportes",
+    //     icon: "mdi-finance",
+    //     link: "/finance",
+    //     childrens: [
+    //         {
+    //             title: "Ventas",
+    //             icon: "mdi-cash-register",
+    //             link: "/finance/sales",
+    //         },
+    //         {
+    //             title: "Compras",
+    //             icon: "mdi-cash-refund",
+    //             link: "/finance/purchases",
+    //         },
+    //         {
+    //             title: "Gastos",
+    //             icon: "mdi-cash",
+    //             link: "/finance/expenses",
+    //         },
+    //         {
+    //             title: "Ingresos",
+    //             icon: "mdi-cash-multiple",
+    //             link: "/finance/incomes",
+    //         },
+    //     ],
+    // },
 
     {
         title: "Configuraciones",
@@ -198,32 +198,37 @@ const menuApp = [
         link: "/configuracion",
         childrens: [
             {
-                title: "Empresa",
+                title: "Empresas",
                 icon: "mdi-cog",
                 link: "/configuracion/empresa",
             },
             {
-                title: "Categorias",
+                title: "Proyectos",
                 icon: "mdi-cog",
                 link: "/configuracion/categorias",
             },
             {
-                title: "Cajas",
+                title: "Areas",
                 icon: "mdi-cog",
                 link: "/configuracion/cajas",
             },
             {
-                title: "Habitaciones",
+                title: "Responsables",
                 icon: "mdi-cog",
                 link: "/configuracion/habitaciones",
             },
             {
-                title: "Pisos",
+                title: "Vehiculos",
                 icon: "mdi-cog",
                 link: "/configuracion/pisos",
             },
             {
-                title: "Series",
+                title: "Operadores",
+                icon: "mdi-cog",
+                link: "/configuracion/series",
+            },
+            {
+                title: "Proveedores",
                 icon: "mdi-cog",
                 link: "/configuracion/series",
             },

@@ -2,7 +2,7 @@
     <AdminLayout>
         <v-container fluid>
             
-            floors
+            no implementado
         </v-container>
     </AdminLayout>
 </template>

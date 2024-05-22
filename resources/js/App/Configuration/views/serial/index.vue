@@ -1,8 +1,7 @@
 <template>
     <AdminLayout>
         <v-container fluid>
-            series de facturación
-            
+            no implementado 
         </v-container>
     </AdminLayout>
 </template>
