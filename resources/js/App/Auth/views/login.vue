@@ -27,7 +27,7 @@
                                     </div>
 
                                     <v-row class="justify-center">
-                                        <v-col cols="6">
+                                        <v-col cols="12">
                                             <v-btn
                                                 color="primary"
                                                 block
@@ -39,15 +39,7 @@
                                                 Google
                                             </v-btn>
                                         </v-col>
-                                        <v-col cols="6">
-                                            <v-btn
-                                                color="primary"
-                                                block
-                                                variant="outlined"
-                                                prepend-icon="mdi-facebook"
-                                                >Facebook</v-btn
-                                            >
-                                        </v-col>
+                                
                                     </v-row>
                                 </div>
                             </v-card-text>
