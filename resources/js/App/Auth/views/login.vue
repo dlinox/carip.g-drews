@@ -33,8 +33,11 @@
                                                 block
                                                 variant="outlined"
                                                 prepend-icon="mdi-google"
-                                                >Google</v-btn
+                                                link
+                                                @click="router.get('/auth/google')"
                                             >
+                                                Google
+                                            </v-btn>
                                         </v-col>
                                         <v-col cols="6">
                                             <v-btn
@@ -127,7 +130,6 @@ import { ref } from "vue";
 import { router, useForm } from "@inertiajs/vue3";
 const showPassword = ref(false);
 
-
 const form = useForm({
     email: "test@example.com",
     password: "password",
@@ -146,7 +148,5 @@ const submitSignIn = () => {
             alert("Error");
         },
     });
-    
-
 };
 </script>
