@@ -10,7 +10,9 @@ Route::get('/auth/google', function () {
 
 Route::get('/auth/google/callback', function () {
     $user = Socialite::driver('google')->user();
-    $user->token;
+
+
+    return response()->json($user);
 });
 
 
