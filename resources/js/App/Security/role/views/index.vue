@@ -2,14 +2,16 @@
     <AdminLayout>
         <v-card>
             <v-toolbar>
-                <v-btn variant="tonal">Agregar</v-btn>
+                <v-btn variant="tonal" link @click="dialog = !dialog">
+                    Agregar
+                </v-btn>
                 <v-spacer></v-spacer>
 
                 <v-text-field
                     prepend-inner-icon="mdi-magnify"
                     label="Buscar"
                     class="mb-0"
-                    v-model="search_"
+                    v-model="search"
                 />
                 <v-btn
                     class="ms-2"
@@ -20,12 +22,12 @@
             </v-toolbar>
 
             <v-data-table-server
-                v-model:items-per-page="dataTable.itemsPerPage"
-                :headers="dataTable.headers"
-                :items="dataTable.items"
-                :items-length="dataTable.totalItems"
+                v-model:items-per-page="items.itemsPerPage"
+                :headers="items.headers"
+                :items="items.items"
+                :items-length="items.totalItems"
                 :loading="loading"
-                :search="search_"
+                :search="search"
                 multi-sort
                 :items-per-page-options="[1, 5, 10, 25, 50]"
                 item-value="name"
@@ -36,7 +38,7 @@
             >
                 <template v-slot:item.status="{ item }">
                     <v-chip
-                        :color="item.status === 1 ? 'success' : 'error'"
+                        :color="item.status ? 'success' : 'error'"
                         dark
                         label
                     >
@@ -56,30 +58,41 @@
                 </template>
             </v-data-table-server>
         </v-card>
+        <v-dialog v-model="dialog" max-width="500px">
+            <v-card class="rounded-lg">
+                <v-card-title class="headline"> Titulo </v-card-title>
+                <v-divider></v-divider>
+                <FormCreate
+                    @on-cancel="dialog"
+                    :formStructure="formStructure"
+                    :url="url"
+
+                />
+            </v-card>
+        </v-dialog>
     </AdminLayout>
 </template>
 <script setup>
-import AdminLayout from "@/Shared/layouts/AdminLayout.vue";
 import { ref } from "vue";
+import AdminLayout from "@/Shared/layouts/AdminLayout.vue";
 
-import { _dataTable } from "@/App/Security/services/user.services";
+import FormCreate from "@/App/Security/role/components/FormCreate.vue";
 
-const dataTable = ref({
-    loading: false,
-    headers: [],
-    items: [],
-    totalItems: 0,
-    itemsPerPage: 10,
-    filters: {
-        page: 1,
-        search: "",
-        sortBy: [],
-        perPage: 10,
-    },
-});
+import { _items } from "@/App/Security/role/services/role.services";
+import { itemsResponse } from "@/Shared/constants";
 
-const search_ = ref("");
+import {
+    url,
+    idKey,
+    formStructure,
+} from "@/App/Security/role/constants/form.constants";
+
+const search = ref("");
 const loading = ref(true);
+
+const dialog = ref(false);
+
+const items = ref({ ...itemsResponse });
 
 const loadItems = async ({ page, itemsPerPage, sortBy }) => {
     loading.value = true;
@@ -87,11 +100,17 @@ const loadItems = async ({ page, itemsPerPage, sortBy }) => {
         page,
         itemsPerPage,
         sortBy,
-        search: search_.value,
+        search: search.value,
     };
 
-    dataTable.value = await _dataTable(data);
+    items.value = await _items(data);
 
     loading.value = false;
 };
+
+const init = async () => {
+    //    items.value = await _items();
+};
+
+init();
 </script>
