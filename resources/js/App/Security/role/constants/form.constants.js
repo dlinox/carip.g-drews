@@ -23,7 +23,7 @@ export const formStructure = [
         key: "isEnabled",
         label: "Activo",
         type: "checkbox",
-        required: true,
+        required: false,
         colMd: 12,
         default: true,
     }

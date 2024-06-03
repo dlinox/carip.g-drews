@@ -11,10 +11,9 @@
 </template>
 
 <script setup>
-import axios from "axios";
 import SimpleForm from "@/Shared/components/SimpleForm.vue";
 import { useForm } from "@inertiajs/vue3";
-const emit = defineEmits(["onCancel", "onSubmit"]);
+const emit = defineEmits(["onCancel", "onSubmit", "onSuccess"]);
 
 const props = defineProps({
     formData: {
@@ -47,6 +46,7 @@ const option = {
     onSuccess: (page) => {
         console.log("onSuccess");
         emit("onCancel");
+        emit("onSuccess");
     },
     onError: (errors) => {
         console.log("onError");

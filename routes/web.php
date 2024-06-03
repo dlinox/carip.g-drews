@@ -30,47 +30,59 @@ Route::group(['prefix' => 'auth'], function () {
 //ruta para el dashboard
 Route::get('/dashboard', [\App\Http\Controllers\Dashboard\DashboardController::class, 'index'])->name('dashboard');
 
-//rutas para recepcion
-Route::group(['prefix' => 'recepcion'], function () {
-    Route::get('/', [\App\Http\Controllers\Reception\ReceptionController::class, 'index']);
-    Route::get('/registro', [\App\Http\Controllers\Reception\ReceptionController::class, 'checkIn']);
-    Route::get('/salida', [\App\Http\Controllers\Reception\ReceptionController::class, 'checkOut']);
-});
+
 
 //rutas para configuracion
-Route::group(['prefix' => 'configuracion'], function () {
-    Route::get('/empresa', [\App\Http\Controllers\Configuration\CompanyController::class, 'index']);
+Route::group(['prefix' => ''], function () {
 
-    Route::get('/categorias', [\App\Http\Controllers\Configuration\CategoryController::class, 'index']);
-    // loadItems
-    Route::post('/categorias/lista', [\App\Http\Controllers\Configuration\CategoryController::class, 'loadItems']);
-    // store
-    Route::post('/categorias', [\App\Http\Controllers\Configuration\CategoryController::class, 'store']);
+    Route::group(['prefix' => 'companies'], function () {
+        Route::get('/', [\App\Http\Controllers\Configuration\CompanyController::class, 'index']);
+        Route::post('/items', [\App\Http\Controllers\Configuration\CompanyController::class, 'getItems']);
+        Route::post('/', [\App\Http\Controllers\Configuration\CompanyController::class, 'store']);
+        Route::put('/{id}', [\App\Http\Controllers\Configuration\CompanyController::class, 'update']);
+        Route::delete('/{id}', [\App\Http\Controllers\Configuration\CompanyController::class, 'destroy']);
 
+        Route::get('/{id}/areas', [\App\Http\Controllers\Configuration\AreaController::class, 'index']);
+        Route::get('/{id}/workers', [\App\Http\Controllers\Configuration\WorkerController::class, 'index']);
+    });
 
-    Route::get('/cajas', [\App\Http\Controllers\Configuration\CashRegisterController::class, 'index']);
-    Route::get('/habitaciones', [\App\Http\Controllers\Configuration\RoomController::class, 'index']);
-    Route::get('/pisos', [\App\Http\Controllers\Configuration\FloorController::class, 'index']);
-    Route::get('/series', [\App\Http\Controllers\Configuration\SerialController::class, 'index']);
+    Route::group(['prefix' => 'projects'], function () {
+        Route::get('/', [\App\Http\Controllers\ProjectController::class, 'index']);
+        Route::get('/{id}', [\App\Http\Controllers\ProjectController::class, 'show']);
+;
+    });
+
+    Route::group(['prefix'=> 'cars'], function () {
+        Route::get('/', [\App\Http\Controllers\Configuration\CarController::class, 'index']);
+    });
 });
 
 
 //rutas para security
-Route::group(['prefix' => 'seguridad'], function () {
-    Route::get('/usuarios', [\App\Http\Controllers\Security\UserController::class, 'index']);
-    Route::post('/usuarios/lista', [\App\Http\Controllers\Security\UserController::class, 'list']);
+Route::group(['prefix' => ''], function () {
 
-
-
-    Route::group(['prefix' => 'roles'], function () {
-        Route::get('/', [\App\Http\Controllers\Security\RoleController::class, 'index']);
-        Route::post('/items', [\App\Http\Controllers\Security\RoleController::class, 'getItems']);
-
-          Route::post('/', [\App\Http\Controllers\Security\RoleController::class, 'store']);
+    Route::group(['prefix' => 'users'], function () {
+        Route::get('/', [\App\Http\Controllers\Security\UserController::class, 'index']);
+        Route::post('/items', [\App\Http\Controllers\Security\UserController::class, 'getItems']);
+        Route::post('/', [\App\Http\Controllers\Security\UserController::class, 'store']);
     });
 
+    // Route::get('/modulos', [\App\Http\Controllers\Security\ModuleController::class, 'index']);
 
-
-    Route::get('/permisos', [\App\Http\Controllers\Security\PermissionController::class, 'index']);
-    Route::get('/modulos', [\App\Http\Controllers\Security\ModuleController::class, 'index']);
+    Route::group(['prefix' => 'roles'], function () {
+        //vista para roles
+        Route::get('/', [\App\Http\Controllers\Security\RoleController::class, 'index']);
+        //listado de roles
+        Route::post('/items', [\App\Http\Controllers\Security\RoleController::class, 'getItems']);
+        //crear un nuevo role
+        Route::post('/', [\App\Http\Controllers\Security\RoleController::class, 'store']);
+        //actualizar un role
+        Route::put('/{id}', [\App\Http\Controllers\Security\RoleController::class, 'update']);
+        //eliminar un role
+        Route::delete('/{id}', [\App\Http\Controllers\Security\RoleController::class, 'destroy']);
+        //actualizar el status de un role
+        Route::put('/{id}/status', [\App\Http\Controllers\Security\RoleController::class, 'updateStatus']);
+        //asignar permisos a un role
+        Route::post('/permissions', [\App\Http\Controllers\Security\RoleController::class, 'assignPermissions']);
+    });
 });

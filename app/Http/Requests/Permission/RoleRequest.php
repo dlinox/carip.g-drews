@@ -19,8 +19,10 @@ class RoleRequest extends FormRequest
     public function rules(): array
     {
         
+        //conderar si es edit
+        $id = $this->route('id');
         return [
-            'name' => 'required|max:100|unique:roles,name',
+            'name' => 'required|max:100|unique:roles,name,' . $id,
             'isEnabled' => 'required|boolean',
         ];
     }

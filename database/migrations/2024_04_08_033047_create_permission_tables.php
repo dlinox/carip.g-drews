@@ -28,7 +28,7 @@ return new class extends Migration
             $table->bigIncrements('id'); // permission id
             $table->string('name', 100);       // For MySQL 8.0 use string('name', 125);
             $table->string('guard_name', 100); // For MySQL 8.0 use string('guard_name', 125);
-            $table->unsignedBigInteger('module_id')->nullable();
+            $table->string('group_name', 100)->nullable();
 
             $table->boolean('is_enabled')->default(true);
             $table->timestamps();

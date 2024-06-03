@@ -1,7 +1,7 @@
 import axios from "axios";
 export const _items = async (data) => {
     try {
-        let response = await axios.post("/seguridad/roles/items", data);
+        let response = await axios.post("/roles/items", data);
         
         return {
             loading: false,

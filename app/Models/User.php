@@ -6,10 +6,11 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Spatie\Permission\Traits\HasRoles;
 
 class User extends Authenticatable
 {
-    use HasFactory, Notifiable;
+    use HasFactory, Notifiable, HasRoles;
 
     /**
      * The attributes that are mass assignable.
@@ -18,9 +19,10 @@ class User extends Authenticatable
      */
     protected $fillable = [
         'name',
+        'username',
         'email',
         'password',
-        'status',
+        'is_enabled',
     ];
 
     /**
@@ -43,6 +45,7 @@ class User extends Authenticatable
         return [
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
+            'is_enabled' => 'boolean',
         ];
     }
 
@@ -52,7 +55,7 @@ class User extends Authenticatable
             ['title' => "Nombre", 'key' => 'name', 'align' => 'center'],
             ['title' => "Usuario", 'key' => 'username', 'align' => 'center'],
             ['title' => "Correo", 'key' => 'email', 'align' => 'center'],
-            ['title' => "Estado", 'key' => 'status', 'align' => 'center'],
+            ['title' => "Estado", 'key' => 'is_enabled', 'align' => 'center'],
             ['title' => "Acciones", 'key' => 'actions', 'align' => 'end', 'sortable' => false]
         ];
     }

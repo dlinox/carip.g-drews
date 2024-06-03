@@ -123,7 +123,7 @@ import { router, useForm } from "@inertiajs/vue3";
 const showPassword = ref(false);
 
 const form = useForm({
-    email: "test@example.com",
+    email: "admin@gmail.com",
     password: "password",
 });
 

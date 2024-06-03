@@ -1,10 +1,30 @@
 <template>
     <AdminLayout>
+
         <v-card>
             <v-toolbar>
-                <v-btn variant="tonal" link @click="dialog = !dialog">
-                    Agregar
-                </v-btn>
+                <LnxDialog title="Nuevo" width="500px">
+                    <template v-slot:activator="{ dialog }">
+                        <v-btn variant="tonal" link @click="dialog">
+                            Agregar
+                        </v-btn>
+                    </template>
+                    <template v-slot:content="{ dialog }">
+                        <FormCreate
+                            :formStructure="formStructure"
+                            :url="url"
+                            @oncancel="dialog"
+                            @onSuccess="
+                                loadItems({
+                                    page: 1,
+                                    itemsPerPage: 10,
+                                    sortBy: [],
+                                })
+                            "
+                        />
+                    </template>
+                </LnxDialog>
+
                 <v-spacer></v-spacer>
 
                 <v-text-field
@@ -36,50 +56,95 @@
                 items-per-page-text="Registros por página"
                 loading-text="Cargando registros"
             >
-                <template v-slot:item.status="{ item }">
+                <template v-slot:item.isEnabled="{ item }">
                     <v-chip
-                        :color="item.status ? 'success' : 'error'"
+                        :color="item.isEnabled ? 'success' : 'error'"
                         dark
                         label
                     >
-                        {{ item.status ? "Activo" : "Inactivo" }}
+                        {{ item.isEnabled ? "Activo" : "Inactivo" }}
                     </v-chip>
                 </template>
 
                 <template v-slot:item.actions="{ item }">
-                    <v-btn
-                        icon="mdi-pencil"
-                        size="small"
-                        color="primary"
-                        variant="tonal"
-                        link
-                    >
-                    </v-btn>
+
+                    <LnxDialog title="Asignar permisos" width="800px">
+                        <template v-slot:activator="{ dialog }">
+                            <v-btn
+                                icon
+                                variant="outlined"
+                                density="comfortable"
+                                class="me-1"
+                                color="dark"
+                                @click="dialog"
+                            >
+                                <v-icon
+                                    size="x-small"
+                                    icon="mdi-security-network"
+                                ></v-icon>
+                            </v-btn>
+                        </template>
+                        <template v-slot:content="{ dialog }">
+                            <FormPermissions
+                                @on-cancel="dialog"
+                                @onSuccess="
+                                    loadItems({
+                                        page: 1,
+                                        itemsPerPage: 10,
+                                        sortBy: [],
+                                    })
+                                "
+                                :permissions="permissions"
+                                :rolPermissions="item.permissions"
+                                :url="urlPermisos"
+                                :roleId="item.id"
+                            />
+                        </template>
+                    </LnxDialog>
+                    <LnxDialog title="Nuevo" width="500px">
+                        <template v-slot:activator="{ dialog }">
+                            <v-btn
+                                icon="mdi-pencil"
+                                size="small"
+                                color="primary"
+                                variant="tonal"
+                                link
+                                @click="dialog"
+                            >
+                            </v-btn>
+                        </template>
+                        <template v-slot:content="{ dialog }">
+                            <FormCreate
+                                :formStructure="formStructure"
+                                :url="url + '/' + item[`${idKey}`]"
+                                :edit="true"
+                                :formData="item"
+                                @onCancel="dialog"
+                                @onSuccess="
+                                    loadItems({
+                                        page: 1,
+                                        itemsPerPage: 10,
+                                        sortBy: [],
+                                    })
+                                "
+                            />
+                        </template>
+                    </LnxDialog>
+
+          
                 </template>
             </v-data-table-server>
         </v-card>
-        <v-dialog v-model="dialog" max-width="500px">
-            <v-card class="rounded-lg">
-                <v-card-title class="headline"> Titulo </v-card-title>
-                <v-divider></v-divider>
-                <FormCreate
-                    @on-cancel="dialog"
-                    :formStructure="formStructure"
-                    :url="url"
-
-                />
-            </v-card>
-        </v-dialog>
     </AdminLayout>
 </template>
 <script setup>
 import { ref } from "vue";
 import AdminLayout from "@/Shared/layouts/AdminLayout.vue";
-
 import FormCreate from "@/App/Security/role/components/FormCreate.vue";
-
+import FormPermissions from "@/App/Security/role/components/FormPermissions.vue";
 import { _items } from "@/App/Security/role/services/role.services";
 import { itemsResponse } from "@/Shared/constants";
+import LnxDialog from "@/Shared/components/LnxDialog.vue";
 
 import {
     url,
@@ -87,10 +152,17 @@ import {
     formStructure,
 } from "@/App/Security/role/constants/form.constants";
 
-const search = ref("");
-const loading = ref(true);
 
-const dialog = ref(false);
+const props = defineProps({
+    permissions: Object,
+    rolPermissions: Array,
+});
+
+const urlPermisos = "/roles/permissions";
+
+const search = ref("");
+
+const loading = ref(true);
 
 const items = ref({ ...itemsResponse });
 
@@ -107,10 +179,4 @@ const loadItems = async ({ page, itemsPerPage, sortBy }) => {
 
     loading.value = false;
 };
-
-const init = async () => {
-    //    items.value = await _items();
-};
-
-init();
 </script>

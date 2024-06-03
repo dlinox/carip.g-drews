@@ -22,21 +22,35 @@ class Role extends Model
     ];
 
     protected $casts = [
-        'is_enabled' => 'boolean',
+        'isEnabled' => 'boolean',
     ];
 
 
+    public static function get($column, $value = null)
+    {
+        $query = parent::get($column, $value);
+        $query->select([
+            'id',
+            'name',
+            'route_redirect as routeRedirect',
+            'is_enabled as isEnabled'
+        ]);
+        return $query;
+    }
+
+    
     public function permissions()
     {
         return $this->belongsToMany(Permission::class);
     }
 
+
     public static function headers(): array
     {
         return [
             ['title' => "Nombre", 'key' => 'name', 'align' => 'center'],
-            ['title' => "Ruta base", 'key' => 'route_redirect', 'align' => 'center'],
-            ['title' => "Estado", 'key' => 'is_enabled', 'align' => 'center'],
+            ['title' => "Ruta base", 'key' => 'routeRedirect', 'align' => 'center'],
+            ['title' => "Estado", 'key' => 'isEnabled', 'align' => 'center'],
             ['title' => "Acciones", 'key' => 'actions', 'align' => 'center'],
         ];
     }
@@ -50,4 +64,6 @@ class Role extends Model
             'is_enabled' => $request['isEnabled'],
         ];
     }
+
+    
 }

@@ -17,7 +17,11 @@
                 icon
                 v-for="menu in menuApp"
                 :key="menu.title"
-                @click="handleMenu(menu)"
+                @click="
+                    menu.childrens.length > 0
+                        ? handleMenu(menu)
+                        : handleSubMenu(menu)
+                "
             >
                 <v-tooltip activator="parent" location="end">
                     {{ menu.title }}
@@ -71,7 +75,7 @@
                     </template>
                 </v-breadcrumbs>
             </v-toolbar>
-  
+
             <slot />
         </v-main>
 
@@ -99,138 +103,32 @@ const menuApp = [
         title: "Dashboard",
         icon: "mdi-view-dashboard-outline",
         link: "/dashboard",
-        childrens: [],
+        childrens: false,
     },
-    // {
-    //     title: "Rececion",
-    //     icon: "mdi-room-service-outline",
-    //     link: "/reception",
-    //     childrens: [
-    //         {
-    //             title: "Registro",
-    //             icon: "mdi-account-plus-outline",
-    //             link: "/recepcion/registro",
-    //         },
-    //         {
-    //             title: "Salida",
-    //             icon: "mdi-account-minus-outline",
-    //             link: "/recepcion/salida",
-    //         },
-    //         {
-    //             title: "Listado",
-    //             icon: "mdi-account-multiple-outline",
-    //             link: "/recepcion",
-    //         },
-    //     ],
-    // },
-
-    // {
-    //     title: "Inentario",
-    //     icon: "mdi-store-outline",
-    //     link: "/stores",
-    //     childrens: [
-    //         {
-    //             title: "Products",
-    //             icon: "mdi-cart-plus",
-    //             link: "/products",
-    //         },
-    //         {
-    //             title: "Sales",
-    //             icon: "mdi-point-of-sale",
-    //             link: "/sales",
-    //         },
-    //         {
-    //             title: "POS",
-    //             icon: "mdi-network-pos",
-    //             link: "/pos",
-    //         },
-    //     ],
-    // },
-    // {
-    //     title: "Contactos",
-    //     icon: "mdi-account-group-outline",
-    //     link: "/customers",
-    //     childrens: [
-    //         {
-    //             title: "Clientes",
-    //             icon: "mdi-account-multiple",
-    //             link: "/customers/clients",
-    //         },
-    //         {
-    //             title: "Proveedores",
-    //             icon: "mdi-account-group",
-    //             link: "/customers/providers",
-    //         },
-    //     ],
-    // },
-
-    // {
-    //     title: "Reportes",
-    //     icon: "mdi-finance",
-    //     link: "/finance",
-    //     childrens: [
-    //         {
-    //             title: "Ventas",
-    //             icon: "mdi-cash-register",
-    //             link: "/finance/sales",
-    //         },
-    //         {
-    //             title: "Compras",
-    //             icon: "mdi-cash-refund",
-    //             link: "/finance/purchases",
-    //         },
-    //         {
-    //             title: "Gastos",
-    //             icon: "mdi-cash",
-    //             link: "/finance/expenses",
-    //         },
-    //         {
-    //             title: "Ingresos",
-    //             icon: "mdi-cash-multiple",
-    //             link: "/finance/incomes",
-    //         },
-    //     ],
-    // },
+    {
+        title: "Proyectos",
+        icon: "mdi-boom-gate-up-outline",
+        link: "/projects",
+        childrens: false,
+    },
 
     {
         title: "Configuraciones",
         icon: "mdi-cog-outline",
-        link: "/configuracion",
+        link: "/",
         childrens: [
             {
                 title: "Empresas",
                 icon: "mdi-cog",
-                link: "/configuracion/empresa",
+                link: "/companies",
+                childrens: false,
             },
+
             {
-                title: "Proyectos",
+                title: "Carros",
                 icon: "mdi-cog",
-                link: "/configuracion/categorias",
-            },
-            {
-                title: "Areas",
-                icon: "mdi-cog",
-                link: "/configuracion/cajas",
-            },
-            {
-                title: "Responsables",
-                icon: "mdi-cog",
-                link: "/configuracion/habitaciones",
-            },
-            {
-                title: "Vehiculos",
-                icon: "mdi-cog",
-                link: "/configuracion/pisos",
-            },
-            {
-                title: "Operadores",
-                icon: "mdi-cog",
-                link: "/configuracion/series",
-            },
-            {
-                title: "Proveedores",
-                icon: "mdi-cog",
-                link: "/configuracion/series",
+                link: "/cars",
+                childrens: false,
             },
         ],
     },
@@ -242,22 +140,14 @@ const menuApp = [
             {
                 title: "Usuarios",
                 icon: "mdi-account",
-                link: "/seguridad/usuarios",
+                link: "/users",
+                childrens: false,
             },
             {
                 title: "Roles",
                 icon: "mdi-account-group",
-                link: "/seguridad/roles",
-            },
-            {
-                title: "Permisos",
-                icon: "mdi-account-key",
-                link: "/seguridad/permisos",
-            },
-            {
-                title: "Modulos",
-                icon: "mdi-view-dashboard",
-                link: "/seguridad/modulos",
+                link: "/roles",
+                childrens: false,
             },
         ],
     },
@@ -283,7 +173,6 @@ const items = [
 
 const handleMenu = (menu) => {
     menuStore.setCurrent(menu);
-  
 
     if (menu.childrens.length > 0) {
         layoutStore.setDrawer(true);
@@ -295,15 +184,20 @@ const handleMenu = (menu) => {
 const breadCrumbs = ref([]);
 
 const handleSubMenu = (menu) => {
+    if (menu.childrens.length > 0) {
+        layoutStore.setDrawer(true);
+    } else {
+        layoutStore.setDrawer(false);
+    }
     router.get(menu.link);
-    // layoutStore.setBreadCrumbs(menu); 
+    // layoutStore.setBreadCrumbs(menu);
 
     breadCrumbs.value = [];
 
     breadCrumbs.value.push({
         title: "Dashboard",
         disabled: false,
-        href: ''
+        href: "",
     });
 
     breadCrumbs.value.push({
@@ -319,7 +213,5 @@ const handleSubMenu = (menu) => {
     });
 
     menuStore.setBreadCrumbs(breadCrumbs.value);
-
-
 };
 </script>

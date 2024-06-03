@@ -24,6 +24,7 @@
                             :disabled="field.disabled"
                             :readonly="field.readonly"
                             :clearable="field.clearable"
+                            :autocomplete = "field.type === 'password' ? 'off' : 'on'" 
                             :type="field.type"
                         ></v-text-field>
                     </template>
