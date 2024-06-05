@@ -3,3 +3,8 @@
 .v-list-item__prepend > .v-tooltip ~ .v-list-item__spacer {
     width: 10px !important;
 }
+
+
+.v-list-group__items .v-list-item {
+    padding-inline-start: calc(16px + 20px) !important;
+}

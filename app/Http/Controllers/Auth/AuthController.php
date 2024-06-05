@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Auth\SignInRequest;
 use Illuminate\Http\Request;
 
 class AuthController extends Controller
@@ -12,20 +13,19 @@ class AuthController extends Controller
         return inertia('Auth/views/login');
     }
 
-    public function signIn(Request $request)
+    public function signIn(SignInRequest $request)
     {
-        $request->validate([
-            'email' => 'required|email',
-            'password' => 'required',
-        ]);
 
         if (!auth()->attempt($request->only('email', 'password'))) {
-            return back()->withErrors([
-                'message' => 'Invalid credentials',
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Credenciales inválidas',
             ]);
         }
 
-        //return back()->with('success', 'You have successfully logged in');
+        return response()->json([
+            'status' => 'success',
+            'message' => 'You have successfully logged in',
+        ]);
     }
-
 }

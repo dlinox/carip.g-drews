@@ -13,7 +13,7 @@
                         <FormCreate
                             :formStructure="formStructure"
                             :url="url"
-                            @oncancel="dialog"
+                            @onCancel="dialog"
                             @onSuccess="
                                 loadItems({
                                     page: 1,

@@ -1,55 +1,52 @@
 <template>
     <v-app app>
-        <v-navigation-drawer app color="grey-lighten-3" width="70">
-            <v-avatar class="d-block mx-auto mt-4 pa-1" tile>
+        <v-navigation-drawer
+            app
+            color="grey-lighten-3"
+            :rail="layoutStore.railDrawer && layoutStore.menuOpen.length === 0"
+            v-model="layoutStore.drawer"
+        >
+            <v-sheet
+                class="d-flex flex-column justify-center align-center pa-1 bg-grey-lighten-2"
+                style="height: 60px"
+            >
                 <img
                     src="https://caripperu.com/img/bg-header/caripperu.png"
                     alt="Caripperu"
-                    class="w-100"
+                    class="h-100"
                 />
-            </v-avatar>
+            </v-sheet>
 
-            <v-divider class="mx-3 my-5"></v-divider>
-
-            <v-btn
-                class="d-block mx-auto mb-1"
-                variant="text"
-                icon
-                v-for="menu in menuApp"
-                :key="menu.title"
-                @click="
-                    menu.childrens.length > 0
-                        ? handleMenu(menu)
-                        : handleSubMenu(menu)
-                "
+            <v-list
+                nav
+                color="primary"
+                :items="listItems"
+                density="compact"
+                v-model:selected="layoutStore.menuActive"
+                v-model:opened="layoutStore.menuOpen"
             >
-                <v-tooltip activator="parent" location="end">
-                    {{ menu.title }}
-                </v-tooltip>
-                <v-icon size="24">{{ menu.icon }}</v-icon>
-            </v-btn>
-        </v-navigation-drawer>
-
-        <v-navigation-drawer app width="200" v-model="layoutStore.drawer">
-            <h6 class="text-h6 ma-4">
-                {{ currentMenu ? currentMenu.title : "Dashboard" }}
-            </h6>
-
-            <v-list nav>
-                <v-list-item
-                    v-for="child in currentMenu ? currentMenu.childrens : []"
-                    :key="child.title"
-                    prepend-icon="mdi-minus"
-                    density="compact"
-                    link
-                    @click="handleSubMenu(child)"
-                >
-                    <v-list-item-title>{{ child.title }}</v-list-item-title>
-                </v-list-item>
             </v-list>
+
+            <template #append>
+                <v-btn
+                    class="mx-auto"
+                    :icon="layoutStore.railDrawer ? 'mdi-arrow-expand-right' : 'mdi-arrow-expand-left'"
+                    block
+                    variant="tonal"
+                    rounded="0"
+                    @click="layoutStore.setRailDrawer(!layoutStore.railDrawer)"
+                >
+                </v-btn>
+            </template>
         </v-navigation-drawer>
 
         <v-app-bar app flat class="bg-grey-lighten-3">
+            <v-btn
+                icon
+                @click="layoutStore.setDrawer(!layoutStore.drawer)"
+            >
+                <v-icon>mdi-menu</v-icon>
+            </v-btn>
             <v-spacer></v-spacer>
             <v-btn
                 icon="mdi-bell"
@@ -98,120 +95,78 @@ const layoutStore = useLayoutStore();
 
 const currentMenu = computed(() => menuStore.current);
 
-const menuApp = [
+const listItems = ref([
     {
         title: "Dashboard",
-        icon: "mdi-view-dashboard-outline",
-        link: "/dashboard",
-        childrens: false,
+
+        props: {
+            value: "dashboard",
+            prependIcon: "mdi-view-dashboard-outline",
+            onclick: () => {
+                router.get("/dashboard");
+            },
+        },
     },
     {
         title: "Proyectos",
-        icon: "mdi-boom-gate-up-outline",
-        link: "/projects",
-        childrens: false,
+        props: {
+            value: "projects",
+            prependIcon: "mdi-boom-gate-up-outline",
+            onclick: () => router.get("/projects"),
+        },
     },
-
     {
         title: "Configuraciones",
-        icon: "mdi-cog-outline",
-        link: "/",
-        childrens: [
+        props: {
+            value: "config",
+            prependIcon: "mdi-cog-outline",
+        },
+        children: [
             {
                 title: "Empresas",
-                icon: "mdi-cog",
-                link: "/companies",
-                childrens: false,
+                props: {
+                    prependIcon: "mdi-minus",
+                    value: "companies",
+                    onclick: () => router.get("/companies"),
+                },
             },
-
             {
                 title: "Carros",
-                icon: "mdi-cog",
-                link: "/cars",
-                childrens: false,
+                props: {
+                    prependIcon: "mdi-minus",
+                    value: "cars",
+                    onclick: () => router.get("/cars"),
+                },
             },
         ],
     },
+
     {
         title: "Seguridad",
-        icon: "mdi-security",
-        link: "/seguridad",
-        childrens: [
+        props: {
+            value: "security",
+            prependIcon: "mdi-security",
+        },
+        children: [
             {
                 title: "Usuarios",
-                icon: "mdi-account",
-                link: "/users",
-                childrens: false,
+                props: {
+                    prependIcon: layoutStore.railDrawer ? "" : " mdi-minus",
+                    value: "users",
+                    onclick: () => router.get("/users"),
+                },
             },
             {
                 title: "Roles",
-                icon: "mdi-account-group",
-                link: "/roles",
-                childrens: false,
+                props: {
+                    prependIcon: layoutStore.railDrawer ? "" : " mdi-minus",
+                    value: "roles",
+                    onclick: () => router.get("/roles"),
+                },
             },
         ],
     },
-];
-
-const items = [
-    {
-        title: "Dashboard",
-        disabled: false,
-        href: "breadcrumbs_dashboard",
-    },
-    {
-        title: "Link 1",
-        disabled: false,
-        href: "breadcrumbs_link_1",
-    },
-    {
-        title: "Link 2",
-        disabled: true,
-        href: "breadcrumbs_link_2",
-    },
-];
-
-const handleMenu = (menu) => {
-    menuStore.setCurrent(menu);
-
-    if (menu.childrens.length > 0) {
-        layoutStore.setDrawer(true);
-    } else {
-        layoutStore.setDrawer(false);
-    }
-};
+]);
 
 const breadCrumbs = ref([]);
-
-const handleSubMenu = (menu) => {
-    if (menu.childrens.length > 0) {
-        layoutStore.setDrawer(true);
-    } else {
-        layoutStore.setDrawer(false);
-    }
-    router.get(menu.link);
-    // layoutStore.setBreadCrumbs(menu);
-
-    breadCrumbs.value = [];
-
-    breadCrumbs.value.push({
-        title: "Dashboard",
-        disabled: false,
-        href: "",
-    });
-
-    breadCrumbs.value.push({
-        title: menuStore.current.title,
-        disabled: true,
-        href: "breadcrumbs_link_1",
-    });
-
-    breadCrumbs.value.push({
-        title: menu.title,
-        disabled: true,
-        href: "breadcrumbs_link_2",
-    });
-
-    menuStore.setBreadCrumbs(breadCrumbs.value);
-};
 </script>

@@ -39,7 +39,6 @@
                                                 Google
                                             </v-btn>
                                         </v-col>
-                                
                                     </v-row>
                                 </div>
                             </v-card-text>
@@ -49,12 +48,29 @@
                             <v-card-text>
                                 <v-form @submit.prevent="submitSignIn">
                                     <v-row>
+                                        <v-col cols="12" v-if="errorMessages">
+                                            <v-alert
+                                                type="error"
+                                                dense
+                                                variant="tonal"
+                                            >
+                                                {{ errorMessages }}
+                                            </v-alert>
+                                        </v-col>
                                         <v-col cols="12">
                                             <v-text-field
                                                 v-model="form.email"
                                                 label="Usuario"
-                                                prepend-inner-icon="mdi-account"
+                                                prepend-inner-icon="mdi-email"
                                                 type="text"
+                                                :error="
+                                                    errors[`email`]
+                                                        ? true
+                                                        : false
+                                                "
+                                                :error-messages="
+                                                    errors[`email`]
+                                                "
                                             ></v-text-field>
                                         </v-col>
                                         <v-col cols="12">
@@ -78,12 +94,20 @@
                                                         ? 'text'
                                                         : 'password'
                                                 "
+                                                :error="
+                                                    errors[`password`]
+                                                        ? true
+                                                        : false
+                                                "
+                                                :error-messages="
+                                                    errors[`password`]
+                                                "
                                             ></v-text-field>
                                         </v-col>
                                     </v-row>
 
                                     <div
-                                        class="text-center d-flex justify-space-between align-center"
+                                        class="text-center d-flex justify-space-between align-center my-2"
                                     >
                                         <v-checkbox
                                             color="primary"
@@ -96,7 +120,12 @@
                                             Olvidaste tu contraseña?
                                         </a>
                                     </div>
-                                    <v-btn type="submit" color="primary" block>
+                                    <v-btn
+                                        type="submit"
+                                        color="primary"
+                                        block
+                                        :loading="loading"
+                                    >
                                         Ingresar
                                     </v-btn>
                                 </v-form>
@@ -119,26 +148,41 @@
 </template>
 <script setup>
 import { ref } from "vue";
-import { router, useForm } from "@inertiajs/vue3";
-const showPassword = ref(false);
+import { router } from "@inertiajs/vue3";
+import { _signIn } from "@/App/Auth/services";
 
-const form = useForm({
+const form = ref({
     email: "admin@gmail.com",
     password: "password",
 });
 
-const submitSignIn = () => {
-    console.log("submitSignIn");
+const loading = ref(false);
+const errors = ref([]);
+const errorMessages = ref(null);
 
-    form.post("/auth/sign-in", {
-        preserveState: true,
-        onSuccess: () => {
-            console.log("onSuccess");
-            router.get("dashboard");
-        },
-        onError: () => {
-            alert("Error");
-        },
-    });
+const showPassword = ref(false);
+
+const submitSignIn = async () => {
+    loading.value = true;
+    errors.value = [];
+    errorMessages.value = null;
+
+    let res = await _signIn(form.value);
+
+    if (res.status === "error") {
+        errorMessages.value = res.message;
+        loading.value = false;
+    }
+
+    if (res.errors) {
+        console.log("res.errors", res.errors);
+        errors.value = res.errors;
+        loading.value = false;
+    }
+
+    if (res.status === "success") {
+        console.log("res.status", res.status);
+        router.get("dashboard");
+    }
 };
 </script>

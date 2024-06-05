@@ -1,4 +1,4 @@
-export const url = "/seguridad/roles";
+export const url = "/roles";
 
 export const idKey = "id";
 
