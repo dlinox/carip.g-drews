@@ -10,6 +10,7 @@ export const formStructure = [
         required: true,
         cols: 12,
         default: "",
+        
     },
     {
         key: "routeRedirect",

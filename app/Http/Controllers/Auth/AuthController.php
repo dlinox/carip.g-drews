@@ -22,7 +22,6 @@ class AuthController extends Controller
                 'message' => 'Credenciales inválidas',
             ]);
         }
-
         return response()->json([
             'status' => 'success',
             'message' => 'You have successfully logged in',

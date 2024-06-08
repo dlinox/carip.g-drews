@@ -20,7 +20,7 @@
                             v-model="form[`${field.key}`]"
                             :label="field.label"
                             :rules="field.required ? [isRequired] : []"
-                            :error-messages="form.errors[`${field.key}`]"
+                            :error-messages="form.errors? form.errors[`${field.key}`] : null"
                             :disabled="field.disabled"
                             :readonly="field.readonly"
                             :clearable="field.clearable"
@@ -51,7 +51,7 @@
                             v-model="form[`${field.key}`]"
                             :label="field.label"
                             :rules="field.required ? [isRequired] : []"
-                            :error-messages="form.errors[`${field.key}`]"
+                            :error-messages="form.errors? form.errors[`${field.key}`] : null"
                         ></v-textarea>
                     </template>
 
@@ -60,7 +60,7 @@
                             v-model="form[`${field.key}`]"
                             :label="field.label"
                             :rules="field.required ? [isRequired] : []"
-                            :error-messages="form.errors[`${field.key}`]"
+                            :error-messages="form.errors? form.errors[`${field.key}`] : null"
                         ></v-checkbox>
                     </template>
 
@@ -72,7 +72,7 @@
                             :item-title="field.itemTitle"
                             :item-value="field.itemValue"
                             :rules="field.required ? [isRequired] : []"
-                            :error-messages="form.errors[`${field.key}`]"
+                            :error-messages="form.errors? form.errors[`${field.key}`] : null"
                         />
                     </template>
                 </slot>

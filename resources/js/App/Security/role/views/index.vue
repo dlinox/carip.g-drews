@@ -13,6 +13,7 @@
                         <FormCreate
                             :formStructure="formStructure"
                             :url="url"
+                            @onSubmit="_store($event, url)"
                             @onCancel="dialog"
                             @onSuccess="
                                 loadItems({
@@ -142,7 +143,7 @@ import { ref } from "vue";
 import AdminLayout from "@/Shared/layouts/AdminLayout.vue";
 import FormCreate from "@/App/Security/role/components/FormCreate.vue";
 import FormPermissions from "@/App/Security/role/components/FormPermissions.vue";
-import { _items } from "@/App/Security/role/services/role.services";
+import { _items, _store, _update } from "@/App/Security/role/services/role.services";
 import { itemsResponse } from "@/Shared/constants";
 import LnxDialog from "@/Shared/components/LnxDialog.vue";
 

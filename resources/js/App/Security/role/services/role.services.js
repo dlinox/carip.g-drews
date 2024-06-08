@@ -2,7 +2,7 @@ import axios from "axios";
 export const _items = async (data) => {
     try {
         let response = await axios.post("/roles/items", data);
-        
+
         return {
             loading: false,
             headers: response.data.headers,
@@ -17,5 +17,25 @@ export const _items = async (data) => {
         };
     } catch (error) {
         return false;
+    }
+};
+
+export const _store = async (data, url) => {
+    try {
+        console.log(data);
+        // let response = await axios.post(url, data);
+        // return response.data;
+    } catch (error) {
+        return error.response.data;
+    }
+};
+
+export const _update = async (data, url) => {
+    try {
+        console.log(data);
+        // let response = await axios.put(url, data);
+        // return response.data;
+    } catch (error) {
+        return error.response.data;
     }
 };

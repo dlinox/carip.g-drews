@@ -1,19 +1,15 @@
 <template>
     <v-container>
-        <SimpleForm
-            :formularioJson="formStructure"
+        <LnxForm
+            :formStructure="formStructure"
             v-model="form"
             @onCancel="$emit('onCancel')"
             @onSumbit="submit"
-        >
-        </SimpleForm>
-
-
+        />
     </v-container>
 </template>
 
 <script setup>
-import SimpleForm from "@/Shared/components/SimpleForm.vue";
 import LnxForm from "@/Shared/components/LnxForm.vue";
 import { useForm } from "@inertiajs/vue3";
 const emit = defineEmits(["onCancel", "onSubmit", "onSuccess"]);

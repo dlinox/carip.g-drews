@@ -13,10 +13,11 @@
 </template>
 
 <script setup>
+import { ref } from "vue";
+
 import LnxForm from "@/Shared/components/LnxForm.vue";
 
-import { useForm } from "@inertiajs/vue3";
-const emit = defineEmits(["onCancel", "onSubmit", "onSuccess"]);
+const emit = defineEmits(["onCancel", "onSubmit", "onSuccess", "onSubmit"]);
 
 const props = defineProps({
     formData: {
@@ -37,24 +38,12 @@ const props = defineProps({
     url: String,
 });
 
-const form = useForm({ ...props.formData });
+const form = ref({ ...props.formData });
 
 const submit = async () => {
-    if (props.edit) form.put(props.url, option);
-    else form.post(props.url, option);
-};
+    emit("onSubmit", form.value);
 
-const option = {
-    onSuccess: (page) => {
-        console.log("onSuccess");
-        emit("onCancel");
-        emit("onSuccess");
-    },
-    onError: (errors) => {
-        console.log("onError");
-    },
-    onFinish: (visit) => {
-        console.log("onFinish");
-    },
+    // if (props.edit) form.put(props.url, option);
+    // else form.post(props.url, option);
 };
 </script>

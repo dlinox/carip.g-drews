@@ -30,7 +30,11 @@
             <template #append>
                 <v-btn
                     class="mx-auto"
-                    :icon="layoutStore.railDrawer ? 'mdi-arrow-expand-right' : 'mdi-arrow-expand-left'"
+                    :icon="
+                        layoutStore.railDrawer
+                            ? 'mdi-arrow-expand-right'
+                            : 'mdi-arrow-expand-left'
+                    "
                     block
                     variant="tonal"
                     rounded="0"
@@ -41,10 +45,7 @@
         </v-navigation-drawer>
 
         <v-app-bar app flat class="bg-grey-lighten-3">
-            <v-btn
-                icon
-                @click="layoutStore.setDrawer(!layoutStore.drawer)"
-            >
+            <v-btn icon @click="layoutStore.setDrawer(!layoutStore.drawer)">
                 <v-icon>mdi-menu</v-icon>
             </v-btn>
             <v-spacer></v-spacer>
@@ -151,7 +152,7 @@ const listItems = ref([
             {
                 title: "Usuarios",
                 props: {
-                    prependIcon: layoutStore.railDrawer ? "" : " mdi-minus",
+                    prependIcon: " mdi-minus",
                     value: "users",
                     onclick: () => router.get("/users"),
                 },
@@ -159,7 +160,7 @@ const listItems = ref([
             {
                 title: "Roles",
                 props: {
-                    prependIcon: layoutStore.railDrawer ? "" : " mdi-minus",
+                    prependIcon: " mdi-minus",
                     value: "roles",
                     onclick: () => router.get("/roles"),
                 },
