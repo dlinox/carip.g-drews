@@ -124,6 +124,14 @@ const listItems = ref([
         },
         children: [
             {
+                title: "Sedes",
+                props: {
+                    prependIcon: "mdi-minus",
+                    value: "branches",
+                    onclick: () => router.get("/branches"),
+                },
+            },
+            {
                 title: "Empresas",
                 props: {
                     prependIcon: "mdi-minus",

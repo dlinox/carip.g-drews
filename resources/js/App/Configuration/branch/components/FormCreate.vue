@@ -31,18 +31,11 @@ const props = defineProps({
     formStructure: {
         type: Array,
     },
-    edit: {
-        type: Boolean,
-        default: false,
-    },
-    url: String,
 });
 
 const form = ref({ ...props.formData });
 
 const submit = async () => {
-    
     emit("onSubmit", form.value);
-
 };
 </script>

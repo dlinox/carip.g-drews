@@ -13,6 +13,11 @@ return new class extends Migration
     {
         Schema::create('branches', function (Blueprint $table) {
             $table->id();
+            $table->string('name');
+            $table->string('address')->nullable();
+            $table->char('geo_code', 6)->default('000000');
+            $table->string('country')->default('PER');
+            $table->boolean('is_enabled')->default(true);
             $table->timestamps();
         });
     }

@@ -1,8 +1,11 @@
 import "./bootstrap";
 import "../css/app.css";
+import "vue-toastification/dist/index.css";
 
 import { createApp, h } from "vue";
 import { createInertiaApp } from "@inertiajs/vue3";
+
+import Toast from "vue-toastification";
 
 //store pinia
 import { createPinia } from "pinia";
@@ -21,6 +24,10 @@ createInertiaApp({
             .use(pinia)
             .use(plugin)
             .use(vuetify)
+            .use(Toast, {
+                position: "bottom-right",
+                timeout: 1500,
+            })
             .mount(el);
     },
 });

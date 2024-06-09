@@ -46,13 +46,20 @@ Route::group(['prefix' => ''], function () {
         Route::get('/{id}/workers', [\App\Http\Controllers\Configuration\WorkerController::class, 'index']);
     });
 
-    Route::group(['prefix' => 'projects'], function () {
-        Route::get('/', [\App\Http\Controllers\ProjectController::class, 'index']);
-        Route::get('/{id}', [\App\Http\Controllers\ProjectController::class, 'show']);
-;
+    Route::group(['prefix' => 'branches'], function () {
+        Route::get('/', [\App\Http\Controllers\BranchController::class, 'index']);
+        Route::post('/items', [\App\Http\Controllers\BranchController::class, 'getItems']);
+        Route::post('/', [\App\Http\Controllers\BranchController::class, 'store']);
+        Route::put('/{id}', [\App\Http\Controllers\BranchController::class, 'update']);
     });
 
-    Route::group(['prefix'=> 'cars'], function () {
+
+    Route::group(['prefix' => 'projects'], function () {
+        Route::get('/', [\App\Http\Controllers\ProjectController::class, 'index']);
+        Route::get('/{id}', [\App\Http\Controllers\ProjectController::class, 'show']);;
+    });
+
+    Route::group(['prefix' => 'cars'], function () {
         Route::get('/', [\App\Http\Controllers\Configuration\CarController::class, 'index']);
     });
 });
