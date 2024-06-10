@@ -18,7 +18,7 @@
                             @onSubmit="store($event, dialog)"
                             @onCancel="dialog"
                             :formData="{
-                                company_id: company.id,
+                                supplier_id: supplier.id,
                             }"
                         />
                     </template>
@@ -77,7 +77,7 @@
                                 :formStructure="formStructure"
                                 :formData="{
                                     ...item,
-                                    company_id: company.id,
+                                    supplier_id: supplier.id,
                                 }"
                                 @onCancel="dialog"
                                 @onSubmit="update($event, dialog)"
@@ -92,8 +92,8 @@
 <script setup>
 import { ref } from "vue";
 import AdminLayout from "@/Shared/layouts/AdminLayout.vue";
-import FormCreate from "@/App/Configuration/area/components/FormCreate.vue";
-import { _items, _store, _update } from "@/App/Configuration/area/services";
+import FormCreate from "@/App/Configuration/vehicle/components/FormCreate.vue";
+import { _items, _store, _update } from "@/App/Configuration/vehicle/services";
 import { itemsResponse } from "@/Shared/constants";
 import LnxDialog from "@/Shared/components/LnxDialog.vue";
 
@@ -101,11 +101,11 @@ import {
     url,
     idKey,
     formStructure,
-} from "@/App/Configuration/area/constants/form.constants";
+} from "@/App/Configuration/vehicle/constants/form.constants";
 
 const props = defineProps({
     title: String,
-    company: Object,
+    supplier: Object,
 });
 
 const search = ref("");
@@ -123,7 +123,7 @@ const loadItems = async ({ page, itemsPerPage, sortBy }) => {
         search: search.value,
     };
 
-    items.value = await _items(data, props.company.id);
+    items.value = await _items(data, props.supplier.id);
 
     loading.value = false;
 };

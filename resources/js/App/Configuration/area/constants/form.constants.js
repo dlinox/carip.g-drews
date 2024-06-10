@@ -1,4 +1,4 @@
-export const url = "/configuracion/areas";
+export const url = "/areas";
 
 export const idKey = "id";
 
@@ -12,19 +12,11 @@ export const formStructure = [
         default: "",
     },
     {
-        key: "description",
-        label: "Descripcion",
-        type: "text",
-        required: false,
-        cols: 12,   
-        default: "",
-    },
-    {
-        key: "isEnabled",
+        key: "is_enabled",
         label: "Activo",
         type: "checkbox",
         required: false,
-        default: true,
+        default: false,
         colMd: 12,
 
     }

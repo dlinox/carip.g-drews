@@ -2,33 +2,33 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Project;
+use App\Models\Supplier;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
-class ProjectController extends Controller
+class SupplierController extends Controller
 {
-
     protected $title;
-    protected $project;
-    public function __construct(){
-        $this->title = "Proyectos";
-        $this->project = new Project();
-    }
+    protected $supplier;
 
+    public function __construct()
+    {
+        $this->title = "Proveedores";
+        $this->supplier = new Supplier();
+    }
     public function index()
     {
 
-        return Inertia::render("Project/views/index", [
-            'title' => 'Proyectos'
+        return Inertia::render("Configuration/supplier/views/index", [
+            'title' => $this->title
         ]);
     }
 
-    public function getItems(Request $request){
-
+    public function getItems(Request $request)
+    {
         $perPage = $request->itemsPerPage ?? 10;
 
-        $query = $this->project::query();
+        $query = $this->supplier::query();
         $sortBy = [];
 
         if ($request->has('sortBy') && count($request->sortBy) > 0) {
@@ -46,7 +46,7 @@ class ProjectController extends Controller
 
         $items = $query->paginate($perPage);
 
-        $headers = $this->project->headers();
+        $headers = $this->supplier->headers();
         return response()->json([
             'items' => $items,
             'headers' => $headers,
@@ -58,41 +58,31 @@ class ProjectController extends Controller
         ]);
     }
 
-    public function store(Request $request){
-
-        try {
-            $project = $this->project::create($request->all());
-            return response()->json([
-                'message' => 'Proyecto creado correctamente',
-            ]);
-        } catch (\Exception $e) {
-            return response()->json([
-                'message'=> $e->getMessage(),
-                ]);
-        }
-    }
-
-    public function update(Request $request, $id){
-        try {
-            $project = $this->project::where('id', $id)->first();
-            $project->update($request->except('processing'));
-            return response()->json([
-                'message' => 'Proyecto actualizado correctamente',
-            ]);
-        } catch (\Exception $e) {
-            return response()->json([
-                'message'=> $e->getMessage(),
-                ]);
-        }
-    }
-
-
-    public function show($id)
+    public function store(Request $request)
     {
-        $project = $this->project::find($id);
-        return Inertia::render('Project/views/show', [
-            'title' => 'Proyecto',
-            'project' => $project
-        ]);
+
+        try {
+            $this->supplier->create($request->all());
+            return response()->json([
+                'message' => 'Proveedor creado correctamente',
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'message' => $e->getMessage(),
+            ]);
+        }
+    }
+    public function update(Request $request, $id)
+    {
+        try {
+            $this->supplier->where('id', $id)->update($request->except('processing'));
+            return response()->json([
+                'message' => 'Proveedor actualizado correctamente',
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'message' => $e->getMessage(),
+            ]);
+        }
     }
 }

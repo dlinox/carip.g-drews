@@ -1,40 +1,36 @@
 <?php
 
-namespace App\Http\Controllers\Configuration;
+namespace App\Http\Controllers;
 
-use App\Http\Controllers\Controller;
-use App\Models\Area;
-use App\Models\Company;
+use App\Models\Supplier;
+use App\Models\Vehicle;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
-class AreaController extends Controller
+class VehicleController extends Controller
 {
 
-    protected $area;
     protected $title;
-
-    //define constructor
+    protected $vehicle;
     public function __construct()
     {
-        $this->area = new Area();
-        $this->title = 'Areas';
+        $this->title = "Vehiculos";
+        $this->vehicle = new Vehicle();
     }
-
-    public function index($id)
+    public function index($supplierId)
     {
-        $company = Company::find($id);
-        return Inertia::render('Configuration/area/views/index', [
+        $supplier = Supplier::find($supplierId);
+        return Inertia::render("Configuration/vehicle/views/index", [
             'title' => $this->title,
-            'company' => $company
+            'supplier' => $supplier
         ]);
     }
 
-    public function getItems(Request $request, $companyId)
+    public function getItems(Request $request, $supplierId)
     {
         $perPage = $request->itemsPerPage ?? 10;
 
-        $query = $this->area::query();
+        $query = $this->vehicle::query();
         $sortBy = [];
 
         if ($request->has('sortBy') && count($request->sortBy) > 0) {
@@ -43,27 +39,20 @@ class AreaController extends Controller
                 $query->orderBy($sort['key'], $sort['order']);
             }
         } else {
-            $query->orderBy('areas.created_at', 'desc');
+            $query->orderBy('created_at', 'desc');
         }
 
         if ($request->has('search')) {
-            $query->where('areas.name', 'like', '%' . $request->search . '%');
+            $query->where('name', 'like', '%' . $request->search . '%');
         }
 
-        $query->where('company_id', $companyId);
-
-        $query->select([
-            'areas.id',
-            'areas.name',
-            'areas.is_enabled',
-            'companies.name as company'
-        ])->join('companies', 'areas.company_id', '=', 'companies.id');
-
+        $query->where('supplier_id', $supplierId);
 
 
         $items = $query->paginate($perPage);
 
-        $headers = $this->area::headers();
+        $headers = $this->vehicle->headers();
+
         return response()->json([
             'items' => $items,
             'headers' => $headers,
@@ -78,10 +67,10 @@ class AreaController extends Controller
     public function store(Request $request)
     {
         try {
-            $this->area::create($request->all());
+            $this->vehicle::create($request->all());
 
             return response()->json([
-                'message' => 'Area creada correctamente',
+                'message' => 'Vihiculo creado correctamente',
             ]);
         } catch (\Exception $e) {
             return response()->json([
@@ -93,12 +82,9 @@ class AreaController extends Controller
     public function update(Request $request, $id)
     {
         try {
-            $this->area->where('id', $id)->update([
-                'name' => $request->name,
-                'is_enabled' => $request->is_enabled,
-            ]);
+            $this->vehicle->where('id', $id)->update($request->except('supplier','supplier_id', 'processing', 'supplier_name'));
             return response()->json([
-                'message' => 'Area actualizada correctamente',
+                'message' => 'Vihiculo actualizado correctamente',
             ]);
         } catch (\Exception $e) {
             return response()->json([

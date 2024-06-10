@@ -80,7 +80,7 @@
         <v-footer app>
             <small class="w-100 text-end">
                 CopyRight {{ new Date().getFullYear() }}- All Rights Reserved |
-                Developed by Linox <v-icon size="12">mdi-heart</v-icon>
+                Developed by <a href="">Linox</a>
             </small>
         </v-footer>
     </v-app>
@@ -140,13 +140,14 @@ const listItems = ref([
                 },
             },
             {
-                title: "Carros",
+                title: "Proveedores",
                 props: {
                     prependIcon: "mdi-minus",
-                    value: "cars",
-                    onclick: () => router.get("/cars"),
+                    value: "suppliers",
+                    onclick: () => router.get("/suppliers"),
                 },
             },
+           
         ],
     },
 

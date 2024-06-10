@@ -1,4 +1,4 @@
-export const url = "/companies";
+export const url = "/suppliers";
 
 export const idKey = "id";
 
@@ -21,24 +21,7 @@ export const formStructure = [
         colMd: 8,
         default: "",
     },
-    {
-        key: "social",
-        label: "Social",
-        type: "text",
-        required: true,
-        cols: 12,
-        colMd: 6,
-        default: "",
-    },
-    {
-        key: "address",
-        label: "Dirección",
-        type: "text",
-        required: true,
-        cols: 12,
-        colMd: 6,
-        default: "",
-    },
+
     {
         key: "phone",
         label: "Teléfono",
@@ -57,15 +40,7 @@ export const formStructure = [
         colMd: 4,
         default: "",
     },
-    {
-        key: "ubication",
-        label: "Ciudad",
-        type: "text",
-        required: true,
-        cols: 12,
-        colMd: 4,
-        default: "",
-    },
+
     {
         key: "is_enabled",
         label: "Activo",
@@ -73,5 +48,5 @@ export const formStructure = [
         required: false,
         colMd: 12,
         default: true,
-    }
+    },
 ];

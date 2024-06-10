@@ -5,18 +5,15 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Worker extends Model
+class Supplier extends Model
 {
     use HasFactory;
-
     protected $fillable = [
         "name",
-        "document",
-        "email",
+        "ruc",
         "phone",
+        "email",
         "is_enabled",
-        "area_id",
-        "company_id",
     ];
 
     protected $hidden = [
@@ -33,12 +30,12 @@ class Worker extends Model
     {
         return [
             ["title" => "Nombre", "key" => "name", "align" => "center"],
-            ["title" => "Documento", "key" => "document", "align" => "center"],
-            ["title" => "Email", "key" => "email", "align" => "center"],
+            ["title"=> "Ruc", "key" => "ruc", "align" => "center"],
             ["title" => "Teléfono", "key" => "phone", "align" => "center"],
+            ["title" => "Email", "key" => "email", "align" => "center"],
             ["title" => "Estado", "key" => "is_enabled", "align" => "center"],
-            ["title" => "Acciones", "key" => "actions", "align" => "end", "sortable" => false],
-
+            ["title" => "Acciones", "key" => "actions", "align" => "end", "sortable" => false]
         ];
     }
+
 }

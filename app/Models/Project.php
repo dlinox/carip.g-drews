@@ -22,29 +22,16 @@ class Project extends Model
 
     protected $casts = [
         'is_enabled' => 'boolean',
-        'isEnabled' => 'boolean',
     ];
 
-    public static function get($column, $value = null){
 
-        $query = parent::get($column, $value);
-        $query->select([
-            'id',
-            'name',
-            'description',
-            'is_enabled as isEnabled'
-        ]);
-
-        return $query;
-
-    }
 
     public static function headers(): array
     {
         return [
             ['title' => "Nombre", 'key' => 'name', 'align' => 'center'],
             ['title' => "Descripción", 'key' => 'description', 'align' => 'center'],
-            ['title' => "Estado", 'key' => 'isEnabled', 'align' => 'center'],
+            ['title' => "Estado", 'key' => 'is_enabled', 'align' => 'center'],
             ['title' => "Acciones", 'key' => 'actions', 'align' => 'end', 'sortable' => false]
         ];
     }

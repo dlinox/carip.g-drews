@@ -1,4 +1,4 @@
-export const url = "/configuracion/proyectos";
+export const url = "/projects";
 
 export const idKey = "id";
 
@@ -11,7 +11,6 @@ export const formStructure = [
         cols: 12,
         default: "",
     },
-
     {
         key: "description",
         label: "Descripción",
@@ -21,11 +20,11 @@ export const formStructure = [
         default: "",
     },
     {
-        key: "isEnabled",
+        key: "is_enabled",
         label: "Activo",
         type: "checkbox",
-        required: true,
-        colMd: 12,
+        required: false,
         default: true,
+        colMd: 12,
     },
 ];

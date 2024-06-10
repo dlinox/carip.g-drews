@@ -4,9 +4,9 @@ import { useToast } from "vue-toastification";
 
 const toast = useToast();
 
-export const _items = async (data, company) => {
+export const _items = async (data, supplier) => {
     try {
-        let response = await axios.post("/areas/items/" + company, data);
+        let response = await axios.post("/vehicles/items/" + supplier, data);
         // return response.data;
         return {
             loading: false,

@@ -27,24 +27,12 @@ class Company extends Model
 
     protected $casts = [
         'is_enabled' => 'boolean',
-        'isEnabled' => 'boolean',
     ];
 
-    public static function get($column, $value = null)
+    //areas
+    public function areas()
     {
-        $query = parent::get($column, $value);
-        $query->select([
-            'id',
-            'name',
-            'ruc',
-            'social',
-            'address',
-            'phone',
-            'email',
-            'ubication',
-            'is_enabled as isEnabled'
-        ]);
-        return $query;
+        return $this->belongsToMany(Area::class);
     }
 
     public static function headers(): array
@@ -57,10 +45,8 @@ class Company extends Model
             ['title' => "Teléfono", 'key' => 'phone', 'align' => 'center'],
             ['title' => "Email", 'key' => 'email', 'align' => 'center'],
             ['title' => "Ubicación", 'key' => 'ubication', 'align' => 'center'],
-            ['title' => "Estado", 'key' => 'isEnabled', 'align' => 'center'],
+            ['title' => "Estado", 'key' => 'is_enabled', 'align' => 'center'],
             ['title' => "Acciones", 'key' => 'actions', 'align' => 'end', 'sortable' => false]
         ];
     }
-
-
 }

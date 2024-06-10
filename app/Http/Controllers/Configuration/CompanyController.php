@@ -19,11 +19,11 @@ class CompanyController extends Controller
         $this->company = new Company();
         $this->title = 'Empresas';
     }
-    
+
     public function index()
     {
         return Inertia::render('Configuration/company/views/index', [
-            'title' => 'Empresas'
+            'title' => $this->title
         ]);
     }
 
@@ -57,7 +57,7 @@ class CompanyController extends Controller
             'phone',
             'email',
             'ubication',
-            'is_enabled as isEnabled'
+            'is_enabled'
 
         ]);
 
@@ -78,29 +78,22 @@ class CompanyController extends Controller
     public function store(Request $request)
     {
         try {
-          
-            $this->company->create([
-                'ruc' => $request->ruc,
-                'name' => $request->name,
-                'social' => $request->social,
-                'address' => $request->address,
-                'phone' => $request->phone,
-                'email' => $request->email,
-                'ubication' => $request->ubication,
-                'is_enabled' => $request->isEnabled,
-            ]);
 
-            return redirect()->back()->with('success', 'Empresa creada correctamente');
+            $this->company->create($request->all());
+
+            return response()->json([
+                'message' => 'Empresa creada correctamente',
+            ]);
         } catch (\Exception $e) {
-            return redirect()->back()->with('error', $e->getMessage());
+            return response()->json([
+                'message' => $e->getMessage(),
+            ]);
         }
     }
 
     public function update(Request $request, $id)
     {
         try {
-          
-
             $this->company->where('id', $id)->update(
                 [
                     'ruc' => $request->ruc,
@@ -110,13 +103,17 @@ class CompanyController extends Controller
                     'phone' => $request->phone,
                     'email' => $request->email,
                     'ubication' => $request->ubication,
-                    'is_enabled' => $request->isEnabled,
+                    'is_enabled' => $request->is_enabled,
                 ]
             );
 
-            return redirect()->back()->with('success', 'Empresa actualizada correctamente');
+            return response()->json([
+                'message' => 'Empresa actualizada correctamente',
+            ]);
         } catch (\Exception $e) {
-            return redirect()->back()->with('error', $e->getMessage());
+            return response()->json([
+                'message' => $e->getMessage(),
+            ]);
         }
     }
 

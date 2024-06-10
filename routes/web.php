@@ -42,8 +42,23 @@ Route::group(['prefix' => ''], function () {
         Route::put('/{id}', [\App\Http\Controllers\Configuration\CompanyController::class, 'update']);
         Route::delete('/{id}', [\App\Http\Controllers\Configuration\CompanyController::class, 'destroy']);
 
+
+
         Route::get('/{id}/areas', [\App\Http\Controllers\Configuration\AreaController::class, 'index']);
+
         Route::get('/{id}/workers', [\App\Http\Controllers\Configuration\WorkerController::class, 'index']);
+    });
+
+    Route::group(['prefix' => 'areas'], function () {
+
+        Route::post('/items/{companyId}', [\App\Http\Controllers\Configuration\AreaController::class, 'getItems']);
+        Route::post('/', [\App\Http\Controllers\Configuration\AreaController::class, 'store']);
+        Route::put('/{id}', [\App\Http\Controllers\Configuration\AreaController::class, 'update']);
+    });
+    Route::group(['prefix' => 'workers'], function () {
+        Route::post('/items/{companyId}', [\App\Http\Controllers\Configuration\WorkerController::class, 'getItems']);
+        Route::post('/', [\App\Http\Controllers\Configuration\WorkerController::class, 'store']);
+        Route::put('/{id}', [\App\Http\Controllers\Configuration\WorkerController::class, 'update']);
     });
 
     Route::group(['prefix' => 'branches'], function () {
@@ -53,10 +68,29 @@ Route::group(['prefix' => ''], function () {
         Route::put('/{id}', [\App\Http\Controllers\BranchController::class, 'update']);
     });
 
+    Route::group(['prefix' => 'suppliers'], function () {
+        Route::get('/', [\App\Http\Controllers\SupplierController::class, 'index']);
+        Route::post('/items', [\App\Http\Controllers\SupplierController::class, 'getItems']);
+        Route::post('/', [\App\Http\Controllers\SupplierController::class, 'store']);
+        Route::put('/{id}', [\App\Http\Controllers\SupplierController::class, 'update']);
+
+        Route::get('/{id}/vehicles', [\App\Http\Controllers\VehicleController::class, 'index']);
+    });
+
+    Route::group(['prefix' => 'vehicles'], function () {
+        Route::post('/items/{supplierId}', [\App\Http\Controllers\VehicleController::class, 'getItems']);
+        Route::post('/', [\App\Http\Controllers\VehicleController::class, 'store']);
+        Route::put('/{id}', [\App\Http\Controllers\VehicleController::class, 'update']);
+    });
+
 
     Route::group(['prefix' => 'projects'], function () {
         Route::get('/', [\App\Http\Controllers\ProjectController::class, 'index']);
-        Route::get('/{id}', [\App\Http\Controllers\ProjectController::class, 'show']);;
+        Route::post('/items', [\App\Http\Controllers\ProjectController::class, 'getItems']);
+        Route::post('/', [\App\Http\Controllers\ProjectController::class,'store']);
+        Route::put('/{id}', [\App\Http\Controllers\ProjectController::class, 'update']);
+        Route::get('/{id}', [\App\Http\Controllers\ProjectController::class, 'show']);
+
     });
 
     Route::group(['prefix' => 'cars'], function () {

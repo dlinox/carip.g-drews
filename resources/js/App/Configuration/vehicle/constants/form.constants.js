@@ -1,77 +1,63 @@
-export const url = "/companies";
+export const url = "/vehicles";
 
 export const idKey = "id";
 
 export const formStructure = [
-    {
-        key: "ruc",
-        label: "Ruc",
-        type: "text",
-        required: true,
-        cols: 12,
-        colMd: 4,
-        default: "",
-    },
     {
         key: "name",
         label: "Nombre",
         type: "text",
         required: true,
         cols: 12,
-        colMd: 8,
         default: "",
     },
     {
-        key: "social",
-        label: "Social",
+        key: "plate",
+        label: "Placa",
         type: "text",
         required: true,
         cols: 12,
-        colMd: 6,
         default: "",
     },
     {
-        key: "address",
-        label: "Dirección",
+        key: "brand",
+        label: "Marca",
         type: "text",
         required: true,
         cols: 12,
-        colMd: 6,
         default: "",
     },
     {
-        key: "phone",
-        label: "Teléfono",
+        key: "model",
+        label: "Modelo",
         type: "text",
         required: true,
         cols: 12,
-        colMd: 4,
         default: "",
     },
     {
-        key: "email",
-        label: "Email",
+        key: "color",
+        label: "Color",
         type: "text",
         required: true,
         cols: 12,
-        colMd: 4,
         default: "",
     },
     {
-        key: "ubication",
-        label: "Ciudad",
+        key: "type",
+        label: "Tipo",
         type: "text",
         required: true,
         cols: 12,
-        colMd: 4,
         default: "",
     },
+
     {
         key: "is_enabled",
         label: "Activo",
         type: "checkbox",
         required: false,
+        default: false,
         colMd: 12,
-        default: true,
-    }
+    },
 ];

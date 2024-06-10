@@ -1,20 +1,23 @@
 <template>
     <v-container>
-        <SimpleForm
-            :formularioJson="formStructure"
+        <LnxForm
+            :formStructure="formStructure"
+            :formErrors="form.errors"
+            :loading="form.processing"
             v-model="form"
             @onCancel="$emit('onCancel')"
             @onSumbit="submit"
         >
-        </SimpleForm>
+        </LnxForm>
     </v-container>
 </template>
 
 <script setup>
+import { ref } from "vue";
 
-import SimpleForm from "@/Shared/components/SimpleForm.vue";
-import { useForm } from "@inertiajs/vue3";
-const emit = defineEmits(["onCancel", "onSubmit", "onSuccess"]);
+import LnxForm from "@/Shared/components/LnxForm.vue";
+
+const emit = defineEmits(["onCancel", "onSubmit", "onSuccess", "onSubmit"]);
 
 const props = defineProps({
     formData: {
@@ -28,32 +31,11 @@ const props = defineProps({
     formStructure: {
         type: Array,
     },
-    edit: {
-        type: Boolean,
-        default: false,
-    },
-    url: String,
 });
 
-const form = useForm({ ...props.formData });
+const form = ref({ ...props.formData });
 
 const submit = async () => {
-    if (props.edit) form.put(props.url, option);
-    else form.post(props.url, option);
-};
-
-const option = {
-  
-    onSuccess: (page) => {
-        console.log("onSuccess");
-        emit("onSuccess");
-        emit("onCancel");
-    },
-    onError: (errors) => {
-        console.log("onError");
-    },
-    onFinish: (visit) => {
-        console.log("onFinish");
-    },
+    emit("onSubmit", form.value);
 };
 </script>
