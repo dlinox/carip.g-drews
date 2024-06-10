@@ -110,20 +110,20 @@
                 </v-row>
             </v-container>
 
+
             <v-table>
                 <thead>
                     <tr>
                         <th>Vehiculo</th>
                         <th>responsale</th>
-                        <th>Proveedor</th>
+
                         <th>Acciones</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <tr v-for="item in items" :key="item.id">
-                        <td>{{ item.car }}</td>
-                        <td>{{ item.responsable }}</td>
-                        <td>{{ item.proveedor }}</td>
+                    <tr v-for="item in assignedVehicles" :key="item.id">
+                        <td>{{ item.vehicle }}</td>
+                        <td>{{ item.operator }}</td>
 
                         <td>
                             <v-btn
@@ -168,9 +168,9 @@ const props = defineProps({
     project: Object,
 });
 
-const itemsAssignedVehicles  =async () => {
-    let response = await _itemsAssignedVehicles(props.project.id);
-    console.log(response);
+const itemsAssignedVehicles = async () => {
+    assignedVehicles.value = await _itemsAssignedVehicles(props.project.id);
+    
 };
 
 const assignVehicle = async (data, dialog) => {
@@ -180,39 +180,23 @@ const assignVehicle = async (data, dialog) => {
     console.log(data);
     let response = await _assignVehicle(data, url + "/assign-vehicle");
     if (response) {
+
         dialog();
+        await itemsAssignedVehicles();
     }
 
     data.processing = false;
 };
 
-const items = [
-    {
-        id: 1,
-        car: "Toyota SDF-454, 2021 4x4",
-        responsable: "Juan",
-        proveedor: "Toyota",
-    },
-    {
-        id: 2,
-        car: "Toyota DX-454, 2021 4x4",
-        responsable: "Juan",
-        proveedor: "Toyota",
-    },
-    {
-        id: 3,
-        car: "Toyota DX-454, 2021 4x4",
-        responsable: "Juan",
-        proveedor: "Toyota",
-    },
-];
-
 const operators = ref([]);
 const vehicles = ref([]);
 
+const assignedVehicles = ref([]);
+
 const init = async () => {
 
-    itemsAssignedVehicles();
+    await itemsAssignedVehicles();
+   
     operators.value = await _operators();
     vehicles.value = await _vehicles();
 

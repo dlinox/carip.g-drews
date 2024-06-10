@@ -28,20 +28,20 @@ class VehiclesOperator extends Model
         'updated_at'
     ];
 
-    public function vehicle()
-    {
-        return $this->belongsTo(Vehicle::class);
-    }
+    // public function vehicle()
+    // {
+    //     return $this->belongsTo(Vehicle::class);
+    // }
 
-    public function operator()
-    {
-        return $this->belongsTo(Operator::class);
-    }
+    // public function operator()
+    // {
+    //     return $this->belongsTo(Operator::class);
+    // }
 
-    public function project()
-    {
-        return $this->belongsTo(Project::class);
-    }
+    // public function project()
+    // {
+    //     return $this->belongsTo(Project::class);
+    // }
 
     public function assignOperatorToVehicle($vehicle, $operator, $project)
     {
@@ -73,10 +73,10 @@ class VehiclesOperator extends Model
     public  function getVehiclesForProject($project)
     {
         return $this
-            ->select('vehicles_operators.vehicle_id', 'vehicles_operators.operator_id', 'vehicles.name as vehicle', 'operators.name as operator', 'vehicles_operators.project_id')
+            ->select('vehicles_operators.id', 'vehicles_operators.vehicle_id', 'vehicles_operators.operator_id', 'vehicles.name as vehicle', 'operators.name as operator', 'vehicles_operators.project_id')
             ->join('vehicles', 'vehicles.id', '=', 'vehicles_operators.vehicle_id')
             ->join('operators', 'operators.id', '=', 'vehicles_operators.operator_id')
-            ->where('vehicles_operators.project_id', $project->id)
+            ->where('vehicles_operators.project_id', $project)
             ->where('vehicles_operators.is_enabled', true)
             ->get();
     }
