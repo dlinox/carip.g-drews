@@ -30,9 +30,7 @@
                                     <div class="text-overline mb-1">
                                         Responsable
                                     </div>
-                                    <div class="text-h6 mb-1">
-                                        Hugo Sanchez
-                                    </div>
+                                    <div class="text-h6 mb-1">Hugo Sanchez</div>
                                     <div class="text-caption">
                                         Responsable de la empresa contratista
                                     </div>
@@ -52,11 +50,9 @@
                                     <div class="text-overline mb-1">
                                         Supervisor
                                     </div>
-                                    <div class="text-h6 mb-1">
-                                        Juan Sanchez
-                                    </div>
+                                    <div class="text-h6 mb-1">Juan Sanchez</div>
                                     <div class="text-caption">
-                                        Supervisor de los trabajos (operadores  )
+                                        Supervisor de los trabajos (operadores )
                                     </div>
                                 </div>
                             </v-card-item>
@@ -84,7 +80,30 @@
                             </v-card-item>
 
                             <v-card-actions>
-                                <v-btn> Gestionar </v-btn>
+                                <LnxDialog title="Editar" width="500px">
+                                    <template v-slot:activator="{ dialog }">
+                                        <v-btn
+                                            block
+                                            color="primary"
+                                            variant="tonal"
+                                            link
+                                            @click="dialog"
+                                        >
+                                            asignar
+                                        </v-btn>
+                                    </template>
+                                    <template v-slot:content="{ dialog }">
+                                        <FormCreate
+                                            @onSubmit="
+                                                assignVehicle($event, dialog)
+                                            "
+                                            :formStructure="
+                                                formStructureAssignVehicle
+                                            "
+                                            @onCancel="dialog"
+                                        />
+                                    </template>
+                                </LnxDialog>
                             </v-card-actions>
                         </v-card>
                     </v-col>
@@ -125,11 +144,47 @@
 </template>
 <script setup>
 import AdminLayout from "@/Shared/layouts/AdminLayout.vue";
+
 import { ref } from "vue";
+
+import {
+    _vehicles,
+    _operators,
+    _itemsAssignedVehicles,
+    _assignVehicle,
+} from "@/App/Project/services";
+
+import {
+    url,
+    idKey,
+    formStructureAssignVehicle,
+} from "@/App/Project/constants/form.constants";
+
+import FormCreate from "@/App/Project/components/FormCreate.vue";
+
+import LnxDialog from "@/Shared/components/LnxDialog.vue";
 
 const props = defineProps({
     project: Object,
 });
+
+const itemsAssignedVehicles  =async () => {
+    let response = await _itemsAssignedVehicles(props.project.id);
+    console.log(response);
+};
+
+const assignVehicle = async (data, dialog) => {
+    data.processing = true;
+    data.project_id = props.project.id;
+
+    console.log(data);
+    let response = await _assignVehicle(data, url + "/assign-vehicle");
+    if (response) {
+        dialog();
+    }
+
+    data.processing = false;
+};
 
 const items = [
     {
@@ -151,4 +206,20 @@ const items = [
         proveedor: "Toyota",
     },
 ];
+
+const operators = ref([]);
+const vehicles = ref([]);
+
+const init = async () => {
+
+    itemsAssignedVehicles();
+    operators.value = await _operators();
+    vehicles.value = await _vehicles();
+
+    formStructureAssignVehicle[0].options = vehicles.value;
+    formStructureAssignVehicle[1].options = operators.value;
+};
+
+init();
+// init();
 </script>

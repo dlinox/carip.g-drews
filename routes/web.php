@@ -1,5 +1,6 @@
 <?php
 
+
 use Illuminate\Support\Facades\Route;
 use Laravel\Socialite\Facades\Socialite;
 
@@ -68,6 +69,13 @@ Route::group(['prefix' => ''], function () {
         Route::put('/{id}', [\App\Http\Controllers\BranchController::class, 'update']);
     });
 
+    Route::group(['prefix' => 'operators'], function () {
+        Route::get('/', [\App\Http\Controllers\OperatorController::class, 'index']);
+        Route::post('/items', [\App\Http\Controllers\OperatorController::class, 'getItems']);
+        Route::post('/', [\App\Http\Controllers\OperatorController::class, 'store']);
+        Route::put('/{id}', [\App\Http\Controllers\OperatorController::class, 'update']);
+    });
+
     Route::group(['prefix' => 'suppliers'], function () {
         Route::get('/', [\App\Http\Controllers\SupplierController::class, 'index']);
         Route::post('/items', [\App\Http\Controllers\SupplierController::class, 'getItems']);
@@ -87,15 +95,20 @@ Route::group(['prefix' => ''], function () {
     Route::group(['prefix' => 'projects'], function () {
         Route::get('/', [\App\Http\Controllers\ProjectController::class, 'index']);
         Route::post('/items', [\App\Http\Controllers\ProjectController::class, 'getItems']);
-        Route::post('/', [\App\Http\Controllers\ProjectController::class,'store']);
+        Route::post('/', [\App\Http\Controllers\ProjectController::class, 'store']);
         Route::put('/{id}', [\App\Http\Controllers\ProjectController::class, 'update']);
         Route::get('/{id}', [\App\Http\Controllers\ProjectController::class, 'show']);
 
+        Route::get('/items/operators', [\App\Http\Controllers\ProjectController::class, 'getOperators']); 
+        Route::get('/items/vehicles', [\App\Http\Controllers\ProjectController::class, 'getVehicles']);
+
+        Route::get('/assigned-vehicles/{idProject}', [\App\Http\Controllers\ProjectController::class, 'getItemsAssignedVehicles']);
+        Route::post('/assign-vehicle', [\App\Http\Controllers\ProjectController::class, 'assignVehicle']);
     });
 
-    Route::group(['prefix' => 'cars'], function () {
-        Route::get('/', [\App\Http\Controllers\Configuration\CarController::class, 'index']);
-    });
+    // Route::group(['prefix' => 'cars'], function () {
+    //     Route::get('/', [\App\Http\Controllers\Configuration\CarController::class, 'index']);
+    // });
 });
 
 

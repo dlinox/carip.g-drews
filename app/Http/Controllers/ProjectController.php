@@ -2,7 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Operator;
 use App\Models\Project;
+use App\Models\Vehicle;
+use App\Models\VehiclesOperator;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
@@ -11,7 +14,8 @@ class ProjectController extends Controller
 
     protected $title;
     protected $project;
-    public function __construct(){
+    public function __construct()
+    {
         $this->title = "Proyectos";
         $this->project = new Project();
     }
@@ -24,7 +28,8 @@ class ProjectController extends Controller
         ]);
     }
 
-    public function getItems(Request $request){
+    public function getItems(Request $request)
+    {
 
         $perPage = $request->itemsPerPage ?? 10;
 
@@ -58,7 +63,8 @@ class ProjectController extends Controller
         ]);
     }
 
-    public function store(Request $request){
+    public function store(Request $request)
+    {
 
         try {
             $project = $this->project::create($request->all());
@@ -67,12 +73,13 @@ class ProjectController extends Controller
             ]);
         } catch (\Exception $e) {
             return response()->json([
-                'message'=> $e->getMessage(),
-                ]);
+                'message' => $e->getMessage(),
+            ]);
         }
     }
 
-    public function update(Request $request, $id){
+    public function update(Request $request, $id)
+    {
         try {
             $project = $this->project::where('id', $id)->first();
             $project->update($request->except('processing'));
@@ -81,8 +88,8 @@ class ProjectController extends Controller
             ]);
         } catch (\Exception $e) {
             return response()->json([
-                'message'=> $e->getMessage(),
-                ]);
+                'message' => $e->getMessage(),
+            ]);
         }
     }
 
@@ -94,5 +101,45 @@ class ProjectController extends Controller
             'title' => 'Proyecto',
             'project' => $project
         ]);
+    }
+
+
+
+    //getTtemsVehiclesToProject
+    public function getItemsAssignedVehicles($idProject)
+    {
+        $vehiclesOperator = new VehiclesOperator();
+        $items = $vehiclesOperator->getVehiclesForProject($idProject);
+        return response()->json($items);
+    }
+
+    public function assignVehicle(Request $request)
+    {
+
+        try {
+            VehiclesOperator::create($request->all());
+
+            return response()->json([
+                'message' => 'Vehicle asigned correctamente',
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'message' => $e->getMessage(),
+            ]);
+        }
+    }
+
+    //optener los operadores libres
+    public function getOperators()
+    {
+        $operators = Operator::where('is_enabled', true)->get();
+
+        return response()->json($operators);
+    }
+
+    public function getVehicles()
+    {
+        $vehicles = Vehicle::all();
+        return response()->json($vehicles);
     }
 }

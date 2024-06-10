@@ -1,4 +1,3 @@
-
 import axios from "axios";
 
 import { useToast } from "vue-toastification";
@@ -40,6 +39,57 @@ export const _store = async (data, url) => {
 export const _update = async (data, url) => {
     try {
         let response = await axios.put(url, data);
+        toast.success(response.data.message);
+        return true;
+    } catch (error) {
+        toast.error(error.response.data.message);
+        return false;
+    }
+};
+
+export const _assignVehicles = async (data, url) => {
+    try {
+        let response = await axios.post(url, data);
+        toast.success(response.data.message);
+        return true;
+    } catch (error) {
+        toast.error(error.response.data.message);
+        return false;
+    }
+};
+
+export const _vehicles = async () => {
+    try {
+        let response = await axios.get("/projects/items/vehicles");
+        return response.data;
+    } catch (error) {
+        return false;
+    }
+};
+
+export const _operators = async () => {
+    try {
+        let response = await axios.get("/projects/items/operators");
+        return response.data;
+    } catch (error) {
+        return false;
+    }
+};
+
+export const _itemsAssignedVehicles = async (idProject) => {
+    try {
+        let response = await axios.get(
+            "/projects/assigned-vehicles/" + idProject
+        );
+        return response.data;
+    } catch (error) {
+        return false;
+    }
+};
+
+export const _assignVehicle = async (data, url) => {
+    try {
+        let response = await axios.post(url, data);
         toast.success(response.data.message);
         return true;
     } catch (error) {

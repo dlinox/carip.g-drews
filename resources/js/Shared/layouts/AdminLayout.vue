@@ -147,6 +147,14 @@ const listItems = ref([
                     onclick: () => router.get("/suppliers"),
                 },
             },
+            {
+                title: "Operadores",
+                props: {
+                    prependIcon: "mdi-minus",
+                    value: "operators",
+                    onclick: () => router.get("/operators"),
+                },
+            }
            
         ],
     },
