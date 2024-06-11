@@ -132,14 +132,15 @@ class ProjectController extends Controller
     //optener los operadores libres
     public function getOperators()
     {
-        $operators = Operator::where('is_enabled', true)->get();
-
+        $operator = new Operator();
+        $operators = $operator->getFreeOperators();
         return response()->json($operators);
     }
 
     public function getVehicles()
     {
-        $vehicles = Vehicle::all();
+        $vehicle = new Vehicle();
+        $vehicles = $vehicle->getFreeVehicles();
         return response()->json($vehicles);
     }
 }

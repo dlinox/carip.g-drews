@@ -169,22 +169,18 @@ const props = defineProps({
 });
 
 const itemsAssignedVehicles = async () => {
-    assignedVehicles.value = await _itemsAssignedVehicles(props.project.id);
-    
+    assignedVehicles.value = await _itemsAssignedVehicles(props.project.id);    
 };
 
 const assignVehicle = async (data, dialog) => {
     data.processing = true;
     data.project_id = props.project.id;
 
-    console.log(data);
     let response = await _assignVehicle(data, url + "/assign-vehicle");
     if (response) {
-
         dialog();
         await itemsAssignedVehicles();
     }
-
     data.processing = false;
 };
 
@@ -205,5 +201,4 @@ const init = async () => {
 };
 
 init();
-// init();
 </script>

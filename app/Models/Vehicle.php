@@ -70,15 +70,16 @@ class Vehicle extends Model
         ];
     }
 
-    //optener vehiculos  libres  que no esteen en un proyecto activo y con una asignacion activa
-
     public function getFreeVehicles(): array
     {
-        return $this->select('id', 'name')
+        $vehicles = $this->select('vehicles.id', 'vehicles.name')
             ->leftJoin('vehicles_operators', 'vehicles_operators.vehicle_id', '=', 'vehicles.id')
             ->leftJoin('projects', 'projects.id', '=', 'vehicles_operators.project_id')
-            ->where('projects.is_enabled', false)
-            ->where('vehicles_operators.is_enabled', false)
+            ->whereRaw('projects.is_enabled = false or projects.is_enabled is null')
+            ->whereRaw('vehicles_operators.is_enabled = false or vehicles_operators.is_enabled is null')
+            ->where('vehicles.is_enabled', true)
             ->get();
+
+        return $vehicles->toArray();
     }
 }

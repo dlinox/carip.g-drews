@@ -45,13 +45,16 @@ class Operator extends Model
         ];
     }
 
-    public function getFreeOperators(): array
+    public  function getFreeOperators(): array
     {
-        return $this->select('id', 'name')
+        $operators =  $this->select('operators.id', 'operators.name') 
             ->leftJoin('vehicles_operators', 'vehicles_operators.operator_id', '=', 'operators.id')
             ->leftJoin('projects', 'projects.id', '=', 'vehicles_operators.project_id')
-            ->where('projects.is_enabled', false)
-            ->where('vehicles_operators.is_enabled', false)
-            ->get();
+            ->whereRaw('projects.is_enabled = false or projects.is_enabled is null')
+            ->whereRaw('vehicles_operators.is_enabled = false or vehicles_operators.is_enabled is null')
+            ->where('operators.is_enabled', true)
+            ->get() ;
+
+        return $operators->toArray();
     }
 }
