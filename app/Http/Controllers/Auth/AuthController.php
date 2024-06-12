@@ -22,6 +22,10 @@ class AuthController extends Controller
                 'message' => 'Credenciales inválidas',
             ]);
         }
+
+        //añadir los permisos a la sesión
+        auth()->user()->p = 'hola';
+
         return response()->json([
             'status' => 'success',
             'message' => 'You have successfully logged in',

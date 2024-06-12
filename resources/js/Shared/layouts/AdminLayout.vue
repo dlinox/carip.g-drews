@@ -86,15 +86,19 @@
     </v-app>
 </template>
 <script setup>
-import { router } from "@inertiajs/vue3";
+import { router, usePage } from "@inertiajs/vue3";
 import { ref, computed } from "vue";
 
 import { useMenuStore, useLayoutStore } from "@/Shared/stores";
+import { useUserStore } from "@/App/Auth/stores";
 
 const menuStore = useMenuStore();
 const layoutStore = useLayoutStore();
+const userStore = useUserStore();
 
 const currentMenu = computed(() => menuStore.current);
+
+const user = computed(() => usePage().props.auth.user);
 
 const listItems = ref([
     {
@@ -154,8 +158,7 @@ const listItems = ref([
                     value: "operators",
                     onclick: () => router.get("/operators"),
                 },
-            }
-           
+            },
         ],
     },
 
@@ -187,4 +190,11 @@ const listItems = ref([
 ]);
 
 const breadCrumbs = ref([]);
+
+const init = async () => {
+    userStore.permissions = user.value.permissions;
+    console.log(userStore.permissions);
+};
+
+init();
 </script>

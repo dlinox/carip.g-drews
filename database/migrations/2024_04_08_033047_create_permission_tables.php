@@ -29,11 +29,9 @@ return new class extends Migration
             $table->string('name', 100);       // For MySQL 8.0 use string('name', 125);
             $table->string('guard_name', 100); // For MySQL 8.0 use string('guard_name', 125);
             $table->string('group_name', 100)->nullable();
-
+            $table->char('code', 3)->unique();
             $table->boolean('is_enabled')->default(true);
             $table->timestamps();
-
-
             $table->unique(['name', 'guard_name']);
         });
 

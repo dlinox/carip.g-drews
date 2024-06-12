@@ -10,7 +10,6 @@ class BranchController extends Controller
 {
 
     protected $title;
-
     protected $branch;
 
     public function __construct()

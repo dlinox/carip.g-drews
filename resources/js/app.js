@@ -12,6 +12,7 @@ import { createPinia } from "pinia";
 
 import vuetify from "@/Shared/plugins/vuetify";
 
+import permission from "./App/Auth/directives/permission";
 const pinia = createPinia();
 
 createInertiaApp({
@@ -22,6 +23,7 @@ createInertiaApp({
     setup({ el, App, props, plugin }) {
         createApp({ render: () => h(App, props) })
             .use(pinia)
+            .directive("permission", permission)
             .use(plugin)
             .use(vuetify)
             .use(Toast, {

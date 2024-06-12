@@ -1,7 +1,10 @@
 <template>
     <AdminLayout>
+        <pre>
+
+            {{ userStore.permissions }}
+        </pre>
         <v-card>
-         
             <v-toolbar>
                 <v-btn variant="tonal" @click="dialog = !dialog">
                     Agregar
@@ -54,6 +57,7 @@
                         color="primary"
                         variant="tonal"
                         link
+                         v-permission="['501']"
                     >
                     </v-btn>
                 </template>
@@ -79,6 +83,8 @@
 </template>
 <script setup>
 import AdminLayout from "@/Shared/layouts/AdminLayout.vue";
+
+import { useUserStore } from "@/App/Auth/stores/";
 import { ref } from "vue";
 
 import { _items } from "@/App/Security/user/services/user.services";
@@ -93,9 +99,13 @@ import {
 
 import { itemsResponse } from "@/Shared/constants";
 
+
+
 const props = defineProps({
     roles: Array,
 });
+
+const userStore = useUserStore();
 
 const items = ref({ ...itemsResponse });
 
