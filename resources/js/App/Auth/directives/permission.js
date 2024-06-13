@@ -1,17 +1,16 @@
+// resources/js/App/Auth/directives/permission.js
+
 import { useUserStore } from "@/App/Auth/stores";
 
 export default {
-    inserted(el, binding) {
+    mounted(el, binding) { // Cambia 'inserted' a 'mounted'
         const { value } = binding;
         const userStore = useUserStore();
         const userPermissions = userStore.permissions;
         
-        console.log("userPermissions", userPermissions);
-
         if (value && value instanceof Array) {
             if (value.length > 0) {
                 const permissionRoles = value;
-                console.log("permissionRoles", permissionRoles);
                 const hasPermission = userPermissions.some((role) =>
                     permissionRoles.includes(role)
                 );

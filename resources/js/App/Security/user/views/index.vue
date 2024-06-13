@@ -1,12 +1,12 @@
 <template>
     <AdminLayout>
-        <pre>
-
-            {{ userStore.permissions }}
-        </pre>
         <v-card>
             <v-toolbar>
-                <v-btn variant="tonal" @click="dialog = !dialog">
+                <v-btn
+                    variant="tonal"
+                    @click="dialog = !dialog"
+                    v-permission="['301']"
+                >
                     Agregar
                 </v-btn>
                 <v-spacer></v-spacer>
@@ -40,6 +40,7 @@
                 items-per-page-text="Registros por página"
                 loading-text="Cargando registros"
             >
+            
                 <template v-slot:item.is_enabled="{ item }">
                     <v-chip
                         :color="item.is_enabled ? 'success' : 'error'"
@@ -57,7 +58,7 @@
                         color="primary"
                         variant="tonal"
                         link
-                         v-permission="['501']"
+                        v-permission="['302']"
                     >
                     </v-btn>
                 </template>
@@ -98,8 +99,6 @@ import {
 } from "@/App/Security/user/constants/form.constants";
 
 import { itemsResponse } from "@/Shared/constants";
-
-
 
 const props = defineProps({
     roles: Array,
