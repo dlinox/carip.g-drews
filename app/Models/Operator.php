@@ -50,11 +50,21 @@ class Operator extends Model
         $operators =  $this->select('operators.id', 'operators.name') 
             ->leftJoin('vehicles_operators', 'vehicles_operators.operator_id', '=', 'operators.id')
             ->leftJoin('projects', 'projects.id', '=', 'vehicles_operators.project_id')
-            ->whereRaw('projects.is_enabled = false or projects.is_enabled is null')
-            ->whereRaw('vehicles_operators.is_enabled = false or vehicles_operators.is_enabled is null')
+            ->whereRaw('vehicles_operators.is_enabled = false or vehicles_operators.id is null')
+            ->whereRaw('projects.is_enabled is null or projects.is_enabled = false')
             ->where('operators.is_enabled', true)
             ->get() ;
 
         return $operators->toArray();
+    }
+
+    public function getSupervisoryOperators(): array
+    {
+        $supervisoryOperators = $this->select('operators.id', 'operators.name')
+            // ->leftJoin('project_supervisors', 'project_supervisors.operator_id', '!=', 'operators.id')
+            // ->where('project_supervisors.is_enabled', true)
+            ->get();
+
+        return $supervisoryOperators->toArray();
     }
 }

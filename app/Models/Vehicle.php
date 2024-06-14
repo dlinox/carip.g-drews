@@ -4,22 +4,11 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\DB;
 
 class Vehicle extends Model
 {
     use HasFactory;
-    /*
-        $table->string('name');
-            $table->string('plate');
-            // marca
-            $table->string('brand');
-            // modelo
-            $table->string('model');
-            // color
-            $table->string('color');
-            // tipo
-            $table->string('type');
-    */
     protected $fillable = [
         "name",
         "plate",
@@ -45,14 +34,14 @@ class Vehicle extends Model
     ];
 
 
-
     public function supplier()
     {
         return $this->belongsTo(Supplier::class);
     }
+
     public function getSupplierNameAttribute()
     {
-        return $this->supplier->name;
+        return $this->supplier ? $this->supplier->name : null;
     }
 
     public static function headers(): array
@@ -72,7 +61,8 @@ class Vehicle extends Model
 
     public function getFreeVehicles(): array
     {
-        $vehicles = $this->select('vehicles.id', 'vehicles.name')
+        $vehicles = $this->select('vehicles.id', DB::raw('concat(vehicles.name, " (", suppliers.name, ")") as name'))
+            ->leftJoin('suppliers', 'suppliers.id', '=', 'vehicles.supplier_id')
             ->leftJoin('vehicles_operators', 'vehicles_operators.vehicle_id', '=', 'vehicles.id')
             ->leftJoin('projects', 'projects.id', '=', 'vehicles_operators.project_id')
             ->whereRaw('projects.is_enabled = false or projects.is_enabled is null')

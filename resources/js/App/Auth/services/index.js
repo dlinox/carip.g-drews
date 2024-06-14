@@ -8,3 +8,12 @@ export const _signIn = async (data) => {
         return error.response.data;
     }
 };
+
+export const _signOut = async () => {
+    try {
+        const response = await axios.post("/auth/sign-out");
+        return response.data;
+    } catch (error) {
+        return error.response.data;
+    }
+};

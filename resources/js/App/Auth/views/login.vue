@@ -9,13 +9,10 @@
                         <div>
                             <h1>logo</h1>
                         </div>
-                        <v-card class="w-md-75 bg-white">
+                        <v-card class="w-md-75 bg-white" elevation="0">
                             <div class="pa-4">
-                                <h4 class="text-center">
-                                    Bienvenido al sistema de gestión de su
-                                    <span class="text-primary">hotel</span>
-                                </h4>
-                                <p class="text-center">
+                                <h4 class="">Bienvenido de nuevo</h4>
+                                <p class="">
                                     Ingrese sus credenciales para acceder al
                                     sistema.
                                 </p>

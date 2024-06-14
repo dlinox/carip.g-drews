@@ -33,4 +33,5 @@ class Area extends Model
             ['title' => "Acciones", 'key' => 'actions', 'align' => 'end', 'sortable' => false]
         ];
     }
+
 }

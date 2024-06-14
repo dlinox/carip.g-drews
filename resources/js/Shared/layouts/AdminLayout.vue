@@ -56,7 +56,24 @@
                 variant="tonal"
                 density="comfortable"
             />
-            <v-btn icon="mdi-account" variant="tonal" density="comfortable" />
+            <v-menu>
+                <template v-slot:activator="{ props }">
+                    <v-btn
+                        icon="mdi-account"
+                        variant="tonal"
+                        density="comfortable"
+                        v-bind="props"
+                    >
+                    </v-btn>
+                </template>
+                <v-list>
+                    <v-list-item
+                        title="Salir"
+                        prepend-icon="mdi-logout"
+                        @click="signOut()"
+                    ></v-list-item>
+                </v-list>
+            </v-menu>
         </v-app-bar>
 
         <v-main>
@@ -91,6 +108,8 @@ import { ref, computed } from "vue";
 
 import { useMenuStore, useLayoutStore } from "@/Shared/stores";
 import { useUserStore } from "@/App/Auth/stores";
+
+import { _signOut } from "@/App/Auth/services";
 
 const menuStore = useMenuStore();
 const layoutStore = useLayoutStore();
@@ -189,7 +208,12 @@ const listItems = ref([
     },
 ]);
 
-const breadCrumbs = ref([]);
+const signOut = async () => {
+    let response = await _signOut();
+    if (response.status === "success") {
+        router.get("/auth");
+    }
+};
 
 const init = async () => {
     userStore.permissions = user.value.permissions;

@@ -26,6 +26,7 @@ Route::get('/', function () {
 Route::group(['prefix' => 'auth'], function () {
     Route::get('/', [\App\Http\Controllers\Auth\AuthController::class, 'index']);
     Route::post('/sign-in', [\App\Http\Controllers\Auth\AuthController::class, 'signIn']);
+    Route::post('/sign-out', [\App\Http\Controllers\Auth\AuthController::class, 'signOut']);
 });
 
 //ruta para el dashboard
@@ -102,8 +103,30 @@ Route::group(['prefix' => ''], function () {
         Route::get('/items/operators', [\App\Http\Controllers\ProjectController::class, 'getOperators']); 
         Route::get('/items/vehicles', [\App\Http\Controllers\ProjectController::class, 'getVehicles']);
 
-        Route::get('/assigned-vehicles/{idProject}', [\App\Http\Controllers\ProjectController::class, 'getItemsAssignedVehicles']);
+        Route::get('/assigned-vehicles/{projectId}', [\App\Http\Controllers\ProjectController::class, 'getItemsAssignedVehicles']);
         Route::post('/assign-vehicle', [\App\Http\Controllers\ProjectController::class, 'assignVehicle']);
+
+
+        //getCompanies
+        Route::get('/items/companies', [\App\Http\Controllers\ProjectController::class, 'getCompanies']);
+
+        //getResponsibleByCompanies
+        Route::get('/items/responsible-by-company/{companyId}', [\App\Http\Controllers\ProjectController::class, 'getResponsibleByCompany']);
+
+        //assign-responsible-company
+        Route::post('/assign-responsible-company', [\App\Http\Controllers\ProjectController::class, 'assignResponsibleCompany']);
+
+        //getProjectManager
+        Route::get('/project-manager/{projectId}', [\App\Http\Controllers\ProjectController::class, 'getProjectManager']);
+
+        //assign-project-supervisor
+        Route::post('/assign-project-supervisor', [\App\Http\Controllers\ProjectController::class, 'assignProjectSupervisor']);
+
+        //getProjectSupervisor
+        Route::get('/project-supervisor/{projectId}', [\App\Http\Controllers\ProjectController::class, 'getProjectSupervisor']);
+
+        //getSupervisoryOperators
+        Route::get('/items/supervisory-operators', [\App\Http\Controllers\ProjectController::class, 'getSupervisoryOperators']);
     });
 
     // Route::group(['prefix' => 'cars'], function () {

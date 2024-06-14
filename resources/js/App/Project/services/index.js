@@ -97,3 +97,76 @@ export const _assignVehicle = async (data, url) => {
         return false;
     }
 };
+
+export const _companies = async () => {
+    try {
+        let response = await axios.get("/projects/items/companies");
+        return response.data;
+    } catch (error) {
+        return false;
+    }
+};
+
+export const _responsibleByCompany = async (idCompany) => {
+    try {
+        let response = await axios.get(
+            "/projects/items/responsible-by-company/" + idCompany
+        );
+        return response.data;
+    } catch (error) {
+        return false;
+    }
+};
+
+export const _assignResponsibleCompany = async (data, url) => {
+    try {
+        let response = await axios.post(url, data);
+        toast.success(response.data.message);
+        return true;
+    } catch (error) {
+        toast.error(error.response.data.message);
+        return false;
+    }
+};
+
+export const _projectManager = async (projectId) => {
+    try {
+        let response = await axios.get(
+            "/projects/project-manager/" + projectId
+        );
+        return response.data;
+    } catch (error) {
+        return false;
+    }
+};
+
+export const _assignProjectSupervisor = async (data, url) => {
+    try {
+        let response = await axios.post(url, data);
+        toast.success(response.data.message);
+        return true;
+    } catch (error) {
+        toast.error(error.response.data.message);
+        return false;
+    }
+};
+
+export const _projectSupervisor = async (projectId) => {
+    try {
+        let response = await axios.get(
+            "/projects/project-supervisor/" + projectId
+        );
+        return response.data;
+    } catch (error) {
+        return false;
+    }
+};
+
+export const _supervisoryOperators = async () => {
+    try {
+        let response = await axios.get("/projects/items/supervisory-operators");
+        return response.data;
+    } catch (error) {
+        return false;
+    }
+};

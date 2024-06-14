@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\DB;
 
 class Company extends Model
 {
@@ -48,5 +49,16 @@ class Company extends Model
             ['title' => "Estado", 'key' => 'is_enabled', 'align' => 'center'],
             ['title' => "Acciones", 'key' => 'actions', 'align' => 'end', 'sortable' => false]
         ];
+    }
+
+    public function getCompanies(): array
+    {
+
+        $companies = $this->select('companies.id', DB::raw('concat_ws(" ","RUC:" , companies.ruc,  "-" ,companies.social) as name'))
+            ->leftJoin('areas', 'areas.company_id', '=', 'companies.id')
+            ->where('companies.is_enabled', true)
+            ->get();
+
+        return $companies->toArray();
     }
 }

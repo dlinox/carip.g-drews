@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\DB;
 
 class Worker extends Model
 {
@@ -40,5 +41,16 @@ class Worker extends Model
             ["title" => "Acciones", "key" => "actions", "align" => "end", "sortable" => false],
 
         ];
+    }
+
+    public function getResponsibleByCompany($idCompany)
+    {
+        $companies = $this->select('workers.id', DB::raw('concat(  areas.name, " - " ,  workers.name, " [", workers.document , "]") as name'))
+            ->join('areas', 'areas.id', '=', 'workers.area_id')
+            ->join('companies', 'companies.id', '=', 'workers.company_id')
+            ->where('companies.id', $idCompany)
+            ->get();
+
+        return $companies->toArray();
     }
 }

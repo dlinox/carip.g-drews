@@ -73,9 +73,10 @@ class VehiclesOperator extends Model
     public  function getVehiclesForProject($project)
     {
         return $this
-            ->select('vehicles_operators.id', 'vehicles_operators.vehicle_id', 'vehicles_operators.operator_id', 'vehicles.name as vehicle', 'operators.name as operator', 'vehicles_operators.project_id')
+            ->select('vehicles_operators.id', 'vehicles_operators.vehicle_id', 'vehicles_operators.operator_id', 'vehicles.name as vehicle', 'operators.name as operator', 'vehicles_operators.project_id', 'suppliers.name as supplier_name')
             ->join('vehicles', 'vehicles.id', '=', 'vehicles_operators.vehicle_id')
             ->join('operators', 'operators.id', '=', 'vehicles_operators.operator_id')
+            ->join('suppliers', 'suppliers.id', '=', 'vehicles.supplier_id')
             ->where('vehicles_operators.project_id', $project)
             ->where('vehicles_operators.is_enabled', true)
             ->get();
