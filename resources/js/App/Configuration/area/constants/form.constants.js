@@ -16,8 +16,8 @@ export const formStructure = [
         label: "Activo",
         type: "checkbox",
         required: false,
-        default: false,
-        colMd: 12,
+        default: true,
+        cols: 12,
 
     }
 ];

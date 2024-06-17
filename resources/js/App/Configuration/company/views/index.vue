@@ -2,7 +2,7 @@
     <AdminLayout>
         <v-card>
             <v-toolbar>
-                <LnxDialog title="Nuevo" width="800px">
+                <LnxDialog title="Nuevo" width="600px">
                     <template v-slot:activator="{ dialog }">
                         <v-btn variant="tonal" link @click="dialog">
                             Agregar
@@ -11,7 +11,10 @@
                     <template v-slot:content="{ dialog }">
                         <FormCreate
                             @onCancel="dialog"
-                            :formStructure="formStructure"
+                            :formStructure="[
+                                ...formStructure,
+                                (formStructure[6].onSearch = searchLocation),
+                            ]"
                             @onSubmit="store($event, dialog)"
                         />
                     </template>
@@ -118,6 +121,8 @@ import { itemsResponse } from "@/Shared/constants";
 
 import FormCreate from "@/App/Configuration/company/components/FormCreate.vue";
 
+import { _searchLocation } from "@/Shared/services";
+
 import {
     url,
     idKey,
@@ -130,6 +135,19 @@ const items = ref({ ...itemsResponse });
 const search = ref("");
 
 const loading = ref(true);
+
+const searchLocation = async (search) => {
+    console.log(search);
+
+    if (search.length < 3) {
+        return;
+    }
+
+    let response = await _searchLocation(search);
+
+    formStructure.value[6].options = response;
+    console.log(response);
+};
 
 const loadItems = async ({ page = 1, itemsPerPage = 10, sortBy = [] }) => {
     loading.value = true;

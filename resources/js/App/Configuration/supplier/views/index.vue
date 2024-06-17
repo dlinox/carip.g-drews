@@ -2,16 +2,19 @@
     <AdminLayout>
         <v-card>
             <v-toolbar>
-                <LnxDialog title="Nuevo" width="800px">
+                <LnxDialog title="Nuevo" width="700px">
                     <template v-slot:activator="{ dialog }">
-                        <v-btn variant="tonal" link @click="dialog">
+                        <v-btn variant="tonal" link @click="dialog" prepend-icon="mdi-plus">
                             Agregar
                         </v-btn>
                     </template>
                     <template v-slot:content="{ dialog }">
                         <FormCreate
                             @onCancel="dialog"
-                            :formStructure="formStructure"
+                            :formStructure="[
+                                ...formStructure,
+                                (formStructure[6].onSearch = searchLocation),
+                            ]"
                             @onSubmit="store($event, dialog)"
                         />
                     </template>
@@ -24,12 +27,7 @@
                     class="mb-0"
                     v-model="search"
                 />
-                <v-btn
-                    class="ms-2"
-                    icon="mdi-filter"
-                    variant="tonal"
-                    density="comfortable"
-                ></v-btn>
+    
             </v-toolbar>
 
             <v-data-table-server
@@ -60,16 +58,17 @@
                 <template v-slot:item.actions="{ item }">
                     <v-btn
                         class="me-2"
-                        color="blue"
+                        color="black"
                         variant="tonal"
-                        icon="mdi-car-pickup"
-                        density="comfortable"
+                        prepend-icon="mdi-car-pickup"
+                
                         @click="
                             router.get(
                                 url + '/' + item[`${idKey}`] + '/vehicles'
                             )
                         "
                     >
+                    Vehiculos
                     </v-btn>
                     <LnxDialog title="Editar" width="500px">
                         <template v-slot:activator="{ dialog }">
@@ -86,7 +85,10 @@
                         <template v-slot:content="{ dialog }">
                             <FormCreate
                                 @onSubmit="update($event, dialog)"
-                                :formStructure="formStructure"
+                                :formStructure="[
+                                    ...formStructure,
+                                    (formStructure[6].onSearch = searchLocation),
+                                ]"
                                 :formData="item"
                             />
                         </template>
@@ -101,6 +103,7 @@ import AdminLayout from "@/Shared/layouts/AdminLayout.vue";
 import { ref } from "vue";
 import { router } from "@inertiajs/vue3";
 
+import LnxDialog from "@/Shared/components/LnxDialog.vue";
 import { _items, _store, _update } from "@/App/Configuration/supplier/services";
 
 import { itemsResponse } from "@/Shared/constants";
@@ -112,13 +115,22 @@ import {
     idKey,
     formStructure,
 } from "@/App/Configuration/supplier/constants/form.constants";
-import LnxDialog from "@/Shared/components/LnxDialog.vue";
+
+import { _searchLocation } from "@/Shared/services";
 
 const items = ref({ ...itemsResponse });
 
 const search = ref("");
 
 const loading = ref(true);
+
+const searchLocation = async (search) => {
+    if (search.length < 3) {
+        return;
+    }
+    let response = await _searchLocation(search);
+    formStructure.value[6].options = response;
+};
 
 const loadItems = async ({ page = 1, itemsPerPage = 10, sortBy = [] }) => {
     loading.value = true;

@@ -8,6 +8,33 @@ use Illuminate\Support\Facades\DB;
 
 class Vehicle extends Model
 {
+    /*
+           $table->string('name');        //marca - modelo - placa
+
+            $table->string('plate')->unique();
+
+            $table->string('brand');
+
+            $table->string('model');
+
+            $table->string('color');
+ 
+            $table->string('category');
+ 
+            $table->string('state');
+
+            $table->string('soat');
+
+            $table->date('soat_expiration_date');
+
+            $table->string('type');
+  
+            $table->string('fuel_type');
+
+            $table->string('capacity');
+
+            $table->string('mileage');
+    */
     use HasFactory;
     protected $fillable = [
         "name",
@@ -15,9 +42,16 @@ class Vehicle extends Model
         "brand",
         "model",
         "color",
+        "category",
+        "state",
+        "soat",
+        "soat_expiration_date",
         "type",
-        "supplier_id",
+        "fuel_type",
+        "capacity",
+        "mileage",
         "is_enabled",
+        "supplier_id",
     ];
 
     protected $hidden = [
@@ -27,13 +61,19 @@ class Vehicle extends Model
 
     protected $casts = [
         'is_enabled' => 'boolean',
+
     ];
 
     protected $appends = [
         'supplier_name',
     ];
 
-
+    //set name  = brand - model - plate
+    public function setNameAttribute($value)
+    {
+        $this->attributes['name'] = $this->brand . ' - ' . $this->model . ' - ' . $this->plate;
+    }
+    
     public function supplier()
     {
         return $this->belongsTo(Supplier::class);

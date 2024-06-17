@@ -82,6 +82,7 @@
                             :error-messages="
                                 form.errors ? form.errors[`${field.key}`] : null
                             "
+                             :return-object="false"
                             :no-data-text="search && search.length > 3 ? 'No se encontraron resultados' : 'Escribe al menos 3 caracteres para buscar'"
                             v-model:search="search"
                             @update:search="field.onSearch"
@@ -101,6 +102,7 @@
                             :error-messages="
                                 form.errors ? form.errors[`${field.key}`] : null
                             "
+                            :return-object="false"
                             @update:modelValue="field.onUpdate"
                         />
                     </template>

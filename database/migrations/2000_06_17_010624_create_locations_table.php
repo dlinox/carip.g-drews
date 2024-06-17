@@ -13,10 +13,10 @@ return new class extends Migration
     {
         Schema::create('locations', function (Blueprint $table) {
             $table->char('code', 6)->unique()->primary();
-            $table->string('deparment', 120);
+            $table->string('department', 120);
             $table->string('province', 120);
             $table->string('district', 120);
-            $table->index(['code', 'deparment', 'province', 'district']);
+            $table->index(['code', 'department', 'province', 'district']);
         });
     }
 

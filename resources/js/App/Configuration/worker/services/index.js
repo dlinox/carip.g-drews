@@ -8,7 +8,6 @@ const toast = useToast();
 export const _items = async (data, company) => {
     try {
         let response = await axios.post("/workers/items/" + company, data);
-        // return response.data;
         return {
             loading: false,
             headers: response.data.headers,

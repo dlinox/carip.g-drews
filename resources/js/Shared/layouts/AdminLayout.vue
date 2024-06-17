@@ -11,7 +11,7 @@
                 style="height: 60px"
             >
                 <img
-                    src="https://caripperu.com/img/bg-header/caripperu.png"
+                    src="/logo.png"
                     alt="Caripperu"
                     class="h-100"
                 />
@@ -49,13 +49,13 @@
                 <v-icon>mdi-menu</v-icon>
             </v-btn>
             <v-spacer></v-spacer>
-            <v-btn
+            <!-- <v-btn
                 icon="mdi-bell"
                 class="me-2"
                 color="info"
                 variant="tonal"
                 density="comfortable"
-            />
+            /> -->
             <v-menu>
                 <template v-slot:activator="{ props }">
                     <v-btn
@@ -216,8 +216,8 @@ const signOut = async () => {
 };
 
 const init = async () => {
+
     userStore.permissions = user.value.permissions;
-    console.log(userStore.permissions);
 };
 
 init();

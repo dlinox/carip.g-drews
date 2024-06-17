@@ -2,7 +2,7 @@
     <AdminLayout>
         <v-card>
             <v-toolbar>
-                <LnxDialog title="Nuevo" width="500px">
+                <LnxDialog title="Nuevo" width="900px">
                     <template v-slot:activator="{ dialog }">
                         <v-btn
                             variant="tonal"
@@ -60,7 +60,7 @@
                 </template>
 
                 <template v-slot:item.actions="{ item }">
-                    <LnxDialog title="Editar" width="500px">
+                    <LnxDialog title="Editar" width="900px">
                         <template v-slot:activator="{ dialog }">
                             <v-btn
                                 icon="mdi-pencil"

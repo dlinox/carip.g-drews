@@ -1,7 +1,6 @@
 <template>
     <AdminLayout>
         <v-card>
-    
             <v-toolbar>
                 <LnxDialog title="Nuevo" width="500px">
                     <template v-slot:activator="{ dialog }">
@@ -16,8 +15,8 @@
                     <template v-slot:content="{ dialog }">
                         <FormCreate
                             :formStructure="[
-                                (formStructure[0].options = areas),
                                 ...formStructure,
+                                (formStructure[0].options = areas),
                             ]"
                             @onSubmit="store($event, dialog)"
                             @onCancel="dialog"

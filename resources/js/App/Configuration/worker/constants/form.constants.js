@@ -28,6 +28,17 @@ export const formStructure = [
         type: "text",
         required: false,
         cols: 12,
+        colMd: 6,
+        default: "",
+    },
+
+    {
+        key: "phone",
+        label: "Teléfono",
+        type: "text",
+        required: false,
+        cols: 12,
+        colMd: 6,
         default: "",
     },
     {
@@ -38,14 +49,7 @@ export const formStructure = [
         cols: 12,
         default: "",
     },
-    {
-        key: "phone",
-        label: "Teléfono",
-        type: "text",
-        required: false,
-        cols: 12,
-        default: "",
-    },
+   
     {
         key: "is_enabled",
         label: "Activo",

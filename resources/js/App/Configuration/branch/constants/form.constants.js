@@ -10,7 +10,7 @@ export const formStructure = ref([
         key: "name",
         label: "Nombre",
         type: "text",
-        required: false,
+        required: true,
         cols: 12,
         default: "",
     },

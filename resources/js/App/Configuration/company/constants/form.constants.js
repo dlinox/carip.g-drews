@@ -1,11 +1,14 @@
+
+import { ref } from "vue";
+
 export const url = "/companies";
 
 export const idKey = "id";
 
-export const formStructure = [
+export const formStructure = ref([
     {
         key: "ruc",
-        label: "Ruc",
+        label: "RUC",
         type: "text",
         required: true,
         cols: 12,
@@ -23,11 +26,11 @@ export const formStructure = [
     },
     {
         key: "social",
-        label: "Social",
+        label: "Razon Social",
         type: "text",
         required: true,
         cols: 12,
-        colMd: 6,
+        colMd: 12,
         default: "",
     },
     {
@@ -36,7 +39,7 @@ export const formStructure = [
         type: "text",
         required: true,
         cols: 12,
-        colMd: 6,
+        colMd: 8,
         default: "",
     },
     {
@@ -54,17 +57,20 @@ export const formStructure = [
         type: "text",
         required: true,
         cols: 12,
-        colMd: 4,
+
         default: "",
     },
     {
         key: "ubication",
-        label: "Ciudad",
-        type: "text",
+        label: "Ubicación",
+        type: "autocomplete",
         required: true,
         cols: 12,
-        colMd: 4,
-        default: "",
+        itemValue: "code",
+        itemTitle: "location",
+        default: null,
+        options: [],
+        onSearch: () => {},
     },
     {
         key: "is_enabled",
@@ -74,4 +80,4 @@ export const formStructure = [
         colMd: 12,
         default: true,
     }
-];
+]);

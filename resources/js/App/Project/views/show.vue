@@ -134,7 +134,8 @@
                                     <div class="text-overline mb-1">
                                         {{
                                             assignedVehicles.length > 0
-                                                ? assignedVehicles.length + " Vehiculos"
+                                                ? assignedVehicles.length +
+                                                  " Vehiculos"
                                                 : "No hay vehículos asignados"
                                         }}
                                     </div>
@@ -290,7 +291,7 @@ const assignProjectSupervisor = async (data, dialog) => {
     );
     if (response) {
         dialog();
-        await itemsAssignedVehicles();
+        await getProjectSupervisor(props.project.id);
     }
     data.processing = false;
 };
@@ -317,7 +318,8 @@ const assignResponsibleCompany = async (data, dialog) => {
     );
     if (response) {
         dialog();
-        await itemsAssignedVehicles();
+
+        await getProjectManager(props.project.id);
     }
     data.processing = false;
 };

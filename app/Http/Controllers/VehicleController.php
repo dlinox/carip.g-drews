@@ -24,6 +24,7 @@ class VehicleController extends Controller
             'title' => $this->title,
             'supplier' => $supplier
         ]);
+        
     }
 
     public function getItems(Request $request, $supplierId)
@@ -67,7 +68,11 @@ class VehicleController extends Controller
     public function store(Request $request)
     {
         try {
-            $this->vehicle::create($request->all());
+            $this->vehicle::create([
+            
+                ...$request->all(),
+                'name' => $request->brand . ' - ' . $request->model . ' - ' . $request->plate,
+            ]);
 
             return response()->json([
                 'message' => 'Vihiculo creado correctamente',

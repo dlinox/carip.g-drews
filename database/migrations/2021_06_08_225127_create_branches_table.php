@@ -18,6 +18,11 @@ return new class extends Migration
             $table->char('geo_code', 6)->default('000000');
             $table->string('country')->default('PER');
             $table->boolean('is_enabled')->default(true);
+
+            $table->foreign('geo_code')
+                ->references('code')
+                ->on('locations')
+                ->onDelete('cascade');
             $table->timestamps();
         });
     }

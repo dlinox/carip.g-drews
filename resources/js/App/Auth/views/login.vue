@@ -7,7 +7,7 @@
                         class="h-100 d-flex justify-space-between align-center flex-column"
                     >
                         <div>
-                            <h1>logo</h1>
+                            <img src="/logo.png" alt="Logo Grupo Drews"  width="150"/>
                         </div>
                         <v-card class="w-md-75 bg-white" elevation="0">
                             <div class="pa-4">

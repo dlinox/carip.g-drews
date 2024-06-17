@@ -13,20 +13,34 @@ return new class extends Migration
     {
         Schema::create('vehicles', function (Blueprint $table) {
             $table->id();
-            // placa
+            //marca - modelo - placa
             $table->string('name');
-            $table->string('plate');
+            // placa
+            $table->string('plate')->unique();
             // marca
             $table->string('brand');
             // modelo
             $table->string('model');
             // color
             $table->string('color');
+            // catergoria
+            $table->string('category');
+            //estado
+            $table->string('state');
+            //soat
+            $table->string('soat');
+            //soat fecha de vencimiento
+            $table->date('soat_expiration_date');
             // tipo
             $table->string('type');
+            //tipo de combustible
+            $table->string('fuel_type');
+            //capacidad
+            $table->string('capacity');
+            //kilometraje
+            $table->string('mileage');
 
             $table->boolean('is_enabled')->default(true);
-            //proveedor
             $table->unsignedBigInteger('supplier_id');
             $table->foreign('supplier_id')->references('id')->on('suppliers')->onDelete('cascade');
             $table->timestamps();
