@@ -163,3 +163,8 @@ Route::group(['prefix' => ''], function () {
         Route::post('/permissions', [\App\Http\Controllers\Security\RoleController::class, 'assignPermissions']);
     });
 });
+
+
+Route::group(['prefix'=> 'service'], function(){
+    Route::get('/locations/{search}', [\App\Http\Controllers\ServiceController::class, 'searchLocation']);
+});

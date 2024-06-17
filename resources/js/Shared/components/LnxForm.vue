@@ -70,6 +70,25 @@
                         ></v-checkbox>
                     </template>
 
+                    <template v-else-if="field.type === 'autocomplete'">
+                        <v-autocomplete
+                            v-model="form[`${field.key}`]"
+                            :items="field.options"
+                            :label="field.label"
+                            :item-title="field.itemTitle"
+                            :item-value="field.itemValue"
+                            :rules="field.required ? [isRequired] : []"
+                            :clearable="field.clearable ?? false"
+                            :error-messages="
+                                form.errors ? form.errors[`${field.key}`] : null
+                            "
+                            :no-data-text="search && search.length > 3 ? 'No se encontraron resultados' : 'Escribe al menos 3 caracteres para buscar'"
+                            v-model:search="search"
+                            @update:search="field.onSearch"
+                            @update:modelValue="field.onUpdate"
+                        />
+                    </template>
+
                     <template v-else-if="field.type === 'combobox'">
                         <v-autocomplete
                             v-model="form[`${field.key}`]"
@@ -127,6 +146,9 @@ const props = defineProps({
 const emit = defineEmits(["update:modelValue", "onCancel", "onSumbit"]);
 
 const formRef = ref(null);
+
+const search = ref("");
+
 
 const form = computed({
     get: () => props.modelValue,

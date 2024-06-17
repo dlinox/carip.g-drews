@@ -14,7 +14,10 @@
                     </template>
                     <template v-slot:content="{ dialog }">
                         <FormCreate
-                            :formStructure="formStructure"
+                            :formStructure="[
+                                ...formStructure,
+                                (formStructure[1].onSearch = searchLocation),
+                            ]"
                             @onSubmit="store($event, dialog)"
                             @onCancel="dialog"
                         />
@@ -71,7 +74,11 @@
                         </template>
                         <template v-slot:content="{ dialog }">
                             <FormCreate
-                                :formStructure="formStructure"
+                                :formStructure="[
+                                    ...formStructure,
+                                    (formStructure[1].onSearch =
+                                        searchLocation),
+                                ]"
                                 :formData="item"
                                 @onCancel="dialog"
                                 @onSubmit="update($event, dialog)"
@@ -97,6 +104,8 @@ import {
     formStructure,
 } from "@/App/Configuration/branch/constants/form.constants";
 
+import { _searchLocation } from "@/Shared/services";
+
 const props = defineProps({
     title: String,
 });
@@ -104,6 +113,20 @@ const props = defineProps({
 const search = ref("");
 
 const loading = ref(true);
+
+const searchLocation = async (search) => {
+    console.log(search);
+   
+
+    if (search.length < 3) {
+        return;
+    }
+
+    let response = await _searchLocation(search);
+
+    formStructure.value[1].options = response;
+    console.log(response);
+};
 
 const items = ref({ ...itemsResponse });
 

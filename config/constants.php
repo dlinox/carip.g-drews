@@ -114,23 +114,23 @@ return [
             ],
         ],
         [
-            "title"=> "Seguridad",
-            "value"=> "security",
-            "icon"=> "mdi-security",
-            "children"=> [
+            "title" => "Seguridad",
+            "value" => "security",
+            "icon" => "mdi-security",
+            "children" => [
                 [
-                    "title"=> "Usuarios",
-                    "value"=> "users",
-                    "icon"=> "mdi-minus",
-                    "to"=> "/users",
-                    "permission"=> "307",
+                    "title" => "Usuarios",
+                    "value" => "users",
+                    "icon" => "mdi-minus",
+                    "to" => "/users",
+                    "permission" => "307",
                 ],
                 [
-                    "title"=> "Roles",
-                    "value"=> "roles",
-                    "icon"=> "mdi-minus",
-                    "to"=> "/roles",
-                    "permission"=> "308",
+                    "title" => "Roles",
+                    "value" => "roles",
+                    "icon" => "mdi-minus",
+                    "to" => "/roles",
+                    "permission" => "308",
                 ],
             ]
         ]
