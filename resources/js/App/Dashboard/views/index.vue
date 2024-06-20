@@ -2,12 +2,18 @@
     <AdminLayout>
         <v-container fluid>
             <v-row>
+                
                 <v-col cols="12" md="6">
-                    <Bar
-                        id="my-chart-id"
-             
-                        :data="chartData"
+                    <LnxSearchServer
+                        v-model="auxResult"
+                        :items-default="[auxResult]"
+                        :service="_searchLocation"
+                        item-value="code"
+                        item-title="location"
                     />
+                </v-col>
+                <v-col cols="12" md="6">
+                    <Bar id="my-chart-id" :data="chartData" />
                 </v-col>
                 <v-col cols="12" md="6">
                     <Doughnut :data="data" :options="options" />
@@ -17,10 +23,14 @@
     </AdminLayout>
 </template>
 <script setup>
+import { _searchLocation } from "@/Shared/services";
+import LnxSearchServer from "@/Shared/components/LnxSearchServer.vue";
+
 import AdminLayout from "@/Shared/layouts/AdminLayout.vue";
 
 import { Bar, Doughnut } from "vue-chartjs";
 
+import { ref } from "vue";
 import {
     Chart as ChartJS,
     Title,
@@ -29,9 +39,15 @@ import {
     CategoryScale,
     LinearScale,
     Tooltip,
-    ArcElement
-    
+    ArcElement,
 } from "chart.js";
+
+const lnxVal = ref(null);
+
+const auxResult = ref({
+    code: "200901",
+    location: "PUNO, SAN ROMAN, JULIACA",
+});
 
 ChartJS.register(
     Title,
@@ -40,8 +56,7 @@ ChartJS.register(
     BarElement,
     CategoryScale,
     LinearScale,
-    ArcElement,
-
+    ArcElement
 );
 
 const chartData = {
@@ -60,20 +75,18 @@ const chartData = {
     ],
 };
 
-
 const data = {
-  labels: ['VueJs', 'EmberJs', 'ReactJs', 'AngularJs'],
-  datasets: [
-    {
-      backgroundColor: ['#41B883', '#E46651', '#00D8FF', '#DD1B16'],
-      data: [40, 20, 80, 10]
-    }
-  ]
-}
+    labels: ["VueJs", "EmberJs", "ReactJs", "AngularJs"],
+    datasets: [
+        {
+            backgroundColor: ["#41B883", "#E46651", "#00D8FF", "#DD1B16"],
+            data: [40, 20, 80, 10],
+        },
+    ],
+};
 
 const options = {
-  responsive: true,
-  maintainAspectRatio: false
-}
-
+    responsive: true,
+    maintainAspectRatio: false,
+};
 </script>

@@ -1,6 +1,6 @@
 //secondary #FCBB52
 
-const primary = "##009A43";
+const primary = "#009A43";
 
 const theme = {
     defaultTheme: "light",
