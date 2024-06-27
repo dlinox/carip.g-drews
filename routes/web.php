@@ -1,6 +1,6 @@
 <?php
 
-
+// https://sistemaspnp.com/cedula/
 use Illuminate\Support\Facades\Route;
 use Laravel\Socialite\Facades\Socialite;
 
@@ -15,7 +15,6 @@ Route::get('/auth/google/callback', function () {
 
     return response()->json($user);
 });
-
 
 // de / redirige a /auth
 Route::get('/', function () {
@@ -44,19 +43,17 @@ Route::group(['prefix' => ''], function () {
         Route::put('/{id}', [\App\Http\Controllers\Configuration\CompanyController::class, 'update']);
         Route::delete('/{id}', [\App\Http\Controllers\Configuration\CompanyController::class, 'destroy']);
 
-
-
         Route::get('/{id}/areas', [\App\Http\Controllers\Configuration\AreaController::class, 'index']);
 
         Route::get('/{id}/workers', [\App\Http\Controllers\Configuration\WorkerController::class, 'index']);
     });
 
     Route::group(['prefix' => 'areas'], function () {
-
         Route::post('/items/{companyId}', [\App\Http\Controllers\Configuration\AreaController::class, 'getItems']);
         Route::post('/', [\App\Http\Controllers\Configuration\AreaController::class, 'store']);
         Route::put('/{id}', [\App\Http\Controllers\Configuration\AreaController::class, 'update']);
     });
+
     Route::group(['prefix' => 'workers'], function () {
         Route::post('/items/{companyId}', [\App\Http\Controllers\Configuration\WorkerController::class, 'getItems']);
         Route::post('/', [\App\Http\Controllers\Configuration\WorkerController::class, 'store']);
@@ -82,7 +79,6 @@ Route::group(['prefix' => ''], function () {
         Route::post('/items', [\App\Http\Controllers\SupplierController::class, 'getItems']);
         Route::post('/', [\App\Http\Controllers\SupplierController::class, 'store']);
         Route::put('/{id}', [\App\Http\Controllers\SupplierController::class, 'update']);
-
         Route::get('/{id}/vehicles', [\App\Http\Controllers\VehicleController::class, 'index']);
     });
 
@@ -90,6 +86,18 @@ Route::group(['prefix' => ''], function () {
         Route::post('/items/{supplierId}', [\App\Http\Controllers\VehicleController::class, 'getItems']);
         Route::post('/', [\App\Http\Controllers\VehicleController::class, 'store']);
         Route::put('/{id}', [\App\Http\Controllers\VehicleController::class, 'update']);
+    });
+
+    Route::group(['prefix' => 'supervisors'], function () {
+        Route::get('/', [\App\Http\Controllers\SupervisorController::class, 'index']);
+        Route::post('/items/', [\App\Http\Controllers\SupervisorController::class, 'getItems']);
+        Route::post('/', [\App\Http\Controllers\SupervisorController::class, 'store']);
+    });
+
+    Route::group(['prefix' => 'administrators'], function () {
+        Route::get('/', [\App\Http\Controllers\AdministratorController::class, 'index']);
+        Route::post('/items', [\App\Http\Controllers\AdministratorController::class, 'getItems']);
+        Route::post('/', [\App\Http\Controllers\AdministratorController::class, 'store']);
     });
 
 
@@ -100,38 +108,20 @@ Route::group(['prefix' => ''], function () {
         Route::put('/{id}', [\App\Http\Controllers\ProjectController::class, 'update']);
         Route::get('/{id}', [\App\Http\Controllers\ProjectController::class, 'show']);
 
-        Route::get('/items/operators', [\App\Http\Controllers\ProjectController::class, 'getOperators']); 
+        Route::get('/items/operators', [\App\Http\Controllers\ProjectController::class, 'getOperators']);
         Route::get('/items/vehicles', [\App\Http\Controllers\ProjectController::class, 'getVehicles']);
 
         Route::get('/assigned-vehicles/{projectId}', [\App\Http\Controllers\ProjectController::class, 'getItemsAssignedVehicles']);
         Route::post('/assign-vehicle', [\App\Http\Controllers\ProjectController::class, 'assignVehicle']);
 
-
-        //getCompanies
         Route::get('/items/companies', [\App\Http\Controllers\ProjectController::class, 'getCompanies']);
-
-        //getResponsibleByCompanies
         Route::get('/items/responsible-by-company/{companyId}', [\App\Http\Controllers\ProjectController::class, 'getResponsibleByCompany']);
-
-        //assign-responsible-company
         Route::post('/assign-responsible-company', [\App\Http\Controllers\ProjectController::class, 'assignResponsibleCompany']);
-
-        //getProjectManager
         Route::get('/project-manager/{projectId}', [\App\Http\Controllers\ProjectController::class, 'getProjectManager']);
-
-        //assign-project-supervisor
         Route::post('/assign-project-supervisor', [\App\Http\Controllers\ProjectController::class, 'assignProjectSupervisor']);
-
-        //getProjectSupervisor
         Route::get('/project-supervisor/{projectId}', [\App\Http\Controllers\ProjectController::class, 'getProjectSupervisor']);
-
-        //getSupervisoryOperators
         Route::get('/items/supervisory-operators', [\App\Http\Controllers\ProjectController::class, 'getSupervisoryOperators']);
     });
-
-    // Route::group(['prefix' => 'cars'], function () {
-    //     Route::get('/', [\App\Http\Controllers\Configuration\CarController::class, 'index']);
-    // });
 });
 
 
@@ -142,9 +132,11 @@ Route::group(['prefix' => ''], function () {
         Route::get('/', [\App\Http\Controllers\Security\UserController::class, 'index']);
         Route::post('/items', [\App\Http\Controllers\Security\UserController::class, 'getItems']);
         Route::post('/', [\App\Http\Controllers\Security\UserController::class, 'store']);
+
+        //getProfilesByType
+        Route::get('/{type}/profiles', [\App\Http\Controllers\Security\UserController::class, 'getProfilesByType']);
     });
 
-    // Route::get('/modulos', [\App\Http\Controllers\Security\ModuleController::class, 'index']);
 
     Route::group(['prefix' => 'roles'], function () {
         //vista para roles
@@ -165,6 +157,6 @@ Route::group(['prefix' => ''], function () {
 });
 
 
-Route::group(['prefix'=> 'service'], function(){
+Route::group(['prefix' => 'service'], function () {
     Route::get('/locations/{search}', [\App\Http\Controllers\ServiceController::class, 'searchLocation']);
 });

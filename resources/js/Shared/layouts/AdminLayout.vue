@@ -10,11 +10,7 @@
                 class="d-flex flex-column justify-center align-center pa-1 bg-grey-lighten-2"
                 style="height: 60px"
             >
-                <img
-                    src="/logo.png"
-                    alt="Caripperu"
-                    class="h-100"
-                />
+                <img src="/logo.png" alt="Caripperu" class="h-100" />
             </v-sheet>
 
             <v-list
@@ -44,22 +40,17 @@
             </template>
         </v-navigation-drawer>
 
-        <v-app-bar app flat class="bg-grey-lighten-3">
-            <v-btn icon @click="layoutStore.setDrawer(!layoutStore.drawer)">
+        <v-app-bar app flat class="bg-primary">
+            <v-btn color="white" icon @click="layoutStore.setDrawer(!layoutStore.drawer)">
                 <v-icon>mdi-menu</v-icon>
             </v-btn>
             <v-spacer></v-spacer>
-            <!-- <v-btn
-                icon="mdi-bell"
-                class="me-2"
-                color="info"
-                variant="tonal"
-                density="comfortable"
-            /> -->
+
             <v-menu>
                 <template v-slot:activator="{ props }">
                     <v-btn
                         icon="mdi-account"
+                        color="white"
                         variant="tonal"
                         density="comfortable"
                         v-bind="props"
@@ -77,7 +68,7 @@
         </v-app-bar>
 
         <v-main>
-            <v-toolbar app flat class="bg-grey-lighten-3">
+            <v-toolbar app flat class="bg-primary">
                 <v-toolbar-title class="text-small">
                     {{ currentMenu ? currentMenu.title : "Dashboard" }}
                 </v-toolbar-title>
@@ -155,6 +146,22 @@ const listItems = ref([
                 },
             },
             {
+                title: "Administradores",
+                props: {
+                    prependIcon: "mdi-minus",
+                    value: "administrators",
+                    onclick: () => router.get("/administrators"),
+                },
+            },
+            {
+                title: "Supervisores",
+                props: {
+                    prependIcon: "mdi-minus",
+                    value: "supervisors",
+                    onclick: () => router.get("/supervisors"),
+                },
+            },
+            {
                 title: "Empresas",
                 props: {
                     prependIcon: "mdi-minus",
@@ -216,7 +223,6 @@ const signOut = async () => {
 };
 
 const init = async () => {
-
     userStore.permissions = user.value.permissions;
 };
 

@@ -2,11 +2,12 @@
     <AdminLayout>
         <v-card class="rounded-0">
             <v-toolbar class="bg-primary">
-                <LnxDialog title="Nuevo" width="500px">
+                <LnxDialog title="Nuevo" width="600px">
                     <template v-slot:activator="{ dialog }">
                         <v-btn
                             v-permission="['301']"
-                            variant="flat"
+                            variant="outlined"
+                            color="dark"
                             @click="dialog"
                             prepend-icon="mdi-plus"
                         >
@@ -61,8 +62,8 @@
                     <v-btn
                         icon="mdi-pencil"
                         size="small"
-                        color="primary"
-                        variant="tonal"
+                        color="dark"
+                        variant="outlined"
                         link
                         v-permission="['302']"
                     >
@@ -77,18 +78,17 @@ import AdminLayout from "@/Shared/layouts/AdminLayout.vue";
 
 import { onMounted, ref } from "vue";
 
-import { _items, _profilesByType, _store } from "@/App/Security/user/services";
+import { _items, _store } from "@/App/Configuration/supervisor/services";
 
-import FormCreate from "@/App/Security/user/components/FormCreate.vue";
+import FormCreate from "@/App/Configuration/supervisor/components/FormCreate.vue";
 import LnxDialog from "@/Shared/components/LnxDialog.vue";
 
-import { formInit } from "@/App/Security/user/forms";
+import { formInit } from "@/App/Configuration/supervisor/forms";
 
 import { itemsResponse } from "@/Shared/constants";
 
 const props = defineProps({
-    roles: Array,
-    profileTypes: Array,
+    typeDocuments: Array,
 });
 
 const formStructure = ref([]);
@@ -98,14 +98,6 @@ const items = ref({ ...itemsResponse });
 const search = ref("");
 
 const loading = ref(true);
-
-const store = async (data, dialog) => {
-    console.log(data);
-    let res = await _store(data);
-
-    dialog();
-    loadItems({});
-};
 
 const loadItems = async ({ page = 1, itemsPerPage = 10, sortBy = [] }) => {
     console.log(page, itemsPerPage, sortBy);
@@ -120,20 +112,17 @@ const loadItems = async ({ page = 1, itemsPerPage = 10, sortBy = [] }) => {
     loading.value = false;
 };
 
-const onUpdateType = async (type) => {
-    console.log(type);
-    const profiles = await _profilesByType(type);
-    formStructure.value[1].options = profiles;
+const store = async (data, dialog) => {
+    console.log(data);
+    await _store(data);
+    dialog();
+    loadItems({});
 };
 
 const init = async () => {
     formStructure.value = formInit({
-        roles: props.roles,
-        profileTypes: props.profileTypes,
-        onUpdateType: onUpdateType,
+        typeDocuments: props.typeDocuments,
     });
-
-    console.log(formStructure.value);
 };
 
 onMounted(() => {

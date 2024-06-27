@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\Administrator;
 use App\Models\Permission\Permission;
 use App\Models\Permission\Role;
 use App\Models\User;
@@ -17,33 +18,33 @@ class SecuritySeeder extends Seeder
      */
     public function run(): void
     {
+        $administrator = Administrator::create([
+            'name' => 'Denis',
+            'document_type' => '001',
+            'document_number' => '71822317',
+            'paternal_surname' => 'Puma',
+            'maternal_surname' => 'Ticona',
+            'phone' => '951208106',
+        ]);
 
         //crear usuarios
         $admin = User::create([
-            'name' => 'Admin',
-            'username' => 'admin',
-            'email' => 'admin@gmail.com',
+            'profile_type' => '001',
+            'profile_id' => $administrator->id,
+            'email' => 'nearlino20@gmail.com',
             'password' => 'password',
         ]);
 
-        $operador = User::create([
-            'name' => 'Operador',
-            'username' => 'operador',
-            'email' => 'operador@gmail.com',
-            'password' => 'password',
-        ]);
 
         //crear roles
         $roles = [
             ['name' => 'Admin', 'route_redirect' => '/', 'guard_name' => 'web'],
-            ['name' => 'User', 'route_redirect' => '/', 'guard_name' => 'web'],
         ];
 
         foreach ($roles as $role) {
             Role::create($role);
         }
 
-    
         Permission::create(['guard_name' => 'web', 'group_name' => 'dashboard', 'name' => 'dashboard', 'code' => '100']);
         Permission::create(['guard_name' => 'web', 'group_name' => 'Roles', 'name' => 'gestionar-roles', 'code' => '200']);
         Permission::create(['guard_name' => 'web', 'group_name' => 'Roles', 'name' => 'agregar-rol', 'code' => '201']);

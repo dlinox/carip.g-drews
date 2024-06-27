@@ -8,3 +8,9 @@
 .v-list-group__items .v-list-item {
     padding-inline-start: calc(16px + 20px) !important;
 }
+
+.v-data-table__thead > tr > th {
+
+    font-weight: 600 !important;
+    color: #888 !important;
+}

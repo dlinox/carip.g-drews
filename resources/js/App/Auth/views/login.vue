@@ -149,7 +149,7 @@ import { router } from "@inertiajs/vue3";
 import { _signIn } from "@/App/Auth/services";
 
 const form = ref({
-    email: "admin@gmail.com",
+    email: "nearlino20@gmail.com",
     password: "password",
 });
 

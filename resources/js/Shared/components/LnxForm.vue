@@ -82,8 +82,12 @@
                             :error-messages="
                                 form.errors ? form.errors[`${field.key}`] : null
                             "
-                             :return-object="false"
-                            :no-data-text="search && search.length > 3 ? 'No se encontraron resultados' : 'Escribe al menos 3 caracteres para buscar'"
+                            :return-object="false"
+                            :no-data-text="
+                                search && search.length > 3
+                                    ? 'No se encontraron resultados'
+                                    : 'Escribe al menos 3 caracteres para buscar'
+                            "
                             v-model:search="search"
                             @update:search="field.onSearch"
                             @update:modelValue="field.onUpdate"
@@ -102,8 +106,18 @@
                             :error-messages="
                                 form.errors ? form.errors[`${field.key}`] : null
                             "
-                            :return-object="false"
+                            :return-object="field.returnObject ?? false"
                             @update:modelValue="field.onUpdate"
+                        />
+                    </template>
+
+                    <template v-else-if="field.type === 'search-server'">
+                        <lnx-search-server
+                            v-model="form[`${field.key}`]"
+                            :items-default="field.default"
+                            :service="field.service"
+                            :item-title="field.itemTitle"
+                            :item-value="field.itemValue"
                         />
                     </template>
                 </slot>
@@ -128,6 +142,7 @@
 <script setup>
 import { computed, ref } from "vue";
 import { isRequired } from "@/Shared/helpers/validations.helpers.js";
+import LnxSearchServer from "@/Shared/components/LnxSearchServer.vue";
 
 const props = defineProps({
     formStructure: {
@@ -150,7 +165,6 @@ const emit = defineEmits(["update:modelValue", "onCancel", "onSumbit"]);
 const formRef = ref(null);
 
 const search = ref("");
-
 
 const form = computed({
     get: () => props.modelValue,

@@ -2,52 +2,44 @@
 
 namespace App\Models;
 
-
-
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
-use Spatie\Permission\Models\Permission;
-use Spatie\Permission\Models\Role;
+use Illuminate\Support\Facades\DB;
 use Spatie\Permission\Traits\HasPermissions;
 use Spatie\Permission\Traits\HasRoles;
-
-use Illuminate\Database\Eloquent\Casts\Attribute;
 
 class User extends Authenticatable
 {
     use HasFactory, Notifiable, HasRoles, HasPermissions;
-
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array<int, string>
-     */
     protected $fillable = [
-        'name',
-        'username',
+        'profile_type',
+        'profile_id',
         'email',
         'password',
         'is_enabled',
     ];
 
-    /**
-     * The attributes that should be hidden for serialization.
-     *
-     * @var array<int, string>
-     */
     protected $hidden = [
         'password',
         'remember_token',
     ];
 
+    public  static $profileTypes = [
+        [
+            'id' => '001',
+            'name' => 'Administrador'
+        ],
+        [
+            'id' => '002',
+            'name' => 'Supervisor'
+        ],
+        [
+            'id' => '003',
+            'name' => 'Operador'
+        ]
+    ];
 
-    /**
-     * Get the attributes that should be cast.
-     *
-     * @return array<string, string>
-     */
     protected function casts(): array
     {
         return [
@@ -57,16 +49,36 @@ class User extends Authenticatable
         ];
     }
 
-
-
     public static function headers(): array
     {
         return [
-            ['title' => "Nombre", 'key' => 'name', 'align' => 'center'],
-            ['title' => "Usuario", 'key' => 'username', 'align' => 'center'],
             ['title' => "Correo", 'key' => 'email', 'align' => 'center'],
             ['title' => "Estado", 'key' => 'is_enabled', 'align' => 'center'],
             ['title' => "Acciones", 'key' => 'actions', 'align' => 'end', 'sortable' => false]
         ];
+    }
+
+
+    public function getProfilesByType($type)
+    {
+        switch ($type) {
+            case '001':
+                return Administrator::select('id', DB::raw('CONCAT(name, " ", paternal_surname, " ", maternal_surname) as name'))
+                    ->where('is_enabled', true)
+                    ->get();
+
+            case '002':
+                return Supervisor::select('id', DB::raw('CONCAT(name, " ", paternal_surname, " ", maternal_surname) as name'))
+                    ->where('is_enabled', true)
+                    ->get();
+
+            case '003':
+                return Operator::select('id', 'name')
+                    ->where('is_enabled', true)
+                    ->get();
+
+            default:
+                return 'No definido';
+        }
     }
 }

@@ -6,7 +6,7 @@ const toast = useToast();
 
 export const _items = async (data) => {
     try {
-        let response = await axios.post("/users/items", data);
+        let response = await axios.post("/supervisors/items", data);
 
         return {
             loading: false,
@@ -21,28 +21,20 @@ export const _items = async (data) => {
             },
         };
     } catch (error) {
+
+        toast.error('Error al cargar los items');
         return false;
     }
 };
 
+
 export const _store = async (data) => {
     try {
-        let response = await axios.post("/users", data);
+        let response = await axios.post("/supervisors", data);
         toast.success('Item creado con éxito');
         return response.data;
     } catch (error) {
         toast.error('Error al crear el item');
-        return false;
-    }
-}
-
-
-export const _profilesByType = async (type) => {
-    try {
-        let response = await axios.get(`/users/${type}/profiles`);
-        return response.data;
-    } catch (error) {
-        toast.error('Error al cargar los tipos de perfil');
         return false;
     }
 }
