@@ -1,11 +1,11 @@
 <template>
     <AdminLayout>
-        <v-card>
-            <v-toolbar>
+        <v-card rounded="0">
+            <v-toolbar class="bg-primary">
                 <LnxDialog title="Nuevo" width="500px">
                     <template v-slot:activator="{ dialog }">
                         <v-btn
-                            variant="tonal"
+                            variant="flat"
                             @click="dialog"
                             prepend-icon="mdi-plus"
                         >
@@ -14,10 +14,7 @@
                     </template>
                     <template v-slot:content="{ dialog }">
                         <FormCreate
-                            :formStructure="[
-                                ...formStructure,
-                                (formStructure[1].onSearch = searchLocation),
-                            ]"
+                            :formStructure="formStructure"
                             @onSubmit="store($event, dialog)"
                             @onCancel="dialog"
                         />
@@ -29,7 +26,7 @@
                 <v-text-field
                     prepend-inner-icon="mdi-magnify"
                     label="Buscar"
-                    class="mb-0"
+                    class="me-3"
                     v-model="search"
                 />
             </v-toolbar>
@@ -49,6 +46,9 @@
                 items-per-page-text="Registros por página"
                 loading-text="Cargando registros"
             >
+                <template v-slot:item.geo_name="{ item }">
+                    {{ item.location["location"] }}
+                </template>
                 <template v-slot:item.is_enabled="{ item }">
                     <v-chip
                         :color="item.is_enabled ? 'success' : 'error'"
@@ -74,11 +74,11 @@
                         </template>
                         <template v-slot:content="{ dialog }">
                             <FormCreate
-                                :formStructure="[
-                                    ...formStructure,
-                                    (formStructure[1].onSearch =
-                                        searchLocation),
-                                ]"
+                                :formStructure="
+                                    formInit({
+                                        defaultGeoCode: [item.location],
+                                    })
+                                "
                                 :formData="item"
                                 @onCancel="dialog"
                                 @onSubmit="update($event, dialog)"
@@ -91,17 +91,17 @@
     </AdminLayout>
 </template>
 <script setup>
-import { ref } from "vue";
+import { onMounted, ref } from "vue";
 import AdminLayout from "@/Shared/layouts/AdminLayout.vue";
 import FormCreate from "@/App/Configuration/branch/components/FormCreate.vue";
 import { _items, _store, _update } from "@/App/Configuration/branch/services";
 import { itemsResponse } from "@/Shared/constants";
 import LnxDialog from "@/Shared/components/LnxDialog.vue";
+import { formInit } from "@/App/Configuration/branch/forms";
 
 import {
     url,
     idKey,
-    formStructure,
 } from "@/App/Configuration/branch/constants/form.constants";
 
 import { _searchLocation } from "@/Shared/services";
@@ -110,23 +110,11 @@ const props = defineProps({
     title: String,
 });
 
+const formStructure = ref([]);
+
 const search = ref("");
 
 const loading = ref(true);
-
-const searchLocation = async (search) => {
-    console.log(search);
-   
-
-    if (search.length < 3) {
-        return;
-    }
-
-    let response = await _searchLocation(search);
-
-    formStructure.value[1].options = response;
-    console.log(response);
-};
 
 const items = ref({ ...itemsResponse });
 
@@ -171,7 +159,14 @@ const update = async (data, dialog) => {
         });
         dialog();
     }
-
     data.processing = false;
 };
+
+const init = async () => {
+    formStructure.value = formInit({});
+};
+
+onMounted(() => {
+    init();
+});
 </script>

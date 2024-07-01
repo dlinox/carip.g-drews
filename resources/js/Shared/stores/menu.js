@@ -6,9 +6,9 @@ const useMenuStore = defineStore("menu", () => {
 
     const breadCrumbs = ref([]);
     
-    
     const menu = ref([]);
     const current = ref(null);
+    
 
     const setCurrent = (item) => {
         // obtener la ruta actual

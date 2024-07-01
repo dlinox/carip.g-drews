@@ -1,3 +1,9 @@
-import { _profilesByType, _items, _store } from "./user.services";
+import {
+    _profilesByType,
+    _items,
+    _store,
+    _assignBranch,
+    _disableBranch,
+} from "./user.services";
 
-export { _profilesByType, _items, _store };
+export { _profilesByType, _items, _store, _assignBranch, _disableBranch };

@@ -41,7 +41,11 @@
         </v-navigation-drawer>
 
         <v-app-bar app flat class="bg-primary">
-            <v-btn color="white" icon @click="layoutStore.setDrawer(!layoutStore.drawer)">
+            <v-btn
+                color="white"
+                icon
+                @click="layoutStore.setDrawer(!layoutStore.drawer)"
+            >
                 <v-icon>mdi-menu</v-icon>
             </v-btn>
             <v-spacer></v-spacer>
@@ -70,7 +74,7 @@
         <v-main>
             <v-toolbar app flat class="bg-primary">
                 <v-toolbar-title class="text-small">
-                    {{ currentMenu ? currentMenu.title : "Dashboard" }}
+                    {{ layoutStore.title }}
                 </v-toolbar-title>
                 <v-spacer></v-spacer>
                 <v-breadcrumbs :items="menuStore.breadCrumbs">

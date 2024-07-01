@@ -2,7 +2,7 @@
     <AdminLayout>
         <v-card class="rounded-0">
             <v-toolbar class="bg-primary">
-                <LnxDialog title="Nuevo" width="500px">
+                <LnxDialog title="Nuevo" width="600px">
                     <template v-slot:activator="{ dialog }">
                         <v-btn
                             v-permission="['301']"
@@ -58,11 +58,73 @@
                 </template>
 
                 <template v-slot:item.actions="{ item }">
+           
+
+                    <LnxDialog title="Asignar Sedes" width="600px">
+                        <template v-slot:activator="{ dialog }">
+                            <v-btn
+                                icon="mdi-source-branch"
+                                size="small"
+                                color="black"
+                                variant="outlined"
+                                class="me-1"
+                                @click="dialog"
+                                v-permission="['302']"
+                            >
+                            </v-btn>
+                        </template>
+                        <template v-slot:content="{ dialog }">
+                            <v-list lines="two" dense>
+                                <v-list-item
+                                    v-for="branch in branches"
+                                    :value="branch.id"
+                                    :key="branch.id"
+                                    color="primary"
+                                    :active="item.branches.includes(branch.id)"
+                                    @click="
+                                        item.branches.includes(branch.id)
+                                            ? disableBranch(branch, item)
+                                            : assignBranch(branch, item)
+                                    "
+                                >
+                                    <template v-slot:prepend="{ isActive }">
+                                        <v-list-item-action start>
+                                            <v-switch
+                                                inset
+                                                class="ms-3"
+                                                color="primary"
+                                                :model-value="isActive"
+                                            ></v-switch>
+                                        </v-list-item-action>
+                                    </template>
+
+                                    <v-list-item-title>
+                                        {{ branch.name }}
+                                    </v-list-item-title>
+
+                                    <v-list-item-subtitle>
+                                        {{ branch.location.location }}
+                                    </v-list-item-subtitle>
+                                </v-list-item>
+                            </v-list>
+                        </template>
+                    </LnxDialog>
+
+                    <v-btn
+                        icon="mdi-folder-network-outline"
+                        size="small"
+                        color="black"
+                        variant="outlined"
+                        class="me-1"
+                        v-permission="['302']"
+                    >
+                    </v-btn>
+
                     <v-btn
                         icon="mdi-pencil"
                         size="small"
-                        color="primary"
-                        variant="tonal"
+                        color="black"
+                        variant="outlined"
                         link
                         v-permission="['302']"
                     >
@@ -77,7 +139,13 @@ import AdminLayout from "@/Shared/layouts/AdminLayout.vue";
 
 import { onMounted, ref } from "vue";
 
-import { _items, _profilesByType, _store } from "@/App/Security/user/services";
+import {
+    _items,
+    _profilesByType,
+    _store,
+    _assignBranch,
+    _disableBranch,
+} from "@/App/Security/user/services";
 
 import FormCreate from "@/App/Security/user/components/FormCreate.vue";
 import LnxDialog from "@/Shared/components/LnxDialog.vue";
@@ -86,10 +154,16 @@ import { formInit } from "@/App/Security/user/forms";
 
 import { itemsResponse } from "@/Shared/constants";
 
+import { useLayoutStore } from "@/Shared/stores";
+
 const props = defineProps({
+    title: String,
     roles: Array,
     profileTypes: Array,
+    branches: Array,
 });
+
+const layoutStore = useLayoutStore();
 
 const formStructure = ref([]);
 
@@ -100,15 +174,28 @@ const search = ref("");
 const loading = ref(true);
 
 const store = async (data, dialog) => {
-    console.log(data);
-    let res = await _store(data);
-
+    await _store(data);
     dialog();
     loadItems({});
 };
 
+const assignBranch = async (branch, user) => {
+    await _assignBranch({
+        branch_id: branch.id,
+        user_id: user.id,
+    });
+    loadItems({});
+};
+
+const disableBranch = async (branch, user) => {
+    await _disableBranch({
+        branch_id: branch.id,
+        user_id: user.id,
+    });
+    loadItems({});
+};
+
 const loadItems = async ({ page = 1, itemsPerPage = 10, sortBy = [] }) => {
-    console.log(page, itemsPerPage, sortBy);
     loading.value = true;
     let data = {
         page,
@@ -121,19 +208,17 @@ const loadItems = async ({ page = 1, itemsPerPage = 10, sortBy = [] }) => {
 };
 
 const onUpdateType = async (type) => {
-    console.log(type);
     const profiles = await _profilesByType(type);
     formStructure.value[1].options = profiles;
 };
 
 const init = async () => {
+    layoutStore.title = props.title;
     formStructure.value = formInit({
         roles: props.roles,
         profileTypes: props.profileTypes,
         onUpdateType: onUpdateType,
     });
-
-    console.log(formStructure.value);
 };
 
 onMounted(() => {

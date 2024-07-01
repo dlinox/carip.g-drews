@@ -18,6 +18,8 @@ return new class extends Migration
             $table->char('geo_code', 6)->default('000000');
             $table->string('country')->default('PER');
             $table->boolean('is_enabled')->default(true);
+            //campo para el control que no puede ser eliminado
+            $table->boolean('is_protected')->default(false);
 
             $table->foreign('geo_code')
                 ->references('code')

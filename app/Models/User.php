@@ -2,12 +2,14 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\DB;
 use Spatie\Permission\Traits\HasPermissions;
 use Spatie\Permission\Traits\HasRoles;
+
 
 class User extends Authenticatable
 {
@@ -49,6 +51,27 @@ class User extends Authenticatable
         ];
     }
 
+    protected $appends = [
+        "branches",
+    ];
+
+
+    //userBranches
+    public function branches(): Attribute
+    {
+        return Attribute::make(
+            get: function ($value) {
+                $branches = UserBranch::where('user_id', $this->id)
+                    ->where('is_enabled', true)
+                    ->pluck('branch_id')
+                    ->toArray();
+
+                return $branches;
+            },
+        );
+    }
+
+
     public static function headers(): array
     {
         return [
@@ -57,6 +80,7 @@ class User extends Authenticatable
             ['title' => "Acciones", 'key' => 'actions', 'align' => 'end', 'sortable' => false]
         ];
     }
+
 
 
     public function getProfilesByType($type)

@@ -118,6 +118,7 @@
                             :service="field.service"
                             :item-title="field.itemTitle"
                             :item-value="field.itemValue"
+                            :required="field.required"
                         />
                     </template>
                 </slot>

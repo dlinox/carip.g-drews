@@ -69,7 +69,7 @@ class BranchController extends Controller
         try {
             $this->branch::create([
                 'name' => $request->name,
-                'geo_code' => $request->geo_code,
+                'geo_code' => $request->location['code'],
                 'is_enabled' => $request->is_enabled,
             ]);
 
@@ -88,7 +88,7 @@ class BranchController extends Controller
         try {
             $this->branch->where('id', $id)->update([
                 'name' => $request->name,
-                'geo_code' => $request->geo_code,
+                'geo_code' => $request->location,
                 'is_enabled' => $request->is_enabled,
             ]);
 

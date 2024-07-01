@@ -135,6 +135,11 @@ Route::group(['prefix' => ''], function () {
 
         //getProfilesByType
         Route::get('/{type}/profiles', [\App\Http\Controllers\Security\UserController::class, 'getProfilesByType']);
+
+        //assign-branch
+        Route::post('/assign-branch', [\App\Http\Controllers\Security\UserController::class, 'assignBranch']);
+        //disable-branch
+        Route::post('/disable-branch', [\App\Http\Controllers\Security\UserController::class, 'disableBranch']);
     });
 
 

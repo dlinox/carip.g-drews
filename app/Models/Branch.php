@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -15,10 +16,12 @@ class Branch extends Model
         "geo_code",
         "country",
         "is_enabled",
+        "is_protected",
     ];
 
     protected $casts = [
         "is_enabled" => "boolean",
+        "is_protected" => "boolean",
     ];
 
     protected $hidden = [
@@ -27,30 +30,37 @@ class Branch extends Model
     ];
 
     protected $appends = [
-        "geo_name",
+        "location",
     ];
 
-    public function location()
+    protected function location(): Attribute
     {
-        return $this->belongsTo(Location::class, 'geo_code', 'code');
-    }
 
-    public function getGeoNameAttribute()
-    {
-        $location = $this->location;
+        return Attribute::make(
+            get: function ($value) {
+                $location = Location::where('code', $this->attributes['geo_code'])->first();
 
-        if ($location) {
-            return $location->department . ', ' . $location->province . ', ' . $location->district;
-        }
+                if ($location) {
+                    $name = $location->department . ', ' . $location->province . ', ' . $location->district;
+                }
 
-        return 'Location not found';
+                return  [
+                    'code' => $this->attributes['geo_code'],
+                    'location' => $name,
+                ];
+            },
+            set: function ($value) {
+                return $value['code'];
+            }
+
+        );
     }
 
     public static function headers(): array
     {
         return [
             ['title' => "Nombre", 'key' => 'name', 'align' => 'center'],
-            ['title' => "Ubicación", 'key' => 'geo_name', 'align' => 'center'],
+            ['title' => "Ubicación", 'key' => 'geo_name', 'align' => 'center', 'sortable' => false],
             ['title' => "Estado", 'key' => 'is_enabled', 'align' => 'center'],
             ['title' => "Acciones", 'key' => 'actions', 'align' => 'end', 'sortable' => false]
         ];

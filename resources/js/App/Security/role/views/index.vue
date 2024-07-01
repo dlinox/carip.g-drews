@@ -1,11 +1,14 @@
 <template>
     <AdminLayout>
-
-        <v-card>
-            <v-toolbar>
+        <v-card rounded="0">
+            <v-toolbar color="primary">
                 <LnxDialog title="Nuevo" width="500px">
                     <template v-slot:activator="{ dialog }">
-                        <v-btn variant="tonal" link @click="dialog">
+                        <v-btn
+                            variant="flat"
+                            @click="dialog"
+                            prepend-icon="mdi-plus"
+                        >
                             Agregar
                         </v-btn>
                     </template>
@@ -31,15 +34,9 @@
                 <v-text-field
                     prepend-inner-icon="mdi-magnify"
                     label="Buscar"
-                    class="mb-0"
+                    class="me-3"
                     v-model="search"
                 />
-                <v-btn
-                    class="ms-2"
-                    icon="mdi-filter"
-                    variant="tonal"
-                    density="comfortable"
-                ></v-btn>
             </v-toolbar>
 
             <v-data-table-server
@@ -68,7 +65,6 @@
                 </template>
 
                 <template v-slot:item.actions="{ item }">
-
                     <LnxDialog title="Asignar permisos" width="800px">
                         <template v-slot:activator="{ dialog }">
                             <v-btn
@@ -131,8 +127,6 @@
                             />
                         </template>
                     </LnxDialog>
-
-          
                 </template>
             </v-data-table-server>
         </v-card>
@@ -143,9 +137,15 @@ import { ref } from "vue";
 import AdminLayout from "@/Shared/layouts/AdminLayout.vue";
 import FormCreate from "@/App/Security/role/components/FormCreate.vue";
 import FormPermissions from "@/App/Security/role/components/FormPermissions.vue";
-import { _items, _store, _update } from "@/App/Security/role/services/role.services";
+import {
+    _items,
+    _store,
+    _update,
+} from "@/App/Security/role/services/role.services";
 import { itemsResponse } from "@/Shared/constants";
 import LnxDialog from "@/Shared/components/LnxDialog.vue";
+
+import { useLayoutStore } from "@/Shared/stores";
 
 import {
     url,
@@ -153,11 +153,13 @@ import {
     formStructure,
 } from "@/App/Security/role/constants/form.constants";
 
-
 const props = defineProps({
+    title: String,
     permissions: Object,
     rolPermissions: Array,
 });
+
+const layoutStore = useLayoutStore();
 
 const urlPermisos = "/roles/permissions";
 
@@ -180,4 +182,10 @@ const loadItems = async ({ page, itemsPerPage, sortBy }) => {
 
     loading.value = false;
 };
+
+const init = async () => {
+    layoutStore.title = props.title;
+};
+
+init();
 </script>

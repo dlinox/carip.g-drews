@@ -33,6 +33,8 @@ class SecuritySeeder extends Seeder
             'profile_id' => $administrator->id,
             'email' => 'nearlino20@gmail.com',
             'password' => 'password',
+            'is_enabled' => true,
+            'is_protected' => true,
         ]);
 
 

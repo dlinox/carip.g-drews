@@ -18,7 +18,14 @@ return new class extends Migration
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
+            $table->unsignedBigInteger('branch_id')->nullable();
+
+
             $table->boolean('is_enabled')->default(true);
+            $table->boolean('is_protected')->default(false);
+
+
+            $table->foreign('branch_id')->references('id')->on('branches')->onDelete('set null');
             $table->rememberToken();
             $table->timestamps();
         });

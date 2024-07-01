@@ -3,6 +3,7 @@ import { ref } from "vue";
 const useLayoutStore = defineStore("layout", () => {
     const drawer = ref(true);
     const railDrawer = ref(false);
+    const title = ref("Dashboard");
 
     const setDrawer = (value) => {
         drawer.value = value;
@@ -22,6 +23,7 @@ const useLayoutStore = defineStore("layout", () => {
         setRailDrawer,
         menuOpen,
         menuActive,
+        title,
     };
 });
 

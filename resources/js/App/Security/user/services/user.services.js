@@ -46,3 +46,25 @@ export const _profilesByType = async (type) => {
         return false;
     }
 }
+
+export const _assignBranch = async (data) => {
+    try {
+        let response = await axios.post("/users/assign-branch", data);
+        toast.success('Sucursal asignada con éxito');
+        return response.data;
+    } catch (error) {
+        toast.error('Error al asignar la sucursal');
+        return false;
+    }
+}
+
+export const _disableBranch = async (data) => {
+    try {
+        let response = await axios.post("/users/disable-branch", data);
+        toast.success('Sucursal deshabilitada con éxito');
+        return response.data;
+    } catch (error) {
+        toast.error('Error al deshabilitar la sucursal');
+        return false;
+    }
+}

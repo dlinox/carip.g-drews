@@ -7,14 +7,12 @@
         <template v-slot:activator="{ props }">
             <v-text-field
                 v-bind="props"
-                class="mx-2 my-2"
                 placeholder="Buscar"
                 outlined
-                readonly
                 clearable
                 @click:clear="onClearable"
                 v-model="result"
-                @click="focusSearchInput"
+                readonly
             >
             </v-text-field>
         </template>
@@ -22,9 +20,10 @@
             <v-card-title>
                 <v-text-field
                     v-model="search"
-                    ref="searchRef"
                     placeholder="Ingrese su búsqueda"
                     @update:model-value="onSearch"
+                    :autofocus="menu"
+                    ref="searchRef"
                 ></v-text-field>
             </v-card-title>
             <v-divider class="mt-3"></v-divider>
@@ -50,7 +49,7 @@
 </template>
 <script setup>
 import { ref, computed, nextTick } from "vue";
-
+import { isRequired } from "@/Shared/helpers/validations.helpers.js";
 const emit = defineEmits(["update:modelValue"]);
 const props = defineProps({
     itemValue: {
@@ -70,6 +69,11 @@ const props = defineProps({
         default: () => [],
     },
 
+    required: {
+        type: Boolean,
+        default: false,
+    },
+
     modelValue: {
         type: Object,
     },
@@ -79,7 +83,6 @@ const valueResult = computed({
     get: () => props.modelValue,
     set: (value) => emit("update:modelValue", value),
 });
-
 
 const menu = ref(false);
 const result = ref(null);
@@ -92,7 +95,6 @@ const items = ref([...props.itemsDefault]);
 const onClearable = () => {
     result.value = null;
     valueResult.value = null;
-
 };
 
 const onSearch = async (value) => {
@@ -109,13 +111,6 @@ const onSelect = (item) => {
     result.value = item[props.itemTitle];
     menu.value = false;
     valueResult.value = item;
-};
-
-const focusSearchInput = async () => {
-    await nextTick();
-    if (searchRef.value) {
-        searchRef.value.focus();
-    }
 };
 
 const init = () => {
