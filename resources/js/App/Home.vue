@@ -1,8 +1,6 @@
 <template>
     <v-app app>
         <v-navigation-drawer :width="miniVariant ? 56 : 220" app>
-            
-
             <v-list-item link title="List Item 1">
                 <template #prepend>
                     <v-icon>mdi-home</v-icon>
@@ -30,7 +28,6 @@
         </v-app-bar>
         <v-main app>
             <v-container>
-                
                 <v-row>
                     <v-col cols="12">
                         <v-text-field
@@ -58,9 +55,9 @@ const total_ = ref(0);
 
 const calcular = (value) => {
     const monto = parseFloat(value);
-    const comision = monto * 0.0344 ;
+    const comision = monto * 0.0344;
     //mas 2 dolares, (el monto es en soles)
-    const comision2 = 0.20 * 3.8;
+    const comision2 = 0.2 * 3.8;
     const total = monto - comision;
     const igv = total * 0.18;
     const totalFinal = total - igv;
@@ -68,5 +65,4 @@ const calcular = (value) => {
 
     console.log(totalFinal);
 };
-
 </script>
