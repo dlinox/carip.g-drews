@@ -11,7 +11,7 @@ class ProjectSupervisor extends Model
 
     protected $fillable = [
         'project_id',
-        'operator_id',
+        'supervisor_id',
         'is_enabled',
     ];
 
@@ -29,21 +29,21 @@ class ProjectSupervisor extends Model
         return $this->belongsTo(Project::class);
     }
 
-    public function operator()
+    public function supervisor()
     {
-        return $this->belongsTo(Operator::class);
+        return $this->belongsTo(Supervisor::class);
     }
 
-    public function assignProjectSupervisor($projectId, $operatorId)
+    public function assignProjectSupervisor($projectId, $supervisorId)
     {
-        $projectSupervisor = $this->where('project_id', $projectId)->where('operator_id', $operatorId)->first();
+        $projectSupervisor = $this->where('project_id', $projectId)->where('supervisor_id', $supervisorId)->first();
 
         if ($projectSupervisor) {
             return $projectSupervisor;
         }
         $projectSupervisor = new ProjectSupervisor();
         $projectSupervisor->project_id = $projectId;
-        $projectSupervisor->operator_id = $operatorId;
+        $projectSupervisor->supervisor_id = $supervisorId;
         $projectSupervisor->is_enabled = true;
         $projectSupervisor->save();
         return $projectSupervisor;
@@ -51,10 +51,11 @@ class ProjectSupervisor extends Model
 
     public function getProjectSupervisor($projectId)
     {
-        return $this->select('operators.name')
-            ->join('operators', 'operators.id', '=', 'project_supervisors.operator_id')
+        $supervisor =  $this->select('supervisors.id', 'supervisors.name')
+            ->join('supervisors', 'supervisors.id', '=', 'project_supervisors.supervisor_id')
             ->where('project_supervisors.project_id', $projectId)
             ->where('project_supervisors.is_enabled', true)
             ->first();
+        return $supervisor;
     }
 }

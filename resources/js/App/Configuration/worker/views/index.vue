@@ -1,11 +1,12 @@
 <template>
     <AdminLayout>
-        <v-card>
-            <v-toolbar>
-                <LnxDialog title="Nuevo" width="500px">
+        <v-card class="rounded-0">
+            <v-toolbar class="bg-primary">
+                <LnxDialog title="Nuevo" width="900px">
                     <template v-slot:activator="{ dialog }">
                         <v-btn
-                            variant="tonal"
+                            variant="outlined"
+                            color="dark"
                             @click="dialog"
                             prepend-icon="mdi-plus"
                         >
@@ -14,15 +15,9 @@
                     </template>
                     <template v-slot:content="{ dialog }">
                         <FormCreate
-                            :formStructure="[
-                                ...formStructure,
-                                (formStructure[0].options = areas),
-                            ]"
+                            :formStructure="formStructure"
                             @onSubmit="store($event, dialog)"
                             @onCancel="dialog"
-                            :formData="{
-                                company_id: company.id,
-                            }"
                         />
                     </template>
                 </LnxDialog>
@@ -52,6 +47,13 @@
                 items-per-page-text="Registros por página"
                 loading-text="Cargando registros"
             >
+                <template v-slot:item.birth_place="{ item }">
+                    {{ item.birth_place.location }}
+                </template>
+                <template v-slot:item.residence_place="{ item }">
+                    {{ item.residence_place.location }}
+                </template>
+
                 <template v-slot:item.is_enabled="{ item }">
                     <v-chip
                         :color="item.is_enabled ? 'success' : 'error'"
@@ -63,7 +65,7 @@
                 </template>
 
                 <template v-slot:item.actions="{ item }">
-                    <LnxDialog title="Editar" width="500px">
+                    <LnxDialog title="Editar" width="900px">
                         <template v-slot:activator="{ dialog }">
                             <v-btn
                                 icon="mdi-pencil"
@@ -77,13 +79,9 @@
                         </template>
                         <template v-slot:content="{ dialog }">
                             <FormCreate
-                                :formStructure="[
-                                    (formStructure[0].options = props.areas),
-                                    ...formStructure,
-                                ]"
+                                :formStructure="formStructure"
                                 :formData="{
                                     ...item,
-                                    company_id: company.id,
                                 }"
                                 @onCancel="dialog"
                                 @onSubmit="update($event, dialog)"
@@ -96,24 +94,31 @@
     </AdminLayout>
 </template>
 <script setup>
-import { ref } from "vue";
+import { ref, onMounted } from "vue";
 import AdminLayout from "@/Shared/layouts/AdminLayout.vue";
 import FormCreate from "@/App/Configuration/worker/components/FormCreate.vue";
 import { _items, _store, _update } from "@/App/Configuration/worker/services";
 import { itemsResponse } from "@/Shared/constants";
 import LnxDialog from "@/Shared/components/LnxDialog.vue";
-
+import { formInit } from "@/App/Configuration/worker/forms";
 import {
     url,
     idKey,
-    formStructure,
 } from "@/App/Configuration/worker/constants/form.constants";
+
+import { useLayoutStore } from "@/Shared/stores";
+
 
 const props = defineProps({
     title: String,
     company: Object,
     areas: Array,
+    typeDocuments: Array,
 });
+
+const layoutStore = useLayoutStore();
+
+const formStructure = ref([]);
 
 const search = ref("");
 
@@ -138,6 +143,8 @@ const loadItems = async ({ page, itemsPerPage, sortBy }) => {
 const store = async (data, dialog) => {
     data.processing = true;
 
+    data.company_id = props.company.id;
+
     let response = await _store(data, url);
     if (response) {
         loadItems({
@@ -153,6 +160,7 @@ const store = async (data, dialog) => {
 
 const update = async (data, dialog) => {
     data.processing = true;
+    data.company_id = props.company.id;
     let response = await _update(data, url + "/" + data[`${idKey}`]);
     if (response) {
         loadItems({
@@ -165,4 +173,16 @@ const update = async (data, dialog) => {
 
     data.processing = false;
 };
+
+const init = async () => {
+    layoutStore.title = props.title;
+    formStructure.value = formInit({
+        typeDocuments: props.typeDocuments,
+        areas: props.areas,
+    });
+};
+
+onMounted(() => {
+    init();
+});
 </script>

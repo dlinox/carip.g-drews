@@ -29,9 +29,10 @@ class WorkerController extends Controller
         $areas = Area::where("company_id", $companyId)->where('is_enabled', true)->get();
 
         return Inertia::render('Configuration/worker/views/index', [
-            'title' => 'Trabajadores',
+            'title' =>  $company->name . ' - ' . $this->title,
             'company' => $company,
-            'areas' => $areas
+            'areas' => $areas,
+            'typeDocuments' => $this->typeDocuments,
         ]);
     }
 
@@ -57,19 +58,6 @@ class WorkerController extends Controller
 
         $query->where('company_id', $companyId);
 
-        $query->select([
-            'workers.id',
-            'workers.name',
-            'workers.document',
-            'workers.email',
-            'workers.phone',
-            'workers.area_id',
-            'workers.is_enabled',
-            'companies.name as company'
-        ])->join('companies', 'workers.company_id', '=', 'companies.id');
-
-
-
         $items = $query->paginate($perPage);
 
         $headers = $this->worker->headers();
@@ -88,6 +76,8 @@ class WorkerController extends Controller
     {
         try {
 
+            $request['birth_place'] = $request->birth_place['code'];
+            $request['residence_place'] = $request->residence_place['code'];
             $this->worker->create($request->all());
 
             return response()->json([
@@ -103,7 +93,11 @@ class WorkerController extends Controller
     public function update(Request $request, $id)
     {
         try {
-            $this->worker->where('id', $id)->update($request->except('company','processing'));
+
+            $request['birth_place'] = $request->birth_place['code'];
+            $request['residence_place'] = $request->residence_place['code'];
+
+            $this->worker->where('id', $id)->update($request->except('company', 'processing', 'full_name', 'area_name'));
 
             return response()->json([
                 'message' => 'Worker actualizada correctamente',

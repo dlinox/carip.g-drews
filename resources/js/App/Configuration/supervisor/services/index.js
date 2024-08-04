@@ -38,3 +38,14 @@ export const _store = async (data) => {
         return false;
     }
 }
+
+export const _update = async (data) => {
+    try {
+        let response = await axios.put(`/supervisors/${data.id}`, data);
+        toast.success('Item actualizado con éxito');
+        return response.data;
+    } catch (error) {
+        toast.error('Error al actualizar el item');
+        return false;
+    }
+}

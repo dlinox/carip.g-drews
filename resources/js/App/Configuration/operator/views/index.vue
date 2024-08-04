@@ -1,11 +1,12 @@
 <template>
     <AdminLayout>
-        <v-card>
-            <v-toolbar>
-                <LnxDialog title="Nuevo" width="500px">
+        <v-card class="rounded-0">
+            <v-toolbar class="bg-primary">
+                <LnxDialog title="Nuevo" width="900px">
                     <template v-slot:activator="{ dialog }">
                         <v-btn
-                            variant="tonal"
+                            variant="outlined"
+                            color="dark"
                             @click="dialog"
                             prepend-icon="mdi-plus"
                         >
@@ -14,10 +15,7 @@
                     </template>
                     <template v-slot:content="{ dialog }">
                         <FormCreate
-                            :formStructure="[
-                                (formStructure[0].options = branches),
-                                ...formStructure,
-                            ]"
+                            :formStructure="formStructure"
                             @onSubmit="store($event, dialog)"
                             @onCancel="dialog"
                         />
@@ -49,6 +47,13 @@
                 items-per-page-text="Registros por página"
                 loading-text="Cargando registros"
             >
+                <template v-slot:item.birth_place="{ item }">
+                    {{ item.birth_place.location }}
+                </template>
+                <template v-slot:item.residence_place="{ item }">
+                    {{ item.residence_place.location }}
+                </template>
+
                 <template v-slot:item.is_enabled="{ item }">
                     <v-chip
                         :color="item.is_enabled ? 'success' : 'error'"
@@ -92,29 +97,29 @@
     </AdminLayout>
 </template>
 <script setup>
-import { ref } from "vue";
+import { ref, onMounted } from "vue";
 import AdminLayout from "@/Shared/layouts/AdminLayout.vue";
 import FormCreate from "@/App/Configuration/operator/components/FormCreate.vue";
 import { _items, _store, _update } from "@/App/Configuration/operator/services";
 import { itemsResponse } from "@/Shared/constants";
 import LnxDialog from "@/Shared/components/LnxDialog.vue";
-
+import { formInit } from "@/App/Configuration/operator/forms";
 import {
     url,
     idKey,
-    formStructure,
 } from "@/App/Configuration/operator/constants/form.constants";
 
 const props = defineProps({
     title: String,
-    branches: Array,
+    licenseCategories: Array,
+    typeDocuments: Array,
 });
 
 const search = ref("");
-
 const loading = ref(true);
-
 const items = ref({ ...itemsResponse });
+
+const formStructure = ref([]);
 
 const loadItems = async ({ page, itemsPerPage, sortBy }) => {
     loading.value = true;
@@ -160,4 +165,15 @@ const update = async (data, dialog) => {
 
     data.processing = false;
 };
+
+const init = async () => {
+    formStructure.value = formInit({
+        typeDocuments: props.typeDocuments,
+        licenseCategories: props.licenseCategories,
+    });
+};
+
+onMounted(() => {
+    init();
+});
 </script>

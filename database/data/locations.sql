@@ -16,6 +16,7 @@
 
 -- Volcando datos para la tabla carip.gdrews.locations: ~1,892 rows (aproximadamente)
 INSERT INTO `locations` (`code`, `department`, `province`, `district`) VALUES
+	('000000', 'PERU', 'PERU', 'PERU'),
 	('010101', 'AMAZONAS', 'CHACHAPOYAS', 'CHACHAPOYAS'),
 	('010102', 'AMAZONAS', 'CHACHAPOYAS', 'ASUNCION'),
 	('010103', 'AMAZONAS', 'CHACHAPOYAS', 'BALSAS'),

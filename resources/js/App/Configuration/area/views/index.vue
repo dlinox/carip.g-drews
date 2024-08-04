@@ -1,11 +1,12 @@
 <template>
     <AdminLayout>
-        <v-card>
-            <v-toolbar>
+        <v-card class="rounded-0">
+            <v-toolbar class="bg-primary">
                 <LnxDialog title="Nuevo" width="500px">
                     <template v-slot:activator="{ dialog }">
                         <v-btn
-                            variant="tonal"
+                            variant="outlined"
+                            color="dark"
                             @click="dialog"
                             prepend-icon="mdi-plus"
                         >
@@ -18,6 +19,10 @@
                             @onSubmit="store($event, dialog)"
                             @onCancel="dialog"
                             :formData="{
+                                ...formStructure.reduce((acc, item) => {
+                                    acc[item.key] = item.default;
+                                    return acc;
+                                }, {}),
                                 company_id: company.id,
                             }"
                         />
@@ -29,7 +34,7 @@
                 <v-text-field
                     prepend-inner-icon="mdi-magnify"
                     label="Buscar"
-                    class="mb-0"
+                    class="mb-0 me-3"
                     v-model="search"
                 />
             </v-toolbar>
@@ -90,13 +95,13 @@
     </AdminLayout>
 </template>
 <script setup>
-import { ref } from "vue";
+import { onMounted, ref } from "vue";
 import AdminLayout from "@/Shared/layouts/AdminLayout.vue";
 import FormCreate from "@/App/Configuration/area/components/FormCreate.vue";
 import { _items, _store, _update } from "@/App/Configuration/area/services";
 import { itemsResponse } from "@/Shared/constants";
 import LnxDialog from "@/Shared/components/LnxDialog.vue";
-
+import { useLayoutStore } from "@/Shared/stores";
 import {
     url,
     idKey,
@@ -107,6 +112,7 @@ const props = defineProps({
     title: String,
     company: Object,
 });
+const layoutStore = useLayoutStore();
 
 const search = ref("");
 
@@ -158,4 +164,13 @@ const update = async (data, dialog) => {
 
     data.processing = false;
 };
+
+const init = async () => {
+    layoutStore.title = props.title;
+};
+
+onMounted(() => {
+    init();
+});
+
 </script>

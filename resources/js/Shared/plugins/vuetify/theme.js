@@ -1,6 +1,7 @@
 //secondary #FCBB52
 
-const primary = "#009A43";
+const primary = "#009a43";
+//  ($primary);
 
 const theme = {
     defaultTheme: "light",

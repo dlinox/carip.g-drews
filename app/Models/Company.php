@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
@@ -11,13 +12,12 @@ class Company extends Model
     use HasFactory;
 
     protected $fillable = [
-        'ruc',
+        'document_number',
         'name',
-        'social',
         'address',
         'phone',
         'email',
-        'ubication',
+        'location',
         'is_enabled',
     ];
 
@@ -36,25 +36,53 @@ class Company extends Model
         return $this->belongsToMany(Area::class);
     }
 
+    protected function location(): Attribute
+    {
+
+        return Attribute::make(
+            get: function ($value) {
+                $location = Location::where('code', $this->attributes['location'])->first();
+
+                if ($location) {
+                    $name = $location->department . ', ' . $location->province . ', ' . $location->district;
+                }
+
+                return  [
+                    'code' => $this->attributes['location'],
+                    'location' => $name,
+                ];
+            },
+            // set: function ($value) {
+            //     return $value['code'];
+            // }
+
+        );
+    }
+
     public static function headers(): array
     {
         return [
-            ['title' => "Ruc", 'key' => 'ruc', 'align' => 'center'],
+            ['title' => "Ruc", 'key' => 'document_number', 'align' => 'center'],
             ['title' => "Nombre", 'key' => 'name', 'align' => 'center'],
-            ['title' => "Social", 'key' => 'social', 'align' => 'center'],
             ['title' => "Dirección", 'key' => 'address', 'align' => 'center'],
             ['title' => "Teléfono", 'key' => 'phone', 'align' => 'center'],
-            ['title' => "Email", 'key' => 'email', 'align' => 'center'],
-            ['title' => "Ubicación", 'key' => 'ubication', 'align' => 'center'],
+            // ['title' => "Email", 'key' => 'email', 'align' => 'center'],
+            ['title' => "Ubicación", 'key' => 'location', 'align' => 'center'],
             ['title' => "Estado", 'key' => 'is_enabled', 'align' => 'center'],
             ['title' => "Acciones", 'key' => 'actions', 'align' => 'end', 'sortable' => false]
         ];
     }
 
+    //companies scope active
+    public function scopeActive($query)
+    {
+        return $query->where('is_enabled', true);
+    }
+
     public function getCompanies(): array
     {
 
-        $companies = $this->select('companies.id', DB::raw('concat_ws(" ","RUC:" , companies.ruc,  "-" ,companies.social) as name'))
+        $companies = $this->select('companies.id', DB::raw('concat_ws(" ","RUC:" , companies.document_number,  "-" ,companies.name) as name'))
             ->leftJoin('areas', 'areas.company_id', '=', 'companies.id')
             ->where('companies.is_enabled', true)
             ->get();

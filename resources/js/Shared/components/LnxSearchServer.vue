@@ -7,12 +7,16 @@
         <template v-slot:activator="{ props }">
             <v-text-field
                 v-bind="props"
+                :label="label"
                 placeholder="Buscar"
                 outlined
                 clearable
                 @click:clear="onClearable"
                 v-model="result"
                 readonly
+                :rules="[
+                    required ? (v) => !!v || 'Campo requerido' : () => true,
+                ]"
             >
             </v-text-field>
         </template>
@@ -59,6 +63,10 @@ const props = defineProps({
     itemTitle: {
         type: String,
         default: "title",
+    },
+    label: {
+        type: String,
+        default: "",
     },
     service: {
         type: Function,

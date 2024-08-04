@@ -65,4 +65,6 @@ const calcular = (value) => {
 
     console.log(totalFinal);
 };
+
+
 </script>

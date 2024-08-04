@@ -7,10 +7,12 @@ use App\Models\Operator;
 use App\Models\Project;
 use App\Models\ProjectManager;
 use App\Models\ProjectSupervisor;
+use App\Models\Supervisor;
 use App\Models\Vehicle;
 use App\Models\VehiclesOperator;
 use App\Models\Worker;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Inertia\Inertia;
 
 class ProjectController extends Controller
@@ -18,17 +20,22 @@ class ProjectController extends Controller
 
     protected $title;
     protected $project;
+    protected $supervisor;
+
+    protected $worker;
     public function __construct()
     {
         $this->title = "Proyectos";
         $this->project = new Project();
+        $this->supervisor = new Supervisor();
+        $this->worker = new Worker();
     }
 
     public function index()
     {
-
         return Inertia::render("Project/views/index", [
-            'title' => 'Proyectos'
+            'title' => 'Gestion de Proyectos',
+            'companies' => Company::select('id', DB::raw('CONCAT(document_number, " - ", name) as name'))->get()
         ]);
     }
 
@@ -71,7 +78,9 @@ class ProjectController extends Controller
     {
 
         try {
-            $project = $this->project::create($request->all());
+
+            $request['location'] = $request->location['code'];
+            $this->project::create($request->all());
             return response()->json([
                 'message' => 'Proyecto creado correctamente',
             ]);
@@ -85,6 +94,7 @@ class ProjectController extends Controller
     public function update(Request $request, $id)
     {
         try {
+            $request['location'] = $request->location['code'];
             $project = $this->project::where('id', $id)->first();
             $project->update($request->except('processing'));
             return response()->json([
@@ -102,9 +112,18 @@ class ProjectController extends Controller
     {
         $project = $this->project::find($id);
         return Inertia::render('Project/views/show', [
-            'title' => 'Proyecto',
-            'project' => $project
+            'title' => 'Gestion del Proyecto',
+            'project' => $project,
+            'supervisors' => $this->supervisor->getFreeSupervisors(),
+            'workers' => $this->worker->getFreeWorkers($id),
         ]);
+    }
+
+    //getSupervisors
+    public function getSupervisors()
+    {
+        $supervisors = $this->supervisor->getFreeSupervisors();
+        return response()->json($supervisors);
     }
 
     //assignResponsibleCompany
@@ -164,7 +183,7 @@ class ProjectController extends Controller
 
         try {
             $projectSupervisor = new ProjectSupervisor();
-            $projectSupervisor->assignProjectSupervisor($request->project_id, $request->operator_id);
+            $projectSupervisor->assignProjectSupervisor($request->project_id, $request->supervisor_id);
 
             return response()->json([
                 'message' => 'Supervisor asigned correctamente',
@@ -182,7 +201,7 @@ class ProjectController extends Controller
         $projectSupervisor = $projectSupervisor->getProjectSupervisor($projectId);
         return response()->json($projectSupervisor);
     }
-    
+
     //getSupervisoryOperators
     public function getSupervisoryOperators()
     {

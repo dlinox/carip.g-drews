@@ -47,20 +47,6 @@ class CompanyController extends Controller
             $query->where('name', 'like', '%' . $request->search . '%');
         }
 
-        //alias a las columnas para el select
-        $query->select([
-            'id',
-            'ruc',
-            'name',
-            'social',
-            'address',
-            'phone',
-            'email',
-            'ubication',
-            'is_enabled'
-
-        ]);
-
         $items = $query->paginate($perPage);
 
         $headers = $this->company->headers();
@@ -79,7 +65,8 @@ class CompanyController extends Controller
     {
         try {
 
-            $this->company->create($request->all());
+            $request['location'] = $request->location['code'];
+            $this->company->create($request->except('processing'));
 
             return response()->json([
                 'message' => 'Empresa creada correctamente',
@@ -94,18 +81,8 @@ class CompanyController extends Controller
     public function update(Request $request, $id)
     {
         try {
-            $this->company->where('id', $id)->update(
-                [
-                    'ruc' => $request->ruc,
-                    'name' => $request->name,
-                    'social' => $request->social,
-                    'address' => $request->address,
-                    'phone' => $request->phone,
-                    'email' => $request->email,
-                    'ubication' => $request->ubication,
-                    'is_enabled' => $request->is_enabled,
-                ]
-            );
+            $request['location'] = $request->location['code'];
+            $this->company->where('id', $id)->update($request->except('processing', 'id'));
 
             return response()->json([
                 'message' => 'Empresa actualizada correctamente',

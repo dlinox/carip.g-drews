@@ -13,13 +13,20 @@ return new class extends Migration
     {
 
         Schema::create("workers", function (Blueprint $table) {
-            $table->bigIncrements("id");
-            $table->string("name");
-            $table->string("document");
-            $table->string("email");
-            $table->string("phone");
-            $table->boolean("is_enabled");
+            $table->id();
+            $table->string('name', 60);
+            $table->string('paternal_surname', 60)->nullable();
+            $table->string('maternal_surname', 60)->nullable();
+            $table->char('document_type', 8)->default('DNI');
+            $table->char('document_number', 8)->nullable();
+            $table->char('phone', 15)->nullable();
+            $table->char('email', 60)->nullable();
+            $table->enum('gender', ['M', 'F'])->default('M');
+            $table->char('birth_place', 6)->nullable();
+            $table->char('residence_place', 6)->nullable();
+            $table->date('birthdate')->nullable();
 
+            $table->boolean('is_enabled')->default(true);
             $table->unsignedBigInteger("company_id");
             $table->unsignedBigInteger("area_id");
 

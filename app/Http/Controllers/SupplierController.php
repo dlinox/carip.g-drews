@@ -62,6 +62,8 @@ class SupplierController extends Controller
     {
 
         try {
+
+            $request['location'] = $request->location['code'];
             $this->supplier->create($request->all());
             return response()->json([
                 'message' => 'Proveedor creado correctamente',
@@ -75,6 +77,7 @@ class SupplierController extends Controller
     public function update(Request $request, $id)
     {
         try {
+            $request['location'] = $request->location['code'];
             $this->supplier->where('id', $id)->update($request->except('processing'));
             return response()->json([
                 'message' => 'Proveedor actualizado correctamente',

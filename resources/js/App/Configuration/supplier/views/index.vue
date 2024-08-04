@@ -1,20 +1,22 @@
 <template>
     <AdminLayout>
-        <v-card>
-            <v-toolbar>
+        <v-card class="rounded-0">
+            <v-toolbar class="bg-primary">
                 <LnxDialog title="Nuevo" width="700px">
                     <template v-slot:activator="{ dialog }">
-                        <v-btn variant="tonal" link @click="dialog" prepend-icon="mdi-plus">
+                        <v-btn
+                            variant="outlined"
+                            color="dark"
+                            @click="dialog"
+                            prepend-icon="mdi-plus"
+                        >
                             Agregar
                         </v-btn>
                     </template>
                     <template v-slot:content="{ dialog }">
                         <FormCreate
                             @onCancel="dialog"
-                            :formStructure="[
-                                ...formStructure,
-                                (formStructure[6].onSearch = searchLocation),
-                            ]"
+                            :formStructure="formStructure"
                             @onSubmit="store($event, dialog)"
                         />
                     </template>
@@ -27,7 +29,6 @@
                     class="mb-0"
                     v-model="search"
                 />
-    
             </v-toolbar>
 
             <v-data-table-server
@@ -45,6 +46,9 @@
                 items-per-page-text="Registros por página"
                 loading-text="Cargando registros"
             >
+                <template v-slot:item.location="{ item }">
+                    {{ item.location["location"] }}
+                </template>
                 <template v-slot:item.is_enabled="{ item }">
                     <v-chip
                         :color="item.is_enabled ? 'success' : 'error'"
@@ -61,14 +65,13 @@
                         color="black"
                         variant="tonal"
                         prepend-icon="mdi-car-pickup"
-                
                         @click="
                             router.get(
                                 url + '/' + item[`${idKey}`] + '/vehicles'
                             )
                         "
                     >
-                    Vehiculos
+                        Vehiculos
                     </v-btn>
                     <LnxDialog title="Editar" width="500px">
                         <template v-slot:activator="{ dialog }">
@@ -85,10 +88,7 @@
                         <template v-slot:content="{ dialog }">
                             <FormCreate
                                 @onSubmit="update($event, dialog)"
-                                :formStructure="[
-                                    ...formStructure,
-                                    (formStructure[6].onSearch = searchLocation),
-                                ]"
+                                :formStructure="formStructure"
                                 :formData="item"
                             />
                         </template>
@@ -100,7 +100,7 @@
 </template>
 <script setup>
 import AdminLayout from "@/Shared/layouts/AdminLayout.vue";
-import { ref } from "vue";
+import { ref, onMounted } from "vue";
 import { router } from "@inertiajs/vue3";
 
 import LnxDialog from "@/Shared/components/LnxDialog.vue";
@@ -110,27 +110,25 @@ import { itemsResponse } from "@/Shared/constants";
 
 import FormCreate from "@/App/Configuration/supplier/components/FormCreate.vue";
 
+import { formInit } from "@/App/Configuration/supplier/forms";
+import { useLayoutStore } from "@/Shared/stores";
 import {
     url,
     idKey,
-    formStructure,
 } from "@/App/Configuration/supplier/constants/form.constants";
 
-import { _searchLocation } from "@/Shared/services";
+const props = defineProps({
+    title: String,
+});
 
+const layoutStore = useLayoutStore();
 const items = ref({ ...itemsResponse });
 
 const search = ref("");
 
 const loading = ref(true);
 
-const searchLocation = async (search) => {
-    if (search.length < 3) {
-        return;
-    }
-    let response = await _searchLocation(search);
-    formStructure.value[6].options = response;
-};
+const formStructure = ref([]);
 
 const loadItems = async ({ page = 1, itemsPerPage = 10, sortBy = [] }) => {
     loading.value = true;
@@ -176,4 +174,13 @@ const update = async (data, dialog) => {
 
     data.processing = false;
 };
+
+const init = async () => {
+    layoutStore.title = props.title;
+    formStructure.value = formInit({});
+};
+
+onMounted(() => {
+    init();
+});
 </script>

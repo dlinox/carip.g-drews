@@ -1,65 +1,5 @@
 <?php
-/*
-    //crear permisos
-        $permissions = [
-            [
-                'module' => 'Dashboard',
-                'action' => [
-                    [
-                        'name' => 'dashboard',
-                        'code' => '100',
-                    ]
-                ]
-            ],
-            [
-                'module' => 'Roles',
-                'action' => [
-                    [
-                        'name' => 'gestionar-roles',
-                        'code' => '200',
-                    ],
-                    [
-                        'name' => 'agregar-rol',
-                        'code' => '201',
-                    ],
-                    [
-                        'name' => 'editar-rol',
-                        'code' => '202',
-                    ],
-                    [
-                        'name' => 'eliminar-rol',
-                        'code' => '203',
-                    ],
-                    [
-                        'name' => 'asignar-permisos',
-                        'code' => '204',
-                    ],
-                ]
-            ],
-            [
-                'module' => 'Usuarios',
-                'action' => [
-                    [
-                        'name' => 'gestionar-usuarios',
-                        'code' => '300',
-                    ],
-                    [
-                        'name' => 'agregar-usuario',
-                        'code' => '301',
-                    ],
-                    [
-                        'name' => 'editar-usuario',
-                        'code' => '302',
-                    ],
-                    [
-                        'name' => 'eliminar-usuario',
-                        'code' => '303',
-                    ],
-                ]
-            ],
-        ];
 
-*/
 
 return [
     "menuItems" => [
@@ -70,9 +10,16 @@ return [
             "to" => "/dashboard",
             "permission" => "100",
         ],
+        [
+            "title" => "company",
+            "value" => "company",
+            "icon" => "mdi-domain",
+            "to" => "/company",
+            "permission" => "302",
+        ],
 
         [
-            "title" => "Proyectos",
+            "title" => "Proyectoss",
             "value" => "projects",
             "icon" => "mdi-boom-gate-up-outline",
             "to" => "/projects",

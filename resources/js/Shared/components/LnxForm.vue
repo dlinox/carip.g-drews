@@ -114,11 +114,30 @@
                     <template v-else-if="field.type === 'search-server'">
                         <lnx-search-server
                             v-model="form[`${field.key}`]"
+                            :label="field.label"
                             :items-default="field.default"
                             :service="field.service"
                             :item-title="field.itemTitle"
                             :item-value="field.itemValue"
                             :required="field.required"
+                        />
+                    </template>
+                    <template v-else-if="field.type === 'document-dni'">
+                        <LnxInputDni
+                            v-model="form[`${field.key}`]"
+                            :required="field.required"
+                            :label="field.label"
+                            :form-state="form"
+                        />
+                    </template>
+
+                    <template v-else-if="field.type === 'document-ruc'">
+                        <LnxInputRuc
+                            v-model="form[`${field.key}`]"
+                            :required="field.required"
+                            :label="field.label"
+                            :form-state="form"
+           
                         />
                     </template>
                 </slot>
@@ -143,6 +162,8 @@
 <script setup>
 import { computed, ref } from "vue";
 import { isRequired } from "@/Shared/helpers/validations.helpers.js";
+import LnxInputDni from "@/Shared/components/LnxInputDni.vue";
+import LnxInputRuc from "@/Shared/components/LnxInputRuc.vue";
 import LnxSearchServer from "@/Shared/components/LnxSearchServer.vue";
 
 const props = defineProps({

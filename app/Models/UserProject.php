@@ -21,22 +21,22 @@ class UserProject extends Model
 
     public function assignProjectToUser($project, $user)
     {
-        $this->user_id = $user->id;
-        $this->project_id = $project->id;
+        $this->user_id = $user;
+        $this->project_id = $project;
         $this->save();
     }
 
     public function disableProjectToUser($project, $user)
     {
-        $this->where('user_id', $user->id)
-            ->where('project_id', $project->id)
+        $this->where('user_id', $user)
+            ->where('project_id', $project)
             ->update(['is_enabled' => false]);
     }
 
     public function enableProjectToUser($project, $user)
     {
-        $this->where('user_id', $user->id)
-            ->where('project_id', $project->id)
+        $this->where('user_id', $user)
+            ->where('project_id', $project)
             ->update(['is_enabled' => true]);
     }
 

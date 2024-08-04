@@ -5,9 +5,10 @@
                 <LnxDialog title="Nuevo" width="500px">
                     <template v-slot:activator="{ dialog }">
                         <v-btn
-                            variant="flat"
                             @click="dialog"
                             prepend-icon="mdi-plus"
+                            variant="outlined"
+                            color="white"
                         >
                             Agregar
                         </v-btn>

@@ -1,6 +1,9 @@
 <?php
 
 // https://sistemaspnp.com/cedula/
+
+use App\Http\Controllers\ProjectSupervisorController;
+use App\Models\ProjectSupervisor;
 use Illuminate\Support\Facades\Route;
 use Laravel\Socialite\Facades\Socialite;
 
@@ -92,6 +95,7 @@ Route::group(['prefix' => ''], function () {
         Route::get('/', [\App\Http\Controllers\SupervisorController::class, 'index']);
         Route::post('/items/', [\App\Http\Controllers\SupervisorController::class, 'getItems']);
         Route::post('/', [\App\Http\Controllers\SupervisorController::class, 'store']);
+        Route::put('/{id}', [\App\Http\Controllers\SupervisorController::class, 'update']);
     });
 
     Route::group(['prefix' => 'administrators'], function () {
@@ -120,7 +124,16 @@ Route::group(['prefix' => ''], function () {
         Route::get('/project-manager/{projectId}', [\App\Http\Controllers\ProjectController::class, 'getProjectManager']);
         Route::post('/assign-project-supervisor', [\App\Http\Controllers\ProjectController::class, 'assignProjectSupervisor']);
         Route::get('/project-supervisor/{projectId}', [\App\Http\Controllers\ProjectController::class, 'getProjectSupervisor']);
-        Route::get('/items/supervisory-operators', [\App\Http\Controllers\ProjectController::class, 'getSupervisoryOperators']);
+        // Route::get('/items/supervisory-operators', [\App\Http\Controllers\ProjectController::class, 'getSupervisoryOperators']);
+
+        //supervisors
+        Route::get('/items/supervisors', [\App\Http\Controllers\ProjectController::class, 'getSupervisors']);
+        //assign/supervisor
+        Route::post('/assign/supervisor', [ProjectSupervisorController::class, 'assignSupervisor']);
+        //unassign/supervisor
+        Route::post('/unassign/supervisor', [ProjectSupervisorController::class, 'unassignSupervisor']);
+        //get/supervisor
+        Route::get('/supervisor/{projectId}', [ProjectSupervisorController::class, 'getSupervisorByProject']);
     });
 });
 
@@ -140,6 +153,15 @@ Route::group(['prefix' => ''], function () {
         Route::post('/assign-branch', [\App\Http\Controllers\Security\UserController::class, 'assignBranch']);
         //disable-branch
         Route::post('/disable-branch', [\App\Http\Controllers\Security\UserController::class, 'disableBranch']);
+
+        //search-project
+        Route::get('/search-projects/{search}/{id}', [\App\Http\Controllers\Security\UserController::class, 'searchProject']);
+
+        //assign-project
+        Route::post('/assign-project', [\App\Http\Controllers\Security\UserController::class, 'assignProject']);
+
+        //disable-project
+        Route::post('/disable-project', [\App\Http\Controllers\Security\UserController::class, 'disableProject']);
     });
 
 
@@ -164,4 +186,6 @@ Route::group(['prefix' => ''], function () {
 
 Route::group(['prefix' => 'service'], function () {
     Route::get('/locations/{search}', [\App\Http\Controllers\ServiceController::class, 'searchLocation']);
+    Route::get('/reniec/{dni}', [\App\Http\Controllers\ServiceController::class, 'searchReniec']);
+    Route::get('/sunat/{ruc}', [\App\Http\Controllers\ServiceController::class, 'searchSunat']);
 });

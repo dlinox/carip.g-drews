@@ -88,7 +88,7 @@ class BranchController extends Controller
         try {
             $this->branch->where('id', $id)->update([
                 'name' => $request->name,
-                'geo_code' => $request->location,
+                'geo_code' => $request->location['code'],
                 'is_enabled' => $request->is_enabled,
             ]);
 

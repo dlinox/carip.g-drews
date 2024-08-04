@@ -14,10 +14,6 @@ class InitSeeder extends Seeder
     public function run(): void
     {
 
-        Branch::create([
-            'name' => 'Sede Central',
-            'geo_code' => '040101',
-            'is_protected' => true
-        ]);
+        $this->call(BranchSeeder::class);
     }
 }

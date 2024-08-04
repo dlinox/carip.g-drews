@@ -18,6 +18,5 @@ export const formStructure = [
         required: false,
         default: true,
         cols: 12,
-
     }
 ];

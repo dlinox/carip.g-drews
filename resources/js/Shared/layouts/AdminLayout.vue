@@ -126,6 +126,7 @@ const listItems = ref([
             },
         },
     },
+
     {
         title: "Proyectos",
         props: {
@@ -135,10 +136,10 @@ const listItems = ref([
         },
     },
     {
-        title: "Configuraciones",
+        title: "GDREWS",
         props: {
-            value: "config",
-            prependIcon: "mdi-cog-outline",
+            value: "company",
+            prependIcon: "mdi-domain",
         },
         children: [
             {
@@ -149,36 +150,13 @@ const listItems = ref([
                     onclick: () => router.get("/branches"),
                 },
             },
-            {
-                title: "Administradores",
-                props: {
-                    prependIcon: "mdi-minus",
-                    value: "administrators",
-                    onclick: () => router.get("/administrators"),
-                },
-            },
+
             {
                 title: "Supervisores",
                 props: {
                     prependIcon: "mdi-minus",
                     value: "supervisors",
                     onclick: () => router.get("/supervisors"),
-                },
-            },
-            {
-                title: "Empresas",
-                props: {
-                    prependIcon: "mdi-minus",
-                    value: "companies",
-                    onclick: () => router.get("/companies"),
-                },
-            },
-            {
-                title: "Proveedores",
-                props: {
-                    prependIcon: "mdi-minus",
-                    value: "suppliers",
-                    onclick: () => router.get("/suppliers"),
                 },
             },
             {
@@ -190,6 +168,23 @@ const listItems = ref([
                 },
             },
         ],
+    },
+
+    {
+        title: "Empresas",
+        props: {
+            prependIcon: "mdi-domain",
+            value: "companies",
+            onclick: () => router.get("/companies"),
+        },
+    },
+    {
+        title: "Proveedores",
+        props: {
+            prependIcon: "mdi-domain",
+            value: "suppliers",
+            onclick: () => router.get("/suppliers"),
+        },
     },
 
     {
@@ -213,6 +208,14 @@ const listItems = ref([
                     prependIcon: " mdi-minus",
                     value: "roles",
                     onclick: () => router.get("/roles"),
+                },
+            },
+            {
+                title: "Admistradores",
+                props: {
+                    prependIcon: "mdi-minus",
+                    value: "administrators",
+                    onclick: () => router.get("/administrators"),
                 },
             },
         ],

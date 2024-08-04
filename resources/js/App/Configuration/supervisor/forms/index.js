@@ -1,4 +1,5 @@
-export const formInit = ({ typeDocuments = [] }) => {
+import { _searchLocation } from "@/Shared/services";
+export const formInit = ({ typeDocuments = [], defaultGeoCode = [] }) => {
     return [
         {
             key: "document_type",
@@ -15,8 +16,9 @@ export const formInit = ({ typeDocuments = [] }) => {
         {
             key: "document_number",
             label: "Número de documento",
-            type: "text",
+            type: "document-dni",
             required: true,
+            searchIn: "reniec",
             cols: 12,
             colMd: 6,
             default: "",
@@ -49,6 +51,15 @@ export const formInit = ({ typeDocuments = [] }) => {
             default: "",
         },
         {
+            key: "birthdate",
+            label: "Fecha de nacimiento",
+            type: "date",
+            required: true,
+            cols: 12,
+            colMd: 6,
+            default: "",
+        },
+        {
             key: "phone",
             label: "Teléfono",
             type: "text",
@@ -56,6 +67,52 @@ export const formInit = ({ typeDocuments = [] }) => {
             cols: 12,
             colMd: 6,
             default: "",
+        },
+        {
+            key: "email",
+            label: "Correo electrónico",
+            type: "email",
+            required: true,
+            cols: 12,
+            colMd: 6,
+            default: "",
+        },
+        {
+            key: "gender",
+            label: "Género",
+            type: "combobox",
+            required: true,
+            options: [
+                { value: "M", title: "Masculino" },
+                { value: "F", title: "Femenino" },
+            ],
+            cols: 12,
+            colMd: 6,
+            default: null,
+        },
+        {
+            key: "birth_place",
+            label: "Lugar de nacimiento",
+            type: "search-server",
+            default: defaultGeoCode,
+            required: true,
+            itemValue: "code",
+            itemTitle: "location",
+            service: _searchLocation,
+            cols: 12,
+            colMd: 6,
+        },
+        {
+            key: "residence_place",
+            label: "Lugar de residencia",
+            type: "search-server",
+            default: defaultGeoCode,
+            required: true,
+            itemValue: "code",
+            itemTitle: "location",
+            service: _searchLocation,
+            cols: 12,
+            colMd: 6,
         },
         {
             key: "is_enabled",

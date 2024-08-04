@@ -25,7 +25,7 @@ class AreaController extends Controller
     {
         $company = Company::find($id);
         return Inertia::render('Configuration/area/views/index', [
-            'title' => $this->title,
+            'title' =>  $company->name . ' - ' . $this->title,
             'company' => $company
         ]);
     }

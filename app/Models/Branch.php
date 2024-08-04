@@ -59,8 +59,8 @@ class Branch extends Model
     public static function headers(): array
     {
         return [
-            ['title' => "Nombre", 'key' => 'name', 'align' => 'center'],
-            ['title' => "Ubicación", 'key' => 'geo_name', 'align' => 'center', 'sortable' => false],
+            ['title' => "Nombre", 'key' => 'name', 'align' => 'start'],
+            ['title' => "Ubicación", 'key' => 'geo_name', 'align' => 'start', 'sortable' => false],
             ['title' => "Estado", 'key' => 'is_enabled', 'align' => 'center'],
             ['title' => "Acciones", 'key' => 'actions', 'align' => 'end', 'sortable' => false]
         ];

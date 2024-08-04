@@ -53,6 +53,7 @@ class User extends Authenticatable
 
     protected $appends = [
         "branches",
+        "projects"
     ];
 
 
@@ -67,6 +68,20 @@ class User extends Authenticatable
                     ->toArray();
 
                 return $branches;
+            },
+        );
+    }
+
+    public function projects(): Attribute
+    {
+        return Attribute::make(
+            get: function ($value) {
+                $projects = UserProject::where('user_id', $this->id)
+                    ->where('is_enabled', true)
+                    ->pluck('project_id')
+                    ->toArray();
+
+                return $projects;
             },
         );
     }

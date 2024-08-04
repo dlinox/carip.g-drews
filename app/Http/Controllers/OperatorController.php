@@ -22,13 +22,10 @@ class OperatorController extends Controller
 
     public function index()
     {
-
-
-        $branches = Branch::where('is_enabled', true)->get();
-
         return Inertia::render("Configuration/operator/views/index", [
             'title' => $this->title,
-            'branches' => $branches
+            'typeDocuments' => $this->typeDocuments,
+            'licenseCategories' => $this->licenseCategories
         ]);
     }
 
@@ -71,6 +68,10 @@ class OperatorController extends Controller
     public function store(Request $request)
     {
         try {
+
+            $request['birth_place'] = $request->birth_place['code'];
+            $request['residence_place'] = $request->residence_place['code'];
+
             $this->operator::create($request->all());
 
             return response()->json([

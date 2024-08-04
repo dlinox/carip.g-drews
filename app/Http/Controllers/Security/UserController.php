@@ -4,9 +4,12 @@ namespace App\Http\Controllers\Security;
 
 use App\Http\Controllers\Controller;
 use App\Models\Branch;
+use App\Models\Project;
 use App\Models\User;
 use App\Models\UserBranch;
+use App\Models\UserProject;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Inertia\Inertia;
 use Spatie\Permission\Models\Role;
 
@@ -15,11 +18,14 @@ class UserController extends Controller
     protected $title;
     protected $user;
     protected $userBranch;
+
+    protected $userProject;
     public function __construct()
     {
         $this->title = 'Gestion de usuarios';
         $this->user = new User();
         $this->userBranch = new UserBranch();
+        $this->userProject = new UserProject();
     }
 
     public function index()
@@ -123,6 +129,48 @@ class UserController extends Controller
         try {
             $profiles = $this->user->getProfilesByType($type);
             return response()->json($profiles);
+        } catch (\Exception $e) {
+            return response()->json(['error' => $e->getMessage()], 500);
+        }
+    }
+
+    public function searchProject($search, $id)
+    {
+        try {
+            $projects = Project::select('projects.id', 'projects.name')
+                ->where('projects.name', 'like', '%' . $search . '%')
+                ->limit(20)->get();
+            return response()->json($projects);
+        } catch (\Exception $e) {
+            return response()->json(['error' => $e->getMessage()], 500);
+        }
+    }
+    //assignProject
+    public function assignProject(Request $request)
+    {
+        try {
+            $userProject = $this->userProject->where('user_id', $request->user_id)
+                ->where('project_id', $request->project_id)
+                ->first();
+
+            if ($userProject) {
+                $this->userProject->enableProjectToUser($request->project_id, $request->user_id);
+            } else {
+                $this->userProject->assignProjectToUser($request->project_id, $request->user_id);
+            }
+
+
+            return response()->json(['message' => 'Proyecto asignado correctamente']);
+        } catch (\Exception $e) {
+            return response()->json(['error' => $e->getMessage()], 500);
+        }
+    }
+
+    public function disableProject(Request $request)
+    {
+        try {
+            $this->userProject->disableProjectToUser($request->project_id, $request->user_id);
+            return response()->json(['message' => 'Proyecto deshabilitado correctamente']);
         } catch (\Exception $e) {
             return response()->json(['error' => $e->getMessage()], 500);
         }

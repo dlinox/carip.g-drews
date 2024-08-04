@@ -2,7 +2,10 @@
     <AdminLayout>
         <v-container fluid>
             <v-row>
-                
+                <v-col cols="12" md="6">
+                    <LnxInputReniecOrSunat searchIn="RENIEC" v-model="lnxVal" />
+                </v-col>
+
                 <v-col cols="12" md="6">
                     <LnxSearchServer
                         v-model="auxResult"
@@ -25,6 +28,7 @@
 <script setup>
 import { _searchLocation } from "@/Shared/services";
 import LnxSearchServer from "@/Shared/components/LnxSearchServer.vue";
+import LnxInputReniecOrSunat from "@/Shared/components/LnxInputReniecOrSunat.vue";
 
 import AdminLayout from "@/Shared/layouts/AdminLayout.vue";
 

@@ -6,9 +6,10 @@
                     <template v-slot:activator="{ dialog }">
                         <v-btn
                             v-permission="['301']"
-                            variant="flat"
-                            @click="dialog"
                             prepend-icon="mdi-plus"
+                            @click="dialog"
+                            variant="outlined"
+                            color="dark"
                         >
                             Nuevo
                         </v-btn>
@@ -40,7 +41,7 @@
                 :loading="loading"
                 :search="search"
                 multi-sort
-                :items-per-page-options="[1, 5, 10, 25, 50]"
+                :items-per-page-options="[5, 10, 25, 50]"
                 item-value="name"
                 @update:options="loadItems"
                 no-data-text="No se encontraron registros"
@@ -58,8 +59,6 @@
                 </template>
 
                 <template v-slot:item.actions="{ item }">
-           
-
                     <LnxDialog title="Asignar Sedes" width="600px">
                         <template v-slot:activator="{ dialog }">
                             <v-btn
@@ -74,6 +73,9 @@
                             </v-btn>
                         </template>
                         <template v-slot:content="{ dialog }">
+                            <pre>
+                                {{ item }}
+                            </pre>
                             <v-list lines="two" dense>
                                 <v-list-item
                                     v-for="branch in branches"
@@ -110,25 +112,86 @@
                         </template>
                     </LnxDialog>
 
-                    <v-btn
-                        icon="mdi-folder-network-outline"
-                        size="small"
-                        color="black"
-                        variant="outlined"
-                        class="me-1"
-                        v-permission="['302']"
-                    >
-                    </v-btn>
+                    <LnxDialog title="Asignar Proyectos" width="600px">
+                        <template v-slot:activator="{ dialog }">
+                            <v-btn
+                                icon="mdi-folder-network-outline"
+                                size="small"
+                                color="black"
+                                variant="outlined"
+                                class="me-1"
+                                @click="dialog"
+                                v-permission="['302']"
+                            >
+                            </v-btn>
+                        </template>
+                        <template v-slot:content="{ dialog }">
+                            <v-card class="" min-height="300">
+                                <v-card-title>
+                                    <v-text-field
+                                        label="Buscar proyectos"
+                                        class="mb-0 me-3"
+                                        v-model="inputSearchProjects"
+                                        @update:model-value="
+                                            searchProjects($event, item.id)
+                                        "
+                                    />
+                                </v-card-title>
 
-                    <v-btn
-                        icon="mdi-pencil"
-                        size="small"
-                        color="black"
-                        variant="outlined"
-                        link
-                        v-permission="['302']"
-                    >
-                    </v-btn>
+                                <v-list-item
+                                    v-for="project in itemsProjects"
+                                    :key="project.id"
+                                    :value="project.id"
+                                    class="border-b py-2"
+                                    color="primary"
+                                    :active="item.projects.includes(project.id)"
+                                    @click="
+                                        item.projects.includes(project.id)
+                                            ? disableProject(project, item)
+                                            : assignProject(project, item)
+                                    "
+                                >
+                                    <template v-slot:prepend="{ isActive }">
+                                        <v-list-item-action start>
+                                            <v-switch
+                                                inset
+                                                class="ms-3"
+                                                color="primary"
+                                                :model-value="isActive"
+                                            ></v-switch>
+                                        </v-list-item-action>
+                                    </template>
+
+                                    <v-list-item-title>
+                                        {{ project.name }}
+                                    </v-list-item-title>
+                                </v-list-item>
+                            </v-card>
+                        </template>
+                    </LnxDialog>
+
+                    <LnxDialog title="Editar" width="600px">
+                        <template v-slot:activator="{ dialog }">
+                            <v-btn
+                                icon="mdi-pencil"
+                                size="small"
+                                color="black"
+                                variant="outlined"
+                                @click="dialog"
+                                class="me-1"
+                                v-permission="['303']"
+                            >
+                            </v-btn>
+                        </template>
+                        <template v-slot:content="{ dialog }">
+                            <FormCreate
+                                :formStructure="formStructure"
+                                @onSubmit="store($event, dialog)"
+                                @onCancel="dialog"
+                                :formData="item"
+                            />
+                        </template>
+                    </LnxDialog>
                 </template>
             </v-data-table-server>
         </v-card>
@@ -145,6 +208,9 @@ import {
     _store,
     _assignBranch,
     _disableBranch,
+    _searchProjects,
+    _assignProject,
+    _disableProject,
 } from "@/App/Security/user/services";
 
 import FormCreate from "@/App/Security/user/components/FormCreate.vue";
@@ -168,8 +234,10 @@ const layoutStore = useLayoutStore();
 const formStructure = ref([]);
 
 const items = ref({ ...itemsResponse });
+const itemsProjects = ref([]);
 
 const search = ref("");
+const inputSearchProjects = ref("");
 
 const loading = ref(true);
 
@@ -210,6 +278,28 @@ const loadItems = async ({ page = 1, itemsPerPage = 10, sortBy = [] }) => {
 const onUpdateType = async (type) => {
     const profiles = await _profilesByType(type);
     formStructure.value[1].options = profiles;
+};
+
+const searchProjects = async (search, id) => {
+    const projects = await _searchProjects(search, id);
+    itemsProjects.value = projects;
+    console.log(projects);
+};
+
+const assignProject = async (project, user) => {
+    await _assignProject({
+        project_id: project.id,
+        user_id: user.id,
+    });
+    loadItems({});
+};
+
+const disableProject = async (project, user) => {
+    await _disableProject({
+        project_id: project.id,
+        user_id: user.id,
+    });
+    loadItems({});
 };
 
 const init = async () => {

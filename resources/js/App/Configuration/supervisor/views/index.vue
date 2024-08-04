@@ -2,7 +2,7 @@
     <AdminLayout>
         <v-card class="rounded-0">
             <v-toolbar class="bg-primary">
-                <LnxDialog title="Nuevo" width="600px">
+                <LnxDialog title="Nuevo" width="900px">
                     <template v-slot:activator="{ dialog }">
                         <v-btn
                             v-permission="['301']"
@@ -48,6 +48,12 @@
                 items-per-page-text="Registros por página"
                 loading-text="Cargando registros"
             >
+                <template v-slot:item.birth_place="{ item }">
+                    {{ item.birth_place.location }}
+                </template>
+                <template v-slot:item.residence_place="{ item }">
+                    {{ item.residence_place.location }}
+                </template>
                 <template v-slot:item.is_enabled="{ item }">
                     <v-chip
                         :color="item.is_enabled ? 'success' : 'error'"
@@ -59,15 +65,27 @@
                 </template>
 
                 <template v-slot:item.actions="{ item }">
-                    <v-btn
-                        icon="mdi-pencil"
-                        size="small"
-                        color="dark"
-                        variant="outlined"
-                        link
-                        v-permission="['302']"
-                    >
-                    </v-btn>
+                    <LnxDialog title="Editar" width="900px">
+                        <template v-slot:activator="{ dialog }">
+                            <v-btn
+                                icon="mdi-pencil"
+                                size="small"
+                                color="primary"
+                                variant="tonal"
+                                link
+                                @click="dialog"
+                            >
+                            </v-btn>
+                        </template>
+                        <template v-slot:content="{ dialog }">
+                            <FormCreate
+                                :formStructure="formStructure"
+                                :formData="item"
+                                @onCancel="dialog"
+                                @onSubmit="update($event, dialog)"
+                            />
+                        </template>
+                    </LnxDialog>
                 </template>
             </v-data-table-server>
         </v-card>
@@ -78,7 +96,11 @@ import AdminLayout from "@/Shared/layouts/AdminLayout.vue";
 
 import { onMounted, ref } from "vue";
 
-import { _items, _store } from "@/App/Configuration/supervisor/services";
+import {
+    _items,
+    _store,
+    _update,
+} from "@/App/Configuration/supervisor/services";
 
 import FormCreate from "@/App/Configuration/supervisor/components/FormCreate.vue";
 import LnxDialog from "@/Shared/components/LnxDialog.vue";
@@ -115,6 +137,13 @@ const loadItems = async ({ page = 1, itemsPerPage = 10, sortBy = [] }) => {
 const store = async (data, dialog) => {
     console.log(data);
     await _store(data);
+    dialog();
+    loadItems({});
+};
+
+const update = async (data, dialog) => {
+    console.log(data);
+    await _update(data);
     dialog();
     loadItems({});
 };
