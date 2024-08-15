@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\DB;
 
 class ProjectSupervisor extends Model
 {
@@ -33,6 +34,20 @@ class ProjectSupervisor extends Model
     {
         return $this->belongsTo(Supervisor::class);
     }
+
+    public static function getSupervisors()
+    {
+        return Supervisor::select('id', DB::raw('CONCAT(name, " ", paternal_surname, " ", maternal_surname) as name'))
+            ->where('is_enabled', true)
+            ->whereNotIn(
+                'id',
+                ProjectSupervisor::join('projects', 'projects.id', '=', 'project_supervisors.project_id')
+                    ->where('projects.is_enabled', true)
+                    ->select('supervisor_id')
+            )
+            ->get();
+    }
+
 
     public function assignProjectSupervisor($projectId, $supervisorId)
     {

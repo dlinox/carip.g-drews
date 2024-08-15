@@ -65,4 +65,16 @@ class Supplier extends Model
             ['title' => "Acciones", 'key' => 'actions', 'align' => 'end', 'sortable' => false]
         ];
     }
+
+    public function scopeEnabled($query)
+    {
+        return $query->where('is_enabled', true);
+    }
+
+    public function scopeForSelect($query)
+    {
+        return $query->select('id', 'name');
+    }
+
+
 }

@@ -8,6 +8,7 @@ use App\Models\Project;
 use App\Models\ProjectManager;
 use App\Models\ProjectSupervisor;
 use App\Models\Supervisor;
+use App\Models\Supplier;
 use App\Models\Vehicle;
 use App\Models\VehiclesOperator;
 use App\Models\Worker;
@@ -22,6 +23,8 @@ class ProjectController extends Controller
     protected $project;
     protected $supervisor;
 
+    protected $supplier;
+
     protected $worker;
     public function __construct()
     {
@@ -29,6 +32,8 @@ class ProjectController extends Controller
         $this->project = new Project();
         $this->supervisor = new Supervisor();
         $this->worker = new Worker();
+
+        $this->supplier = new Supplier();
     }
 
     public function index()
@@ -114,128 +119,7 @@ class ProjectController extends Controller
         return Inertia::render('Project/views/show', [
             'title' => 'Gestion del Proyecto',
             'project' => $project,
-            'supervisors' => $this->supervisor->getFreeSupervisors(),
-            'workers' => $this->worker->getFreeWorkers($id),
+            'suppliers' => $this->supplier::enabled()->forSelect()->get(),
         ]);
-    }
-
-    //getSupervisors
-    public function getSupervisors()
-    {
-        $supervisors = $this->supervisor->getFreeSupervisors();
-        return response()->json($supervisors);
-    }
-
-    //assignResponsibleCompany
-    public function assignResponsibleCompany(Request $request)
-    {
-
-        try {
-            $projectManager =  new ProjectManager();
-            $projectManager->assignProjectManager($request->project_id, $request->worker_id);
-
-            return response()->json([
-                'message' => 'Compañía asignada correctamente',
-            ]);
-        } catch (\Exception $e) {
-            return response()->json([
-                'message' => $e->getMessage(),
-            ]);
-        }
-    }
-
-    //getProjectManager
-    public function getProjectManager($projectId)
-    {
-        $projectManager = new ProjectManager();
-        $projectManager = $projectManager->getProjectManager($projectId);
-        return response()->json($projectManager);
-    }
-
-    //getTtemsVehiclesToProject
-    public function getItemsAssignedVehicles($projectId)
-    {
-        $vehiclesOperator = new VehiclesOperator();
-        $items = $vehiclesOperator->getVehiclesForProject($projectId);
-        return response()->json($items);
-    }
-
-
-
-    public function assignVehicle(Request $request)
-    {
-
-        try {
-            VehiclesOperator::create($request->all());
-
-            return response()->json([
-                'message' => 'Vehicle asigned correctamente',
-            ]);
-        } catch (\Exception $e) {
-            return response()->json([
-                'message' => $e->getMessage(),
-            ]);
-        }
-    }
-
-    public function assignProjectSupervisor(Request $request)
-    {
-
-        try {
-            $projectSupervisor = new ProjectSupervisor();
-            $projectSupervisor->assignProjectSupervisor($request->project_id, $request->supervisor_id);
-
-            return response()->json([
-                'message' => 'Supervisor asigned correctamente',
-            ]);
-        } catch (\Exception $e) {
-            return response()->json([
-                'message' => $e->getMessage(),
-            ]);
-        }
-    }
-
-    public function getProjectSupervisor($projectId)
-    {
-        $projectSupervisor = new ProjectSupervisor();
-        $projectSupervisor = $projectSupervisor->getProjectSupervisor($projectId);
-        return response()->json($projectSupervisor);
-    }
-
-    //getSupervisoryOperators
-    public function getSupervisoryOperators()
-    {
-        $supervisoryOperators = new Operator();
-        $supervisoryOperators = $supervisoryOperators->getSupervisoryOperators();
-        return response()->json($supervisoryOperators);
-    }
-
-    //optener los operadores libres
-    public function getOperators()
-    {
-        $operator = new Operator();
-        $operators = $operator->getFreeOperators();
-        return response()->json($operators);
-    }
-
-    public function getVehicles()
-    {
-        $vehicle = new Vehicle();
-        $vehicles = $vehicle->getFreeVehicles();
-        return response()->json($vehicles);
-    }
-
-    public function getCompanies()
-    {
-        $company = new Company();
-        $companies = $company->getCompanies();
-        return response()->json($companies);
-    }
-
-    public function getResponsibleByCompany($companyId)
-    {
-        $worker = new Worker();
-        $workers = $worker->getResponsibleByCompany($companyId);
-        return response()->json($workers);
     }
 }

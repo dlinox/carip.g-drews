@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\ProjectSupervisor;
+use App\Models\Supervisor;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class ProjectSupervisorController extends Controller
 {
@@ -50,11 +52,17 @@ class ProjectSupervisorController extends Controller
         }
     }
 
+
+    public function getSupervisors()
+    {
+        $supervisors = $this->projectSupervisor->getSupervisors();
+        return response()->json($supervisors);
+    }
+
     public function getSupervisorByProject($projectId)
     {
         $supervisor = $this->projectSupervisor->getProjectSupervisor($projectId);
 
-        //si supoervisor es un objeto vacio retornar null
         if (!$supervisor) {
             return response()->json(null);
         }

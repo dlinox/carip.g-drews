@@ -2,7 +2,7 @@
     <v-card class="rounded-0" elevation="0">
         <v-toolbar density="compact">
             <v-toolbar-title>
-                <small> Supervisor(s) </small>
+                <small> Supervisor </small>
             </v-toolbar-title>
 
             <v-spacer></v-spacer>
@@ -51,7 +51,7 @@
     </v-card>
 </template>
 <script setup>
-import { ref, onMounted } from "vue";
+import { ref } from "vue";
 import { formAssignSupervisorInit } from "@/App/Project/forms";
 import FormCreate from "@/App/Project/components/FormCreate.vue";
 import LnxDialog from "@/Shared/components/LnxDialog.vue";
@@ -79,9 +79,8 @@ const assignSupervisor = async (data, dialog) => {
 
     const response = await _assignSupervisor(data);
     if (response) {
+        await init();
         dialog();
-        supervisors.value = await _supervisors();
-        supervisor.value = await _supervisor(props.project.id);
     }
 };
 
@@ -93,13 +92,12 @@ const unassignSupervisor = async () => {
 
     const response = await _unassignSupervisor(data);
     if (response) {
-        supervisors.value = await _supervisors();
-        supervisor.value = null;
+        await init();
     }
 };
 const init = async () => {
-    supervisors.value = await _supervisors();
     supervisor.value = await _supervisor(props.project.id);
+    supervisors.value = await _supervisors();
     formAssignSupervisor.value = formAssignSupervisorInit({
         supervisors: supervisors.value,
     });

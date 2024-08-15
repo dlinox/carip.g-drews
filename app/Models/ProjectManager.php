@@ -36,7 +36,30 @@ class ProjectManager extends Model
     }
 
 
-    public function assignProjectManager($projectId, $workerId)
+    public function getCompanyManagers($companyId)
+    {
+        return Worker::select('id', DB::raw('CONCAT(name, " ", paternal_surname, " ", maternal_surname) as name'))
+            ->where('company_id', $companyId)
+            ->where('is_enabled', true)
+            ->whereNotIn(
+                'id',
+                ProjectManager::join('projects', 'projects.id', '=', 'project_managers.project_id')
+                    ->where('projects.is_enabled', true)
+                    ->select('worker_id')
+            )
+            ->get();
+    }
+    //getProjectManagers
+    public function getManagers($projectId)
+    {
+        return Worker::select('workers.id', 'workers.area_id', DB::raw('CONCAT(workers.name, " ", workers.paternal_surname, " ", workers.maternal_surname) as name'))
+            ->join('project_managers', 'project_managers.worker_id', '=', 'workers.id')
+            ->where('project_managers.project_id', $projectId)
+            ->where('project_managers.is_enabled', true)
+            ->get();
+    }
+
+    public function assignManager($projectId, $workerId)
     {
         $projectManager = $this->where('project_id', $projectId)->where('worker_id', $workerId)->first();
 
@@ -49,16 +72,5 @@ class ProjectManager extends Model
         $projectManager->is_enabled = true;
         $projectManager->save();
         return $projectManager;
-    }
-
-    public function getProjectManager($projectId)
-    {
-        return $this->select('workers.name as worker_name', 'areas.name as area_name', 'companies.name as company_name')
-            ->join('workers', 'workers.id', '=', 'project_managers.worker_id')
-            ->join('areas', 'areas.id', '=', 'project_managers.project_id')
-            ->join('companies', 'companies.id', '=', 'project_managers.project_id')
-            ->where('project_managers.project_id', $projectId)
-            ->where('project_managers.is_enabled', true)
-            ->first();
     }
 }

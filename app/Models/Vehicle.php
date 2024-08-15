@@ -8,33 +8,7 @@ use Illuminate\Support\Facades\DB;
 
 class Vehicle extends Model
 {
-    /*
-           $table->string('name');        //marca - modelo - placa
 
-            $table->string('plate')->unique();
-
-            $table->string('brand');
-
-            $table->string('model');
-
-            $table->string('color');
- 
-            $table->string('category');
- 
-            $table->string('state');
-
-            $table->string('soat');
-
-            $table->date('soat_expiration_date');
-
-            $table->string('type');
-  
-            $table->string('fuel_type');
-
-            $table->string('capacity');
-
-            $table->string('mileage');
-    */
     use HasFactory;
     protected $fillable = [
         "name",
@@ -73,7 +47,7 @@ class Vehicle extends Model
     {
         $this->attributes['name'] = $this->brand . ' - ' . $this->model . ' - ' . $this->plate;
     }
-    
+
     public function supplier()
     {
         return $this->belongsTo(Supplier::class);
@@ -99,17 +73,36 @@ class Vehicle extends Model
         ];
     }
 
-    public function getFreeVehicles(): array
+    public function scopeEnabled($query)
     {
-        $vehicles = $this->select('vehicles.id', DB::raw('concat(vehicles.name, " (", suppliers.name, ")") as name'))
-            ->leftJoin('suppliers', 'suppliers.id', '=', 'vehicles.supplier_id')
-            ->leftJoin('vehicles_operators', 'vehicles_operators.vehicle_id', '=', 'vehicles.id')
-            ->leftJoin('projects', 'projects.id', '=', 'vehicles_operators.project_id')
-            ->whereRaw('projects.is_enabled = false or projects.is_enabled is null')
-            ->whereRaw('vehicles_operators.is_enabled = false or vehicles_operators.is_enabled is null')
-            ->where('vehicles.is_enabled', true)
-            ->get();
+        return $query->where('is_enabled', true);
+    }
 
-        return $vehicles->toArray();
+    public function scopeForSelect($query)
+    {
+        return $query->select('id', DB::raw('concat(name, " (", plate, ")") as name'));
+    }
+
+    public function scopeBySupplier($query, $supplier_id)
+    {
+        return $query->where('supplier_id', $supplier_id);
+    }
+    public function scopeFree($query)
+    {
+        //
+
+        /*$vehicles = $this->whereNotIn('id', function ($query) {
+            $query->select('vehicle_id')
+                ->from('project_vehicles')
+                ->where('project_vehicles.is_enabled', true);
+        })->get();
+
+        return $vehicles->toArray();*/
+
+        return $query->whereNotIn('id', function ($query) {
+            $query->select('vehicle_id')
+                ->from('project_vehicles')
+                ->where('project_vehicles.is_enabled', true);
+        });
     }
 }

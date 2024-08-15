@@ -79,14 +79,5 @@ class Company extends Model
         return $query->where('is_enabled', true);
     }
 
-    public function getCompanies(): array
-    {
 
-        $companies = $this->select('companies.id', DB::raw('concat_ws(" ","RUC:" , companies.document_number,  "-" ,companies.name) as name'))
-            ->leftJoin('areas', 'areas.company_id', '=', 'companies.id')
-            ->where('companies.is_enabled', true)
-            ->get();
-
-        return $companies->toArray();
-    }
 }

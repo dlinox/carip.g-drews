@@ -2,7 +2,9 @@
 
 // https://sistemaspnp.com/cedula/
 
+use App\Http\Controllers\ProjectManagerController;
 use App\Http\Controllers\ProjectSupervisorController;
+use App\Http\Controllers\ProjectVehicleController;
 use App\Models\ProjectSupervisor;
 use Illuminate\Support\Facades\Route;
 use Laravel\Socialite\Facades\Socialite;
@@ -112,28 +114,32 @@ Route::group(['prefix' => ''], function () {
         Route::put('/{id}', [\App\Http\Controllers\ProjectController::class, 'update']);
         Route::get('/{id}', [\App\Http\Controllers\ProjectController::class, 'show']);
 
-        Route::get('/items/operators', [\App\Http\Controllers\ProjectController::class, 'getOperators']);
-        Route::get('/items/vehicles', [\App\Http\Controllers\ProjectController::class, 'getVehicles']);
 
-        Route::get('/assigned-vehicles/{projectId}', [\App\Http\Controllers\ProjectController::class, 'getItemsAssignedVehicles']);
-        Route::post('/assign-vehicle', [\App\Http\Controllers\ProjectController::class, 'assignVehicle']);
-
-        Route::get('/items/companies', [\App\Http\Controllers\ProjectController::class, 'getCompanies']);
-        Route::get('/items/responsible-by-company/{companyId}', [\App\Http\Controllers\ProjectController::class, 'getResponsibleByCompany']);
-        Route::post('/assign-responsible-company', [\App\Http\Controllers\ProjectController::class, 'assignResponsibleCompany']);
-        Route::get('/project-manager/{projectId}', [\App\Http\Controllers\ProjectController::class, 'getProjectManager']);
-        Route::post('/assign-project-supervisor', [\App\Http\Controllers\ProjectController::class, 'assignProjectSupervisor']);
-        Route::get('/project-supervisor/{projectId}', [\App\Http\Controllers\ProjectController::class, 'getProjectSupervisor']);
-        // Route::get('/items/supervisory-operators', [\App\Http\Controllers\ProjectController::class, 'getSupervisoryOperators']);
-
-        //supervisors
-        Route::get('/items/supervisors', [\App\Http\Controllers\ProjectController::class, 'getSupervisors']);
+        //project supervisors
+        Route::get('/items/supervisors', [ProjectSupervisorController::class, 'getSupervisors']);
         //assign/supervisor
         Route::post('/assign/supervisor', [ProjectSupervisorController::class, 'assignSupervisor']);
         //unassign/supervisor
         Route::post('/unassign/supervisor', [ProjectSupervisorController::class, 'unassignSupervisor']);
         //get/supervisor
         Route::get('/supervisor/{projectId}', [ProjectSupervisorController::class, 'getSupervisorByProject']);
+
+        //project manager
+        Route::get('/items/company-managers/{companyId}', [ProjectManagerController::class, 'getCompanyManagers']);
+        //projects/assign/manager
+        Route::post('/assign/manager', [ProjectManagerController::class, 'assignManager']);
+        //projects/unassign/manager
+        Route::post('/unassign/manager', [ProjectManagerController::class, 'unassignManager']);
+        //getProjectManagers
+        Route::get('/managers/{projectId}', [ProjectManagerController::class, 'getManagers']);
+
+        //project vehicles
+        //projects/vehicles/supplier
+        Route::get('/vehicles/supplier/{supplierId}', [ProjectVehicleController::class, 'getVehiclesBySupplier']);
+
+        Route::get('/items/vehicles/{projectId}', [ProjectVehicleController::class, 'items']);
+        //projects/vehicles/assign
+        Route::post('/assign/vehicle', [ProjectVehicleController::class, 'assignVehicle']);
     });
 });
 

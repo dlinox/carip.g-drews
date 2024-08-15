@@ -62,44 +62,37 @@
                 </template>
 
                 <template v-slot:item.actions="{ item }">
-                    <v-btn
-                        class="me-2"
-                        color="black"
-                        variant="tonal"
-                        @click="router.get(url + '/' + item[`${idKey}`])"
-                    >
-                        Tareo
-                    </v-btn>
+                    <div class="d-flex">
+                        <v-btn
+                            class="me-2"
+                            color="blue"
+                            variant="tonal"
+                            @click="router.get(url + '/' + item[`${idKey}`])"
+                        >
+                            Detalles
+                        </v-btn>
 
-                    <v-btn
-                        class="me-2"
-                        color="blue"
-                        variant="tonal"
-                        @click="router.get(url + '/' + item[`${idKey}`])"
-                    >
-                        Detalles
-                    </v-btn>
-
-                    <LnxDialog title="Editar" width="500px">
-                        <template v-slot:activator="{ dialog }">
-                            <v-btn
-                                icon="mdi-pencil"
-                                density="comfortable"
-                                color="primary"
-                                variant="tonal"
-                                link
-                                @click="dialog"
-                            >
-                            </v-btn>
-                        </template>
-                        <template v-slot:content="{ dialog }">
-                            <FormCreate
-                                @onSubmit="update($event, dialog)"
-                                :formStructure="formStructure"
-                                :formData="item"
-                            />
-                        </template>
-                    </LnxDialog>
+                        <LnxDialog title="Editar" width="500px">
+                            <template v-slot:activator="{ dialog }">
+                                <v-btn
+                                    icon="mdi-pencil"
+                                    density="comfortable"
+                                    color="primary"
+                                    variant="tonal"
+                                    link
+                                    @click="dialog"
+                                >
+                                </v-btn>
+                            </template>
+                            <template v-slot:content="{ dialog }">
+                                <FormCreate
+                                    @onSubmit="update($event, dialog)"
+                                    :formStructure="formStructure"
+                                    :formData="item"
+                                />
+                            </template>
+                        </LnxDialog>
+                    </div>
                 </template>
             </v-data-table-server>
         </v-card>

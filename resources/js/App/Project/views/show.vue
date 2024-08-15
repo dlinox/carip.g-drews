@@ -18,6 +18,10 @@
                 <v-col cols="12" md="6" class="border-s">
                     <AssignSupervisor :project="project" />
                 </v-col>
+
+                <v-col cols="12">
+                    <AssignVehicles :suppliers="suppliers" :project="project" />
+                </v-col>
             </v-row>
         </v-card>
     </AdminLayout>
@@ -26,11 +30,13 @@
 import AdminLayout from "@/Shared/layouts/AdminLayout.vue";
 import AssignSupervisor from "@/App/Project/components/AssignSupervisor.vue";
 import AssignManagers from "@/App/Project/components/AssignManagers.vue";
+import AssignVehicles from "@/App/Project/components/AssignVehicles.vue";
 
 import { useLayoutStore } from "@/Shared/stores";
 const props = defineProps({
     title: String,
     project: Object,
+    suppliers: Array,
 });
 
 const layoutStore = useLayoutStore();

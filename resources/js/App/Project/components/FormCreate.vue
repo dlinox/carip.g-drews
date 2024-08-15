@@ -13,11 +13,17 @@
 </template>
 
 <script setup>
-import { ref } from "vue";
+import { ref, watch } from "vue";
 
 import LnxForm from "@/Shared/components/LnxForm.vue";
 
-const emit = defineEmits(["onCancel", "onSubmit", "onSuccess", "onSubmit"]);
+const emit = defineEmits([
+    "onCancel",
+    "onSubmit",
+    "onSuccess",
+    "onSubmit",
+    "onUpdated",
+]);
 
 const props = defineProps({
     formData: {
@@ -34,6 +40,17 @@ const props = defineProps({
 });
 
 const form = ref({ ...props.formData });
+
+watch(
+    () => form.value,
+    (value) => {
+        emit("onUpdated", value);
+    },
+    {
+        deep: true,
+    }
+);
+
 
 const submit = async () => {
     emit("onSubmit", form.value);
