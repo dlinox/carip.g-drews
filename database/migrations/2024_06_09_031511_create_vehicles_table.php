@@ -40,6 +40,15 @@ return new class extends Migration
             //kilometraje
             $table->string('mileage');
 
+            //serie
+            $table->string('serie')->nullable();
+            //motor numero
+            $table->string('engine_number')->nullable();
+            //fecha  de vecimiento de la revision tecnica
+            $table->date('technical_review_expiration_date')->nullable();
+            //fecha de vecimiento de la poliza de seguro
+            $table->date('insurance_expiration_date')->nullable();
+
             $table->boolean('is_enabled')->default(true);
             $table->unsignedBigInteger('supplier_id');
             $table->foreign('supplier_id')->references('id')->on('suppliers')->onDelete('cascade');

@@ -24,6 +24,11 @@ class Vehicle extends Model
         "fuel_type",
         "capacity",
         "mileage",
+
+        "serie",
+        "engine_number",
+        "technical_review_expiration_date",
+        "insurance_expiration_date",
         "is_enabled",
         "supplier_id",
     ];
@@ -67,6 +72,18 @@ class Vehicle extends Model
             ["title" => "Modelo", "key" => "model", "align" => "center"],
             ["title" => "Color", "key" => "color", "align" => "center"],
             ["title" => "Tipo", "key" => "type", "align" => "center"],
+            ["title" => "Combustible", "key" => "fuel_type", "align" => "center"],
+            ["title" => "Capacidad", "key" => "capacity", "align" => "center"],
+            ["title" => "Kilometraje", "key" => "mileage", "align" => "center"],
+            ["title" => "Categoria", "key" => "category", "align" => "center"],
+            ["title" => "Estado", "key" => "state", "align" => "center"],
+            ["title" => "SOAT", "key" => "soat", "align" => "center"],
+            ["title" => "Vencimiento SOAT", "key" => "soat_expiration_date", "align" => "center"],
+            ["title" => "Serie", "key" => "serie", "align" => "center"],
+            ["title" => "Numero de motor", "key" => "engine_number", "align" => "center"],
+            ["title" => "Vencimiento revision tecnica", "key" => "technical_review_expiration_date", "align" => "center"],
+            ["title" => "Vencimiento poliza de seguro", "key" => "insurance_expiration_date", "align" => "center"],
+
             ["title" => "Proveedor", "key" => "supplier_name", "align" => "center"],
             ["title" => "Estado", "key" => "is_enabled", "align" => "center"],
             ["title" => "Acciones", "key" => "actions", "align" => "end", "sortable" => false]
