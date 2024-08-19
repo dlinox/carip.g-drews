@@ -15,6 +15,9 @@ import {
 
 import { _vehiclesBySupplier, _assignVehicle, _vehicles } from "./vehicles";
 
+//_operators
+import { _operators, _assignOperator } from "./operator";
+
 export {
     _items,
     _store,
@@ -30,4 +33,6 @@ export {
     _vehiclesBySupplier,
     _assignVehicle,
     _vehicles,
+    _operators,
+    _assignOperator,
 };

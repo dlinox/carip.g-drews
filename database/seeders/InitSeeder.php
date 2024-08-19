@@ -15,5 +15,11 @@ class InitSeeder extends Seeder
     {
 
         $this->call(BranchSeeder::class);
+        $this->call(CompanySeeder::class);
+        $this->call(OperatorSeeder::class);
+        $this->call(SupervisorSeeder::class);
+        $this->call(SupplierSeeder::class);
+        $this->call(VehicleSeeder::class);
+
     }
 }

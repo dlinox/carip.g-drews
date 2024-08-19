@@ -2,9 +2,11 @@
 
 // https://sistemaspnp.com/cedula/
 
+use App\Http\Controllers\OperatorController;
 use App\Http\Controllers\ProjectManagerController;
 use App\Http\Controllers\ProjectSupervisorController;
 use App\Http\Controllers\ProjectVehicleController;
+use App\Http\Controllers\VehiclesOperatorController;
 use App\Models\ProjectSupervisor;
 use Illuminate\Support\Facades\Route;
 use Laravel\Socialite\Facades\Socialite;
@@ -73,10 +75,10 @@ Route::group(['prefix' => ''], function () {
     });
 
     Route::group(['prefix' => 'operators'], function () {
-        Route::get('/', [\App\Http\Controllers\OperatorController::class, 'index']);
-        Route::post('/items', [\App\Http\Controllers\OperatorController::class, 'getItems']);
-        Route::post('/', [\App\Http\Controllers\OperatorController::class, 'store']);
-        Route::put('/{id}', [\App\Http\Controllers\OperatorController::class, 'update']);
+        Route::get('/', [OperatorController::class, 'index']);
+        Route::post('/items', [OperatorController::class, 'getItems']);
+        Route::post('/', [OperatorController::class, 'store']);
+        Route::put('/{id}', [OperatorController::class, 'update']);
     });
 
     Route::group(['prefix' => 'suppliers'], function () {
@@ -140,6 +142,12 @@ Route::group(['prefix' => ''], function () {
         Route::get('/items/vehicles/{projectId}', [ProjectVehicleController::class, 'items']);
         //projects/vehicles/assign
         Route::post('/assign/vehicle', [ProjectVehicleController::class, 'assignVehicle']);
+
+        //projects vehicles operator
+        Route::get('/free/operators', [OperatorController::class, 'getOperators']);
+
+        //assignOperator
+        Route::post('/assign/operator', [VehiclesOperatorController::class, 'assignOperator']);
     });
 });
 

@@ -5,7 +5,7 @@ export const formInit = ({ companies = [] }) => {
     return [
         {
             key: "company_id",
-            label: "Empresa",
+            label: "Empresa responsable",
             type: "combobox",
             options: companies,
             required: true,
@@ -16,14 +16,14 @@ export const formInit = ({ companies = [] }) => {
         },
         {
             key: "name",
-            label: "Nombre",
+            label: "Nombre del proyecto",
             type: "text",
             required: true,
             colMd: 12,
         },
         {
             key: "description",
-            label: "Descripción",
+            label: "Descripción del proyecto",
             type: "textarea",
             required: true,
             colMd: 12,
@@ -33,14 +33,7 @@ export const formInit = ({ companies = [] }) => {
             label: "Fecha de inicio",
             type: "date",
             required: true,
-            colMd: 6,
-        },
-        {
-            key: "end_date",
-            label: "Fecha de fin",
-            type: "date",
-            required: true,
-            colMd: 6,
+            colMd: 12,
         },
 
         {
@@ -52,15 +45,6 @@ export const formInit = ({ companies = [] }) => {
             itemValue: "code",
             itemTitle: "location",
             service: _searchLocation,
-        },
-
-        {
-            key: "is_enabled",
-            label: "Activo",
-            type: "checkbox",
-            required: false,
-            colMd: 6,
-            default: true,
         },
     ];
 };
@@ -133,23 +117,44 @@ export const formAssignVehicleInit = ({ suppliers = [], vehicles = [] }) => {
             default: null,
             colMd: 6,
         },
-
-        //fecha de fin
-        {
-            key: "end_date",
-            label: "Fecha de fin",
-            type: "date",
-            required: true,
-            default: null,
-            colMd: 6,
-        },
-
         {
             key: "vehicle_price",
             label: "Precio por día",
             type: "text",
             required: true,
             default: null,
+            colMd: 6,
+        },
+    ];
+};
+
+export const formAssignOperatorInit = ({ operators = [] }) => {
+    return [
+        {
+            key: "operator_id",
+            label: "Operador",
+            type: "combobox",
+            options: operators,
+            required: true,
+            itemTitle: "name",
+            itemValue: "id",
+            cols: 12,
+            default: null,
+        },
+        {
+            key: "start_date",
+            label: "Fecha de inicio",
+            type: "date",
+            required: true,
+            default: Date.now(),
+            colMd: 6,
+        },
+        {
+            key: "operator_salary",
+            label: "Precio por día",
+            type: "text",
+            required: true,
+            default: 0,
             colMd: 6,
         },
     ];

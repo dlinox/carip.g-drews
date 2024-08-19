@@ -3,14 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\Company;
-use App\Models\Operator;
 use App\Models\Project;
-use App\Models\ProjectManager;
-use App\Models\ProjectSupervisor;
 use App\Models\Supervisor;
 use App\Models\Supplier;
-use App\Models\Vehicle;
-use App\Models\VehiclesOperator;
 use App\Models\Worker;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -122,4 +117,19 @@ class ProjectController extends Controller
             'suppliers' => $this->supplier::enabled()->forSelect()->get(),
         ]);
     }
+
+    public function finish($id)
+    {
+        try {
+            $project = $this->project::where('id', $id)->first();
+            $project->finish();
+            return response()->json([
+                'message' => 'Proyecto finalizado correctamente',
+            ]);
+        } catch (\Exception $e) {                         
+            return response()->json([
+                'message' => $e->getMessage(),
+            ]);
+        }
+    }                              
 }

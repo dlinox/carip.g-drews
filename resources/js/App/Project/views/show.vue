@@ -10,6 +10,8 @@
                 </v-toolbar-title>
 
                 <v-spacer></v-spacer>
+
+                <FinishProject :project="project" />
             </v-toolbar>
             <v-row no-gutters class="">
                 <v-col cols="12" md="6">
@@ -24,6 +26,7 @@
                 </v-col>
             </v-row>
         </v-card>
+
     </AdminLayout>
 </template>
 <script setup>
@@ -31,6 +34,7 @@ import AdminLayout from "@/Shared/layouts/AdminLayout.vue";
 import AssignSupervisor from "@/App/Project/components/AssignSupervisor.vue";
 import AssignManagers from "@/App/Project/components/AssignManagers.vue";
 import AssignVehicles from "@/App/Project/components/AssignVehicles.vue";
+import FinishProject from "@/App/Project/components/FinishProject.vue";
 
 import { useLayoutStore } from "@/Shared/stores";
 const props = defineProps({

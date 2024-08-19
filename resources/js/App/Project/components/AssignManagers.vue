@@ -64,7 +64,6 @@ import {
     _unassignManager,
     _managers,
 } from "@/App/Project/services";
-import { da } from "vuetify/locale";
 
 const props = defineProps({
     project: {

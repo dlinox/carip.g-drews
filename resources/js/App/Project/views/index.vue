@@ -51,13 +51,17 @@
                     {{ item.location.location }}
                 </template>
 
-                <template v-slot:item.is_enabled="{ item }">
+                <template v-slot:item.is_finished="{ item }">
                     <v-chip
-                        :color="item.is_enabled ? 'success' : 'error'"
+                        :color="
+                            item.is_finished
+                                ? 'blue-grey-darken-3'
+                                : 'light-blue-darken-4'
+                        "
                         dark
                         label
                     >
-                        {{ item.is_enabled ? "Activo" : "Inactivo" }}
+                        {{ item.is_finished ? "Finalizado" : "Activo" }}
                     </v-chip>
                 </template>
 
@@ -81,6 +85,7 @@
                                     variant="tonal"
                                     link
                                     @click="dialog"
+                                    :disabled="item.is_finished"
                                 >
                                 </v-btn>
                             </template>

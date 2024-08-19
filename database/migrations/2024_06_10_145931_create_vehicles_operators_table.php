@@ -17,6 +17,11 @@ return new class extends Migration
             $table->unsignedBigInteger('operator_id');
             $table->unsignedBigInteger('project_id');
 
+            //operator_salary
+            $table->decimal('operator_salary', 10, 2)->nullable();
+            
+            $table->date('start_date')->nullable();
+            $table->date('end_date')->nullable();
             $table->boolean('is_enabled')->default(true);
             $table->foreign('vehicle_id')->references('id')->on('vehicles')->onDelete('cascade');
             $table->foreign('operator_id')->references('id')->on('operators')->onDelete('cascade');

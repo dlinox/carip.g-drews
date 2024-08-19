@@ -10,24 +10,15 @@ class Project extends Model
 {
     use HasFactory;
 
-    /*
-        $table->string('description');
-        $table->char('location', 6)->nullable();
-        $table->date('start_date')->nullable();
-        $table->date('end_date')->nullable();
-        $table->boolean('is_enabled')->default(true);
-        $table->unsignedBigInteger('company_id');
-        $table->foreign('company_id')->references('id')->on('companies');
-    */
 
     protected $fillable = [
         'name',
         'description',
         'location',
         'start_date',
-        'end_date',
+        'finish_date',
         'company_id',
-        'is_enabled',
+        'is_finished',
     ];
 
     protected $hidden = [
@@ -36,9 +27,9 @@ class Project extends Model
     ];
 
     protected $casts = [
-        'is_enabled' => 'boolean',
+        'is_finished' => 'boolean',
         'start_date' => 'date:Y-m-d',
-        'end_date' => 'date:Y-m-d',
+        'finish_date' => 'date:Y-m-d',
     ];
 
     protected $appends = [
@@ -62,9 +53,6 @@ class Project extends Model
 
         );
     }
-
-
-
     protected function location(): Attribute
     {
 
@@ -85,6 +73,14 @@ class Project extends Model
         );
     }
 
+    //finalizar proyecto
+    public function finish()
+    {
+        $this->is_finished = true;
+        $this->finish_date = now();
+        $this->save();
+    }
+
     public static function headers(): array
     {
         return [
@@ -94,8 +90,7 @@ class Project extends Model
             ['title' => "Descripción", 'key' => 'description', 'align' => 'center'],
             ['title' => "Ubicación", 'key' => 'location', 'align' => 'center'],
             ['title' => "Fecha de Inicio", 'key' => 'start_date', 'align' => 'center'],
-            ['title' => "Fecha de Fin", 'key' => 'end_date', 'align' => 'center'],
-            ['title' => "Estado", 'key' => 'is_enabled', 'align' => 'center'],
+            ['title' => "Estado", 'key' => 'is_finished', 'align' => 'center'],
             ['title' => "Acciones", 'key' => 'actions', 'align' => 'end', 'sortable' => false]
         ];
     }

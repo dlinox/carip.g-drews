@@ -109,17 +109,33 @@ class Operator extends Model
         ];
     }
 
-    public  function getFreeOperators(): array
+    public  function getFreeOperators()
     {
         $operators =  $this->select('operators.id', 'operators.name')
-            ->leftJoin('vehicles_operators', 'vehicles_operators.operator_id', '=', 'operators.id')
-            ->leftJoin('projects', 'projects.id', '=', 'vehicles_operators.project_id')
-            ->whereRaw('vehicles_operators.is_enabled = false or vehicles_operators.id is null')
-            ->whereRaw('projects.is_enabled is null or projects.is_enabled = false')
-            ->where('operators.is_enabled', true)
-            ->get();
+            ->whereNotIn('operators.id', function ($query) {
+                $query->select('vehicles_operators.operator_id')
+                    ->from('vehicles_operators')
+                    ->where('vehicles_operators.is_enabled', 0)
+                    ->where('vehicles_operators.end_date', null);
+            })->get();
 
-        return $operators->toArray();
+
+        return $operators;
+    }
+
+    public function scopeForSelect($query)
+    {
+        return $query->select('id', 'name');
+    }
+
+    public function scopeFree($query)
+    {
+        return $query->whereNotIn('id', function ($query) {
+            $query->select('operator_id')
+                ->from('vehicles_operators')
+                ->where('is_enabled', 1)
+                ->whereNull('end_date');
+        });
     }
 
     public function getSupervisoryOperators(): array

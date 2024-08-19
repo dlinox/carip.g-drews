@@ -97,4 +97,12 @@ class OperatorController extends Controller
             ], 400);
         }
     }
+
+    //getFreeOperators
+
+    public function getOperators()
+    {
+        $operators = $this->operator->forSelect()->free()->get();
+        return response()->json($operators);
+    }
 }

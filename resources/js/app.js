@@ -13,6 +13,7 @@ import { createPinia } from "pinia";
 import vuetify from "@/Shared/plugins/vuetify";
 
 import permission from "./App/Auth/directives/permission";
+
 const pinia = createPinia();
 
 createInertiaApp({
