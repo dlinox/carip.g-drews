@@ -65,7 +65,7 @@
                 </template>
 
                 <template v-slot:item.actions="{ item }">
-                    <LnxDialog title="Editar" width="500px">
+                    <LnxDialog title="Editar" width="800px">
                         <template v-slot:activator="{ dialog }">
                             <v-btn
                                 icon="mdi-pencil"
@@ -79,10 +79,7 @@
                         </template>
                         <template v-slot:content="{ dialog }">
                             <FormCreate
-                                :formStructure="[
-                                    (formStructure[0].options = branches),
-                                    ...formStructure,
-                                ]"
+                                :formStructure="formStructure"
                                 :formData="{
                                     ...item,
                                 }"

@@ -85,6 +85,7 @@ export const formInit = ({ typeDocuments = [], defaultGeoCode = [] }) => {
             options: [
                 { value: "M", title: "Masculino" },
                 { value: "F", title: "Femenino" },
+                { value: "O", title: "Otro" },
             ],
             cols: 12,
             colMd: 6,
