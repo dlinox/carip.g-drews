@@ -87,6 +87,8 @@ class OperatorController extends Controller
     public function update(Request $request, $id)
     {
         try {
+            $request['birth_place'] = $request->birth_place['code'];
+            $request['residence_place'] = $request->residence_place['code'];
             $this->operator->where('id', $id)->update($request->except('processing'));
             return response()->json([
                 'message' => 'Operador actualizado correctamente',
