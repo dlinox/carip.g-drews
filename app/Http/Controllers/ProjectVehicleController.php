@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Operator;
 use App\Models\ProjectVehicle;
 use App\Models\Vehicle;
+use App\Models\VehiclesOperator;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -14,10 +15,14 @@ class ProjectVehicleController extends Controller
 
     protected $vehicle;
 
+    protected $vehiclesOperator;
+
+
     public function __construct()
     {
         $this->projectVehicle = new ProjectVehicle();
         $this->vehicle = new Vehicle();
+        $this->vehiclesOperator = new VehiclesOperator();
     }
 
     public function items($projectId)
@@ -48,13 +53,44 @@ class ProjectVehicleController extends Controller
     public function assignVehicle(Request $request)
     {
         try {
+
             $this->projectVehicle->create($request->all());
+
             return response()->json([
                 'message' => 'Vehiculo asignado correctamente',
             ], 201);
         } catch (\Exception $e) {
             return response()->json([
                 'message' => 'Error al asignar vehiculo',
+                'error' => $e->getMessage(),
+            ], 400);
+        }
+    }
+
+    public function unassignVehicle(Request $request)
+    {
+        try {
+
+            DB::beginTransaction();
+
+            $this->projectVehicle->where('project_id', $request->project_id)
+                ->where('vehicle_id', $request->vehicle_id)
+                ->update(['is_enabled' => 0, 'end_date' => now()]);
+
+            //desasignar operadores que esten asignados a este vehiculo con un estado activo
+            $this->vehiclesOperator->where('vehicle_id', $request->vehicle_id)
+                ->where('project_id', $request->project_id)
+                ->where('is_enabled', 1)
+                ->update(['is_enabled' => 0, 'end_date' => now()]);
+
+            DB::commit();
+            return response()->json([
+                'message' => 'Vehiculo desasignado correctamente',
+            ]);
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return response()->json([
+                'message' => 'Error al desasignar vehiculo',
                 'error' => $e->getMessage(),
             ]);
         }

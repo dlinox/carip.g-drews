@@ -30,40 +30,79 @@
                 <tr>
                     <th class="text-left">Vehículo</th>
                     <th class="text-left">Proveedor</th>
-                    <th class="text-left">Precio</th>
 
-                    <th class="text-left">Fecha de inicio</th>
-                    <th class="text-left">Fecha de fin</th>
                     <th class="text-left">Opereradores</th>
                     <th class="text-left">Acciones</th>
                 </tr>
             </thead>
             <tbody>
                 <tr v-for="(vehicle, index) in vehicles" :key="index">
-                    <td>{{ vehicle.vehicle_name }}</td>
-                    <td>{{ vehicle.supplier_name }}</td>
-                    <td>{{ vehicle.vehicle_price }}</td>
-                    <td>{{ vehicle.start_date }}</td>
-                    <td>{{ vehicle.end_date }}</td>
-                    <td>
+                    <td style="min-width: 300px">
+                        <v-list-item>
+                            <v-list-item-title>
+                                {{ vehicle.vehicle_name }}
+                            </v-list-item-title>
+                            <v-list-item-subtitle class="mt-1">
+                                S/. {{ vehicle.vehicle_price }} por día
+                            </v-list-item-subtitle>
+                            <v-list-item-subtitle class="mt-1">
+                                <v-chip tile>
+                                    <v-icon class="me-2"> mdi-calendar </v-icon>
+                                    {{ vehicle.start_date }} |
+                                    {{ vehicle.end_date ?? "Actualidad" }}
+                                </v-chip>
+                            </v-list-item-subtitle>
+                        </v-list-item>
+                    </td>
+                    <td style="max-width: 200px">
+                        {{ vehicle.supplier_name }}
+                    </td>
+
+                    <td style="min-width: 320px">
                         <v-list-item
                             v-for="operator in vehicle.operators"
                             :key="operator.operator_id"
                         >
+                            <template v-slot:prepend>
+                                <v-btn
+                                    color="red"
+                                    variant="tonal"
+                                    class="me-2"
+                                    density="comfortable"
+                                    :disabled="operator.end_date !== null"
+                                    icon
+                                >
+                                    <v-icon> mdi-minus-circle </v-icon>
+                                    <LnxConfirm
+                                        title="¿Está seguro de finalizar la asignación del operador?"
+                                        text="El operador podrá ser asignado en este u otro proyecto."
+                                        @onConfirm="
+                                            removeOperator(
+                                                vehicle.vehicle_id,
+                                                operator.id
+                                            )
+                                        "
+                                    />
+                                </v-btn>
+                            </template>
+
                             <v-list-item-title>
                                 <small>
                                     {{ operator.name }}
                                 </small>
                             </v-list-item-title>
+                            <v-list-item-subtitle class="my-1">
+                                S/. {{ operator.operator_salary }} por día
+                            </v-list-item-subtitle>
                             <v-list-item-subtitle>
                                 <small>
-                                    {{ operator.operator_salary }} |
                                     <v-chip tile>
-                                        {{
-                                            operator.is_enabled
-                                                ? "Activo"
-                                                : "Finalizado"
-                                        }}
+                                        <v-icon class="me-2">
+                                            mdi-calendar
+                                        </v-icon>
+                                        {{ operator.start_date }}
+                                        |
+                                        {{ operator.end_date ?? "Actualidad" }}
                                     </v-chip>
                                 </small>
                             </v-list-item-subtitle>
@@ -74,8 +113,10 @@
                             <template v-slot:activator="{ dialog }">
                                 <v-btn
                                     icon="mdi-account-network"
-                                    color="primary"
+                                    color="black"
+                                    variant="tonal"
                                     @click="dialog"
+                                    :disabled="vehicle.end_date !== null"
                                 >
                                 </v-btn>
                             </template>
@@ -95,6 +136,21 @@
                                 </FormCreate>
                             </template>
                         </LnxDialog>
+
+                        <v-btn
+                            color="red"
+                            variant="tonal"
+                            class="ms-2"
+                            :disabled="vehicle.end_date !== null"
+                            icon
+                        >
+                            <v-icon> mdi-minus-circle </v-icon>
+                            <LnxConfirm
+                                title="¿Está seguro de finalizar la asignación del vehículo?"
+                                text="Al finalizar la asignación, el vehículo podrá ser asignado en otro proyecto, pero no en este. Además, los operadores asignados a este vehículo serán desasignados con la fecha de fin actual."
+                                @onConfirm="unassignVehicle(vehicle.vehicle_id)"
+                            />
+                        </v-btn>
                     </td>
                 </tr>
             </tbody>
@@ -108,14 +164,17 @@ import LnxDialog from "@/Shared/components/LnxDialog.vue";
 import {
     _vehiclesBySupplier,
     _assignVehicle,
+    _unassignVehicle,
     _vehicles,
     _operators,
     _assignOperator,
+    _unassignOperator,
 } from "@/App/Project/services";
 import {
     formAssignVehicleInit,
     formAssignOperatorInit,
 } from "@/App/Project/forms";
+import LnxConfirm from "@/Shared/components/LnxConfirm.vue";
 
 const props = defineProps({
     project: Object,
@@ -137,6 +196,16 @@ const assignVehicle = async (data, dialog) => {
     }
 };
 
+const unassignVehicle = async (vehicleId) => {
+    let response = await _unassignVehicle({
+        project_id: props.project.id,
+        vehicle_id: vehicleId,
+    });
+    if (response) {
+        await init();
+    }
+};
+
 const assignOperator = async (data, dialog, vehicleId) => {
     data.project_id = props.project.id;
     data.vehicle_id = vehicleId;
@@ -144,6 +213,17 @@ const assignOperator = async (data, dialog, vehicleId) => {
     if (response) {
         await init();
         dialog();
+    }
+};
+
+const removeOperator = async (vehicleId, operatorId) => {
+    let response = await _unassignOperator({
+        project_id: props.project.id,
+        vehicle_id: vehicleId,
+        operator_id: operatorId,
+    });
+    if (response) {
+        await init();
     }
 };
 

@@ -43,6 +43,18 @@ export const _assignVehicle = async (data) => {
         toast.success(response.data.message);
         return response.data;
     } catch (error) {
+        toast.error("Error al asignar el vehículo");
         return false;
     }
 };
+
+export const _unassignVehicle = async (data) => {
+    try {
+        let response = await axios.post("/projects/unassign/vehicle", data);
+        toast.success(response.data.message);
+        return response.data;
+    } catch (error) {
+        toast.error("Error al desasignar el vehículo");
+        return false;
+    }
+}

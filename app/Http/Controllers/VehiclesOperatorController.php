@@ -36,4 +36,23 @@ class VehiclesOperatorController extends Controller
             ], 400);
         }
     }
+
+    public function unassignOperator(Request $request)
+    {
+        try {
+            $this->vehiclesOperator->unassignOperator(
+                $request->vehicle_id,
+                $request->operator_id,
+                $request->project_id,
+            );
+            
+            return response()->json([
+                'message' => 'Operador desasignado correctamente'
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'message' => $e->getMessage(),
+            ], 400);
+        }
+    }
 }

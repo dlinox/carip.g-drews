@@ -76,6 +76,15 @@
                             Detalles
                         </v-btn>
 
+                        <v-btn
+                            class="me-2"
+                            color="black"
+                            variant="tonal"
+                            @click="router.get(url + '/time-sheets/' + item[`${idKey}`])"
+                        >
+                            Tareo
+                        </v-btn>
+
                         <LnxDialog title="Editar" width="500px">
                             <template v-slot:activator="{ dialog }">
                                 <v-btn

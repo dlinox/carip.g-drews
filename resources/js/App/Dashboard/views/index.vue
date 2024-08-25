@@ -3,23 +3,18 @@
         <v-container fluid>
             <v-row>
                 <v-col cols="12" md="6">
-                    <LnxInputReniecOrSunat searchIn="RENIEC" v-model="lnxVal" />
-                </v-col>
-
-                <v-col cols="12" md="6">
-                    <LnxSearchServer
-                        v-model="auxResult"
-                        :items-default="[auxResult]"
-                        :service="_searchLocation"
-                        item-value="code"
-                        item-title="location"
-                    />
+                    <v-card>
+                        <v-card-item>
+                            <Bar id="my-chart-id" :data="chartData" />
+                        </v-card-item>
+                    </v-card>
                 </v-col>
                 <v-col cols="12" md="6">
-                    <Bar id="my-chart-id" :data="chartData" />
-                </v-col>
-                <v-col cols="12" md="6">
-                    <Doughnut :data="data" :options="options" />
+                    <v-card>
+                        <v-card-item>
+                            <Doughnut :data="data" :options="options" />
+                        </v-card-item>
+                    </v-card>
                 </v-col>
             </v-row>
         </v-container>
@@ -80,7 +75,7 @@ const chartData = {
 };
 
 const data = {
-    labels: ["VueJs", "EmberJs", "ReactJs", "AngularJs"],
+    labels: ["op1", "op2", "op3", "op4"],
     datasets: [
         {
             backgroundColor: ["#41B883", "#E46651", "#00D8FF", "#DD1B16"],

@@ -151,7 +151,7 @@ export const formAssignOperatorInit = ({ operators = [] }) => {
         },
         {
             key: "operator_salary",
-            label: "Precio por día",
+            label: "Salario por día",
             type: "text",
             required: true,
             default: 0,

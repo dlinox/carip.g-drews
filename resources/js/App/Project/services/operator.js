@@ -28,3 +28,16 @@ export const _assignOperator = async (data) => {
         return false;
     }
 };
+
+//unassign/operator
+export const _unassignOperator = async (data) => {
+    try {
+        let response = await axios.post("/projects/unassign/operator", data);
+        toast.success(response.data.message);
+        return response.data;
+    } catch (error) {
+        toast.error("Error al desasignar el operador");
+        return false;
+    }
+};
+

@@ -142,12 +142,19 @@ Route::group(['prefix' => ''], function () {
         Route::get('/items/vehicles/{projectId}', [ProjectVehicleController::class, 'items']);
         //projects/vehicles/assign
         Route::post('/assign/vehicle', [ProjectVehicleController::class, 'assignVehicle']);
+        //projects/vehicles/unassign
+        Route::post('/unassign/vehicle', [ProjectVehicleController::class, 'unassignVehicle']);
 
         //projects vehicles operator
         Route::get('/free/operators', [OperatorController::class, 'getOperators']);
 
         //assignOperator
         Route::post('/assign/operator', [VehiclesOperatorController::class, 'assignOperator']);
+        //unassignOperator
+        Route::post('/unassign/operator', [VehiclesOperatorController::class, 'unassignOperator']);
+
+        //time-sheets
+        Route::get('/time-sheets/{projectId}', [\App\Http\Controllers\TimeSheetController::class, 'index']);
     });
 });
 

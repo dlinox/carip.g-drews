@@ -13,10 +13,15 @@ import {
     _unassignManager,
 } from "./manager";
 
-import { _vehiclesBySupplier, _assignVehicle, _vehicles } from "./vehicles";
+import {
+    _vehiclesBySupplier,
+    _assignVehicle,
+    _unassignVehicle,
+    _vehicles,
+} from "./vehicles";
 
 //_operators
-import { _operators, _assignOperator } from "./operator";
+import { _operators, _assignOperator, _unassignOperator } from "./operator";
 
 export {
     _items,
@@ -32,7 +37,9 @@ export {
     _unassignManager,
     _vehiclesBySupplier,
     _assignVehicle,
+    _unassignVehicle,
     _vehicles,
     _operators,
     _assignOperator,
+    _unassignOperator,
 };
