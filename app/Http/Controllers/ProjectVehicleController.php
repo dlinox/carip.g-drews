@@ -95,4 +95,31 @@ class ProjectVehicleController extends Controller
             ]);
         }
     }
+
+    //vehicles for time sheet
+    public function vehiclesForTimeSheet($projectId)
+    {
+        $items = $this->projectVehicle->select(
+            'project_vehicles.project_id',
+            'project_vehicles.vehicle_id',
+            'project_vehicles.start_date as vehicle_start_date',
+            'project_vehicles.end_date as vehicle_end_date',
+            'vehicles.name as vehicle_name',
+            'suppliers.name as supplier_name',
+            'operators.id as operator_id',
+            DB::Raw('CONCAT_WS(" ", operators.name, operators.paternal_surname, operators.maternal_surname) as operator_name'),
+            'vehicles_operators.start_date as operator_start_date',
+            'vehicles_operators.end_date as operator_end_date',
+
+        )
+            ->join('vehicles', 'project_vehicles.vehicle_id', '=', 'vehicles.id')
+            ->join('suppliers', 'vehicles.supplier_id', '=', 'suppliers.id')
+            ->leftJoin('vehicles_operators', 'vehicles.id', '=', 'vehicles_operators.vehicle_id')
+            ->leftJoin('operators', 'vehicles_operators.operator_id', '=', 'operators.id')
+            ->whereRaw('project_vehicles.is_enabled = 1 or project_vehicles.is_enabled is null')
+            ->where('project_vehicles.project_id', $projectId)
+            ->get();
+
+        return response()->json($items);
+    }
 }

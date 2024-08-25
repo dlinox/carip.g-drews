@@ -1,72 +1,99 @@
 <template>
     <AdminLayout>
         <v-row no-gutters>
-            <v-col cols="12" md="4" lg="3">
+            <v-col cols="12" md="5" lg="4">
                 <v-date-picker
                     width="100%"
                     class="rounded-0"
                     title="Selecciona una fecha"
                     v-model="date"
+                    :min="project.start_date"
                     :max="today"
                     color="primary"
-                    @update:model-value="
-                        (event) => {
-                            console.log(event);
-                        }
-                    "
+                    @update:model-value="getTimesheet"
                 >
                 </v-date-picker>
             </v-col>
-            <v-col cols="12" md="8" lg="9">
+            <v-col cols="12" md="7" lg="8">
                 <v-toolbar class="w-100" color="primary">
                     <v-toolbar-title>
-                        {{ date.toDateString() }}
+                        Tareo
+                        <br />
+                        <small class="text-wrap">
+                            {{
+                                date.toLocaleDateString("es-ES", {
+                                    year: "numeric",
+                                    month: "numeric",
+                                    day: "numeric",
+                                })
+                            }}
+                        </small>
                     </v-toolbar-title>
                     <v-spacer></v-spacer>
-                    <v-btn color="white" variant="tonal">Guardar</v-btn>
+                    <v-btn
+                        color="dark"
+                        variant="outlined"
+                        @click="saveTimeSheet"
+                    >
+                        Guardar
+                    </v-btn>
                 </v-toolbar>
-                <v-table>
-                    <thead>
-                        <tr>
-                            <th class="column-sticky">Vehículo / Operador</th>
-                            <th v-for="day in 30" style="min-width: 100px">
-                                Dia {{ day }} <br />
-                                2021-09-01
-                            </th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td class="column-sticky">Vehículo 1</td>
-                            <td v-for="day in 30" style="min-width: 100px">
-                                <v-menu>
-                                    <template v-slot:activator="{ props }">
-                                        <v-btn
-                                            color="primary"
-                                            v-bind="props"
-                                            icon
-                                            density="compact"
-                                            variant="outlined"
-                                        >
-                                            <small> F </small>
-                                        </v-btn>
-                                    </template>
-                                    <v-list>
-                                        <v-list-item
-                                            v-for="(item, index) in items"
-                                            :key="index"
-                                            :value="index"
-                                        >
-                                            <v-list-item-title>
-                                                {{ item.title }}
-                                            </v-list-item-title>
-                                        </v-list-item>
-                                    </v-list>
-                                </v-menu>
-                            </td>
-                        </tr>
-                    </tbody>
-                </v-table>
+                <v-card  class="rounded-0">
+                    <v-overlay
+                        v-model="loading"
+                        class="align-center justify-center"
+                        contained
+                    >
+                        <v-progress-circular
+                            indeterminate
+                            color="primary"
+                        ></v-progress-circular>
+                    </v-overlay>
+                    <v-table>
+                        <thead>
+                            <tr>
+                                <th class="column-sticky">
+                                    Vehículo / Operador
+                                </th>
+                                <th>Marcar Asistencia</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr v-for="(item, index) in vehicles" :key="index">
+                                <td class="column-sticky">
+                                    <v-list-item>
+                                        <v-list-item-title>
+                                            <small class="font-weight-bold">
+                                                {{ item.vehicle_name }} /
+                                                {{
+                                                    item.operator_name
+                                                        ? item.operator_name
+                                                        : "Sin operador"
+                                                }}
+                                            </small>
+                                        </v-list-item-title>
+                                        <v-list-item-subtitle>
+                                            <small>
+                                                {{ item.supplier_name }}
+                                            </small>
+                                        </v-list-item-subtitle>
+                                    </v-list-item>
+                                </td>
+                                <td>
+                                    <v-select
+                                        v-model="item.type"
+                                        :items="items"
+                                        item-text="title"
+                                        item-value="value"
+                                        dense
+                                        outlined
+                                        class="rounded-0"
+                                    ></v-select>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </v-table>
+                </v-card>
             </v-col>
         </v-row>
     </AdminLayout>
@@ -75,24 +102,16 @@
 import AdminLayout from "@/Shared/layouts/AdminLayout.vue";
 import { useLayoutStore } from "@/Shared/stores";
 
+import { _vehiclesForTimeSheet, _storeTimeSheet } from "@/App/Project/services";
+
 import { ref } from "vue";
 
 const props = defineProps({
     title: String,
     today: String,
     todayJs: String,
+    project: Object,
 });
-
-const selected = ref(null);
-
-/*
-   Dias trabajados           T
-            Dias no trabajados        N 			
-            faltas injustificadas	  I 		
-            Permisos			      P 
-            Mantenimiento		      M     	
-            Casos de emergencia		  E   
-*/
 
 const items = [
     { value: "T", title: "Trabajado" },
@@ -103,11 +122,37 @@ const items = [
     { value: "E", title: "Caso de emergencia" },
 ];
 
-const date = ref(new Date(props.todayJs));
+const date = ref(new Date(props.today));
 const layoutStore = useLayoutStore();
+
+const vehicles = ref([]);
+const loading = ref(false);
+
+const getTimesheet = async (event) => {
+    loading.value = true;
+    vehicles.value = await _vehiclesForTimeSheet(
+        props.project.id,
+        new Date(event).toISOString().split("T")[0]
+    );
+    loading.value = false;
+};
+
+const saveTimeSheet = async () => {
+    let data = vehicles.value.map((item) => {
+        return {
+            operator_id: item.operator_id,
+            vehicle_id: item.vehicle_id,
+            type: item.type,
+            project_id: props.project.id,
+            register_at: new Date(date.value).toISOString().split("T")[0],
+        };
+    });
+    await _storeTimeSheet(data);
+};
 
 const init = async () => {
     layoutStore.title = props.title;
+    await getTimesheet(date.value);
 };
 
 init();
@@ -115,7 +160,7 @@ init();
 
 <style scoped>
 .column-sticky {
-    min-width: 200px;
+    min-width: 150px;
     position: sticky;
     top: 0;
     left: 0;

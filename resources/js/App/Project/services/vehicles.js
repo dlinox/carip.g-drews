@@ -57,4 +57,28 @@ export const _unassignVehicle = async (data) => {
         toast.error("Error al desasignar el vehículo");
         return false;
     }
-}
+};
+
+///vehicles-for-time-sheet/{projectId}
+export const _vehiclesForTimeSheet = async (projectId, date) => {
+    try {
+        let response = await axios.get(
+            "/projects/vehicles-for-time-sheet/" + projectId + "/" + date
+        );
+        return response.data;
+    } catch (error) {
+        return false;
+    }
+};
+
+///time-sheets post
+export const _storeTimeSheet = async (data) => {
+    try {
+        let response = await axios.post("/projects/time-sheets", data);
+        toast.success(response.data.message);
+        return response.data;
+    } catch (error) {
+        toast.error("Error al guardar la hoja de tiempo");
+        return false;
+    }
+};

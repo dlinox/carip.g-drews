@@ -6,6 +6,7 @@ use App\Http\Controllers\OperatorController;
 use App\Http\Controllers\ProjectManagerController;
 use App\Http\Controllers\ProjectSupervisorController;
 use App\Http\Controllers\ProjectVehicleController;
+use App\Http\Controllers\TimeSheetController;
 use App\Http\Controllers\VehiclesOperatorController;
 use App\Models\ProjectSupervisor;
 use Illuminate\Support\Facades\Route;
@@ -154,7 +155,12 @@ Route::group(['prefix' => ''], function () {
         Route::post('/unassign/operator', [VehiclesOperatorController::class, 'unassignOperator']);
 
         //time-sheets
-        Route::get('/time-sheets/{projectId}', [\App\Http\Controllers\TimeSheetController::class, 'index']);
+        Route::get('/time-sheets/{projectId}', [TimeSheetController::class, 'index']);
+        //store
+        Route::post('/time-sheets', [TimeSheetController::class, 'store']);
+
+        //vehiclesForTimeSheet
+        Route::get('/vehicles-for-time-sheet/{projectId}/{date}', [TimeSheetController::class, 'timeSheetByDay']);
     });
 });
 
