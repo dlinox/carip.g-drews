@@ -59,7 +59,19 @@ export const _unassignVehicle = async (data) => {
     }
 };
 
-///vehicles-for-time-sheet/{projectId}
+///time-sheets post
+export const _storeTimeSheet = async (data) => {
+    try {
+        let response = await axios.post("/projects/time-sheets", data);
+        toast.success(response.data.message);
+        return response.data;
+    } catch (error) {
+        toast.error("Error al guardar la hoja de tiempo");
+        return false;
+    }
+};
+
+//vehicles-for-time-sheet/{projectId}
 export const _vehiclesForTimeSheet = async (projectId, date) => {
     try {
         let response = await axios.get(
@@ -71,14 +83,14 @@ export const _vehiclesForTimeSheet = async (projectId, date) => {
     }
 };
 
-///time-sheets post
-export const _storeTimeSheet = async (data) => {
+//timeSheetByMonth
+export const _timeSheetByMonth = async (projectId, month) => {
     try {
-        let response = await axios.post("/projects/time-sheets", data);
-        toast.success(response.data.message);
+        let response = await axios.get(
+            "/projects/time-sheet-by-month/" + projectId + "/" + month
+        );
         return response.data;
     } catch (error) {
-        toast.error("Error al guardar la hoja de tiempo");
         return false;
     }
 };

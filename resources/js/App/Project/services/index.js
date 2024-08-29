@@ -19,7 +19,8 @@ import {
     _unassignVehicle,
     _vehicles,
     _vehiclesForTimeSheet,
-    _storeTimeSheet
+    _storeTimeSheet,
+    _timeSheetByMonth,
 } from "./vehicles";
 
 //_operators
@@ -45,5 +46,6 @@ export {
     _assignOperator,
     _unassignOperator,
     _vehiclesForTimeSheet,
-    _storeTimeSheet
+    _storeTimeSheet,
+    _timeSheetByMonth,
 };

@@ -11,10 +11,10 @@ class Vehicle extends Model
 
     use HasFactory;
     protected $fillable = [
-        "name",
         "plate",
         "brand",
         "model",
+        "name",
         "color",
         "category",
         "state",
@@ -50,7 +50,7 @@ class Vehicle extends Model
     //set name  = brand - model - plate
     public function setNameAttribute($value)
     {
-        $this->attributes['name'] = $this->brand . ' - ' . $this->model . ' - ' . $this->plate;
+        $this->attributes['name'] = $this->attributes['brand'] . ' - ' . $this->attributes['model'] . ' - ' . $this->attributes['plate'];
     }
 
     public function supplier()

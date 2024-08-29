@@ -160,8 +160,17 @@ Route::group(['prefix' => ''], function () {
         Route::post('/time-sheets', [TimeSheetController::class, 'store']);
 
         //vehiclesForTimeSheet
-        Route::get('/vehicles-for-time-sheet/{projectId}/{date}', [TimeSheetController::class, 'timeSheetByDay']);
+        Route::get('/vehicles-for-time-sheet/{projectId}/{day}', [TimeSheetController::class, 'timeSheetByDay']);
+
+        //timeSheetByMonth
+        Route::get('/time-sheet-by-month/{projectId}/{month}', [TimeSheetController::class, 'timeSheetByMonth']);
     });
+});
+
+//payments
+Route::group(['prefix' => 'payments'], function () {
+    Route::get('/operators', [\App\Http\Controllers\PaymentController::class, 'indexOperators']);
+    Route::get('/suppliers', [\App\Http\Controllers\PaymentController::class, 'indexSuppliers']);
 });
 
 

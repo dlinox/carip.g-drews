@@ -25,10 +25,10 @@ class VehicleSeeder extends Seeder
         $vehicles = [
             [
                 'id' => 1,
-                'name' => 'Chevrolet - 54 - 654-SFS',
                 'plate' => '654-SFS',
                 'brand' => 'Chevrolet',
                 'model' => '54',
+                'name' => 'Chevrolet - 54 - 654-SFS',
                 'color' => '',
                 'category' => 'Automóvil',
                 'state' => 'Nuevo',
@@ -46,10 +46,10 @@ class VehicleSeeder extends Seeder
 
             [
                 'id' => 2,
-                'name' => 'Toyota - Hilux - A2F-154',
                 'plate' => 'A2F-154',
                 'brand' => 'Toyota',
                 'model' => 'Hilux',
+                'name' => 'Toyota - Hilux - A2F-154',
                 'color' => '',
                 'category' => 'Camioneta',
                 'state' => 'Nuevo',

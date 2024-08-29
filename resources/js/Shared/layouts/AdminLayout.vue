@@ -135,6 +135,33 @@ const listItems = ref([
             onclick: () => router.get("/projects"),
         },
     },
+
+    {
+        title: "Pagos",
+        props: {
+            value: "payments",
+            prependIcon: "mdi-cash",
+        },
+        children: [
+            {
+                title: "Pagos a Operadores",
+                props: {
+                    prependIcon: "mdi-minus",
+                    value: "payments-operators",
+                    onclick: () => router.get("/payments/operators"),
+                },
+            },
+
+            {
+                title: "Pagos a Proveedores",
+                props: {
+                    prependIcon: "mdi-minus",
+                    value: "payments-suppliers",
+                    onclick: () => router.get("/payments/suppliers"),
+                },
+            },
+        ],
+    },
     {
         title: "GDREWS",
         props: {
